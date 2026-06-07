@@ -11,6 +11,12 @@ import {
   faPhone,
   faLocationDot,
   faFileArrowDown,
+  faXmark,
+  faChevronUp,
+  faChevronDown,
+  faPlus,
+  faBriefcase,
+  faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const Icon = {
@@ -23,4 +29,10 @@ export const Icon = {
   faEnvelope,
   faPhone,
   faFileArrowDown,
+  faXmark,
+  faChevronUp,
+  faChevronDown,
+  faPlus,
+  faBriefcase,
+  faTrashCan,
 } as const satisfies Record<string, IconDefinition>;

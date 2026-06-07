@@ -1,0 +1,85 @@
+@let company = block().data;
+<article>
+  <h2><strong [(appInlineEdit)]="company.companyName"></strong></h2>
+  <div class="flex flex-col gap-2 text-base-content text-opacity-75">
+    @for (position of company.positions; track $index; let posIndex = $index) {
+    <div class="position group/pos relative">
+      <header class="flex items-center justify-between">
+        <!-- eslint-disable-next-line @angular-eslint/template/elements-content -->
+        <h3 class="text-base-content" [(appInlineEdit)]="position.position"></h3>
+        <p class="text-xs flex gap-1 items-center">
+          @for (tech of position.techStack; track $index; let isLast = $last;
+          let i = $index) {
+          <span class="tech group/tech relative inline-flex items-center">
+            <span [(appInlineEdit)]="position.techStack[i]"></span>
+            <button
+              type="button"
+              class="chip-remove font-sans"
+              aria-label="Remove tech"
+              (click)="removeTech(position, i)"
+            >
+              <fa-icon [icon]="icon.faXmark"></fa-icon>
+            </button>
+          </span>
+          @if (!isLast) { <span>|</span> } }
+          <button
+            type="button"
+            class="chip-add font-sans"
+            aria-label="Add tech"
+            (click)="addTech(position)"
+          >
+            <fa-icon [icon]="icon.faPlus"></fa-icon>
+          </button>
+        </p>
+      </header>
+      <time class="text-[0.625rem]" [(appInlineEdit)]="position.period"></time>
+      <ul>
+        @for (contribution of position.contributions; track $index; let c =
+        $index) {
+        <li class="contribution group/con relative">
+          <strong [(appInlineEdit)]="contribution.category"></strong>
+          –
+          <span [(appInlineEdit)]="contribution.contribution"></span>
+          <button
+            type="button"
+            class="row-remove font-sans"
+            aria-label="Remove contribution"
+            (click)="removeContribution(position, c)"
+          >
+            <fa-icon [icon]="icon.faXmark"></fa-icon>
+          </button>
+        </li>
+        }
+      </ul>
+      <div class="position-actions flex gap-2 font-sans">
+        <button
+          type="button"
+          class="add-button add-button--sm"
+          (click)="addContribution(position)"
+        >
+          <fa-icon [icon]="icon.faPlus"></fa-icon>
+          <span>Add contribution</span>
+        </button>
+        <button
+          type="button"
+          class="add-button add-button--sm"
+          (click)="addPosition()"
+        >
+          <fa-icon [icon]="icon.faPlus"></fa-icon>
+          <span>Add role</span>
+        </button>
+        @if (company.positions.length > 1) {
+        <button
+          type="button"
+          class="add-button add-button--sm add-button--danger"
+          (click)="removePosition(posIndex)"
+        >
+          <fa-icon [icon]="icon.faXmark"></fa-icon>
+          <span>Remove role</span>
+        </button>
+        }
+      </div>
+    </div>
+    }
+  </div>
+</article>

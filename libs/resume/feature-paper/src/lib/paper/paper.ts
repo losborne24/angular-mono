@@ -1,14 +1,16 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+} from '@angular/core';
+import { CommonModule, NgComponentOutlet } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   CONTACT_DETAILS,
-  LINKS,
-  EXPERIENCE,
   RIGHT_PANEL,
-  HEADER,
-  SECTION_LABELS,
   EDUCATION,
+  SECTION_LABELS,
+  LINKS,
 } from './paper-data';
 import { Icon } from '@angular-monorepo/shared/util';
 import {
@@ -16,30 +18,35 @@ import {
   CopyUrlDirective,
   InlineEditDirective,
 } from '@angular-monorepo/shared/ui';
+import { ResumeStore } from '../blocks/resume-store';
+import { BlockFrame } from '../blocks/block-frame/block-frame';
+import { BLOCK_REGISTRY } from '../blocks/block-registry';
 
 @Component({
   selector: 'app-paper',
   imports: [
     CommonModule,
+    NgComponentOutlet,
     FontAwesomeModule,
     ExportPdfDirective,
     CopyUrlDirective,
     InlineEditDirective,
+    BlockFrame,
   ],
+  providers: [ResumeStore],
   templateUrl: './paper.html',
   styleUrl: './paper.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Paper {
   readonly icon = Icon;
+  readonly registry = BLOCK_REGISTRY;
+  readonly store = inject(ResumeStore);
 
-  // All editable content sourced from paper-data. Inline edits mutate these
-  // objects in place via [(appInlineEdit)] two-way bindings.
-  readonly header = HEADER;
+  // Aside content (left as-is): sourced from paper-data, edited in place.
   readonly sectionLabels = SECTION_LABELS;
   readonly education = EDUCATION;
   readonly contactDetails = CONTACT_DETAILS;
-  readonly links = LINKS;
-  readonly experience = EXPERIENCE;
   readonly rightPanel = RIGHT_PANEL;
+  readonly links = LINKS;
 }

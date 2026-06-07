@@ -1,0 +1,125 @@
+// Small inline add/remove affordances. Hidden in the PDF clone via the
+// :host-context(.printable) rule below.
+
+.chip-add,
+.chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 0.875rem;
+  height: 0.875rem;
+  font-size: 0.5rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.chip-remove {
+  background: hsl(var(--er, 0 70% 50%));
+  color: hsl(var(--erc, 0 0% 100%));
+  // Collapse to zero footprint until the tech tag is hovered.
+  width: 0;
+  margin-left: 0;
+  overflow: hidden;
+  transition: opacity 120ms ease, width 120ms ease, margin 120ms ease;
+}
+
+.tech:hover .chip-remove {
+  width: 0.875rem;
+  margin-left: 0.125rem;
+}
+
+.chip-add {
+  background: hsl(var(--bc, 0 0% 40%) / 0.2);
+  color: hsl(var(--bc, 0 0% 30%));
+}
+
+// All add/remove chrome stays hidden until the block is hovered.
+article:hover {
+  .chip-add,
+  .position-actions,
+  .add-button {
+    opacity: 1;
+  }
+}
+
+.tech:hover .chip-remove {
+  opacity: 1;
+}
+
+.row-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 0.875rem;
+  height: 0.875rem;
+  margin-left: 0.25rem;
+  font-size: 0.5rem;
+  border-radius: 9999px;
+  background: hsl(var(--er, 0 70% 50%));
+  color: hsl(var(--erc, 0 0% 100%));
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 120ms ease;
+  vertical-align: middle;
+}
+
+.contribution:hover .row-remove {
+  opacity: 1;
+}
+
+.position-actions {
+  // Collapse to zero footprint until the position is hovered.
+  margin-top: 0;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 120ms ease, height 120ms ease, margin 120ms ease;
+}
+
+.position:hover .position-actions {
+  margin-top: 0.25rem;
+  height: 1.25rem;
+  opacity: 1;
+}
+
+.add-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  border-radius: 0.375rem;
+  border: 1px dashed hsl(var(--bc, 0 0% 40%) / 0.4);
+  color: hsl(var(--bc, 0 0% 30%) / 0.7);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 120ms ease;
+
+  &:hover {
+    border-color: hsl(var(--p, 220 70% 50%));
+    color: hsl(var(--p, 220 70% 50%));
+  }
+
+  &--sm {
+    padding: 0.125rem 0.5rem;
+    font-size: 0.625rem;
+  }
+
+  &--danger:hover {
+    border-color: hsl(var(--er, 0 70% 50%));
+    color: hsl(var(--er, 0 70% 50%));
+  }
+}
+
+// Hide all editing chrome inside the exported PDF clone.
+:host-context(.printable) {
+  .chip-add,
+  .chip-remove,
+  .row-remove,
+  .position-actions,
+  .add-button {
+    display: none !important;
+  }
+}

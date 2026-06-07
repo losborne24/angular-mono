@@ -9,61 +9,34 @@
       class="paper-container flex-row card bg-base-100 text-neutral overflow-hidden"
     >
       <main
-        class="flex flex-col flex-none basis-[72%] p-8 gap-8 text-base-content"
+        class="group/main flex flex-col flex-none basis-[72%] p-8 gap-8 text-base-content"
       >
         <header>
           <h1 class="text-5xl mb-2">
-            <strong [(appInlineEdit)]="header.name"></strong>
+            <strong [(appInlineEdit)]="store.header().name"></strong>
           </h1>
           <!-- eslint-disable-next-line @angular-eslint/template/elements-content -->
-          <h3 [(appInlineEdit)]="header.title"></h3>
+          <h3 [(appInlineEdit)]="store.header().title"></h3>
         </header>
-        <section class="flex flex-col gap-2">
-          <h3 class="text-primary">
-            <strong [(appInlineEdit)]="sectionLabels.experience"></strong>
-          </h3>
-          <div class="flex flex-col gap-4">
-            @for(company of experience; track $index) {
-            <article>
-              <h2><strong [(appInlineEdit)]="company.companyName"></strong></h2>
-              <div
-                class="flex flex-col gap-2 text-base-content text-opacity-75"
-              >
-                @for(position of company.positions; track $index) {
-                <div>
-                  <header class="flex items-center justify-between">
-                    <!-- eslint-disable-next-line @angular-eslint/template/elements-content -->
-                    <h3
-                      class="text-base-content"
-                      [(appInlineEdit)]="position.position"
-                    ></h3>
-                    <p class="text-xs flex gap-1">
-                      @for (tech of position.techStack; track $index; let isLast
-                      = $last; let i = $index) {
-                      <span [(appInlineEdit)]="position.techStack[i]"></span>
-                      @if(!isLast) { <span>|</span> } }
-                    </p>
-                  </header>
-                  <time
-                    class="text-[0.625rem]"
-                    [(appInlineEdit)]="position.period"
-                  ></time>
-                  <ul>
-                    @for(contribution of position.contributions; track $index) {
-                    <li>
-                      <strong [(appInlineEdit)]="contribution.category"></strong>
-                      –
-                      <span [(appInlineEdit)]="contribution.contribution"></span>
-                    </li>
-                    }
-                  </ul>
-                </div>
-                }
-              </div>
-            </article>
-            }
-          </div>
-        </section>
+
+        <div class="flex flex-col gap-4">
+          @for (block of store.blocks(); track block.id) {
+          <app-block-frame (remove)="store.removeBlock(block.id)">
+            <ng-container
+              [ngComponentOutlet]="registry[block.kind]"
+              [ngComponentOutletInputs]="{ block }"
+            />
+          </app-block-frame>
+          }
+        </div>
+
+        <nav class="add-bar flex gap-2 font-sans">
+          <button type="button" class="add-button" (click)="store.addBlock('experience')">
+            <fa-icon [icon]="icon.faBriefcase"></fa-icon>
+            <span>Add experience</span>
+          </button>
+        </nav>
+
         <section class="flex flex-col gap-2">
           <h3 class="text-primary">
             <strong [(appInlineEdit)]="sectionLabels.links"></strong>

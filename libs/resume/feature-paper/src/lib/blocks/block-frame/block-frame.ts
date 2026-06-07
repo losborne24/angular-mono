@@ -1,0 +1,20 @@
+import { ChangeDetectionStrategy, Component, output } from '@angular/core';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { Icon } from '@angular-monorepo/shared/util';
+
+/**
+ * Reusable shell around a resume block. Projects block content and reveals a
+ * remove control on hover. Controls are hidden in the PDF clone
+ * (see `.printable .block-controls` in paper.scss).
+ */
+@Component({
+  selector: 'app-block-frame',
+  imports: [FontAwesomeModule],
+  templateUrl: './block-frame.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class BlockFrame {
+  readonly icon = Icon;
+
+  readonly remove = output<void>();
+}

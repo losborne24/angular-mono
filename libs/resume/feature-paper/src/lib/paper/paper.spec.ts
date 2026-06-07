@@ -32,9 +32,16 @@ describe('Paper', () => {
       expect(address).toBeTruthy();
     });
 
-    it('should render experience section', () => {
+    it('should render experience blocks', () => {
       const compiled = fixture.nativeElement;
-      expect(compiled.textContent).toContain('EXPERIENCE');
+      expect(compiled.querySelector('app-experience-block')).toBeTruthy();
+      expect(compiled.textContent).toContain('OpenGamma Limited');
+    });
+
+    it('should render add-block controls', () => {
+      const compiled = fixture.nativeElement;
+      const addButtons = compiled.querySelectorAll('.add-bar button');
+      expect(addButtons.length).toBe(1);
     });
 
     it('should render utility buttons', () => {

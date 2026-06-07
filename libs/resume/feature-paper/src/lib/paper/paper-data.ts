@@ -8,6 +8,7 @@ import type {
   ResumeHeader,
   Education,
   SectionLabels,
+  ResumeBlock,
 } from '@angular-monorepo/resume/util';
 
 export const HEADER: ResumeHeader = {
@@ -189,3 +190,16 @@ export const RIGHT_PANEL: RightPanelSection[] = [
     ],
   },
 ];
+
+/**
+ * Initial left-column blocks: existing experience companies and links mapped to
+ * entity-level blocks. Seed ids are deterministic; runtime-added blocks get
+ * crypto.randomUUID() ids in ResumeStore.
+ */
+export const SEED_BLOCKS: ResumeBlock[] = EXPERIENCE.map(
+  (data, i): ResumeBlock => ({
+    id: `seed-experience-${i}`,
+    kind: 'experience',
+    data,
+  }),
+);
