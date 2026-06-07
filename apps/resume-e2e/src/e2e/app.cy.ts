@@ -1,7 +1,7 @@
 import { getGreeting } from '../support/app.po';
 
 describe('resume-e2e', () => {
-  beforeEach(() => cy.visit('/angular-monorepo/resume/'));
+  beforeEach(() => cy.visit('/angular-mono/resume/'));
 
   describe('Page Load and Content Display', () => {
     it('should display the main title', () => {

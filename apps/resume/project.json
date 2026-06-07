@@ -12,7 +12,7 @@
       "options": {
         "outputPath": "dist/apps/resume",
         "index": "apps/resume/src/index.html",
-        "baseHref": "/angular-monorepo/resume/",
+        "baseHref": "/angular-mono/resume/",
         "main": "apps/resume/src/main.ts",
         "polyfills": ["zone.js"],
         "tsConfig": "apps/resume/tsconfig.app.json",
