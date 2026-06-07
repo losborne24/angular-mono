@@ -33,13 +33,21 @@
 .chip-add {
   background: hsl(var(--bc, 0 0% 40%) / 0.2);
   color: hsl(var(--bc, 0 0% 30%));
+  // Collapse to zero footprint until the block is hovered.
+  width: 0;
+  overflow: hidden;
+  transition: opacity 120ms ease, width 120ms ease;
 }
 
-// All add/remove chrome stays hidden until the block is hovered.
-article:hover {
-  .chip-add,
+// Add/remove chrome only reveals in edit mode, on block hover.
+article.editing:hover {
   .position-actions,
   .add-button {
+    opacity: 1;
+  }
+
+  .chip-add {
+    width: 0.875rem;
     opacity: 1;
   }
 }

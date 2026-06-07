@@ -17,6 +17,13 @@ export class ResumeStore {
   readonly header = signal<ResumeHeader>(HEADER);
   readonly blocks = signal<ResumeBlock[]>(SEED_BLOCKS);
 
+  /** When true, inline-edit and add/remove controls are active. */
+  readonly editMode = signal<boolean>(false);
+
+  toggleEditMode(): void {
+    this.editMode.update((on) => !on);
+  }
+
   addBlock(kind: BlockKind): void {
     if (kind !== 'experience') return;
     const block: ResumeBlock = {

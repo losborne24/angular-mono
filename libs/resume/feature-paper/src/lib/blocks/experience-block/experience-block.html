@@ -1,17 +1,25 @@
 @let company = block().data;
-<article>
-  <h2><strong [(appInlineEdit)]="company.companyName"></strong></h2>
+@let edit = store.editMode();
+<article [class.editing]="edit">
+  <h2>
+    <strong [(appInlineEdit)]="company.companyName" [disabled]="!edit"></strong>
+  </h2>
   <div class="flex flex-col gap-2 text-base-content text-opacity-75">
     @for (position of company.positions; track $index; let posIndex = $index) {
     <div class="position group/pos relative">
       <header class="flex items-center justify-between">
         <!-- eslint-disable-next-line @angular-eslint/template/elements-content -->
-        <h3 class="text-base-content" [(appInlineEdit)]="position.position"></h3>
+        <h3
+          class="text-base-content"
+          [(appInlineEdit)]="position.position"
+          [disabled]="!edit"
+        ></h3>
         <p class="text-xs flex gap-1 items-center">
           @for (tech of position.techStack; track $index; let isLast = $last;
           let i = $index) {
           <span class="tech group/tech relative inline-flex items-center">
-            <span [(appInlineEdit)]="position.techStack[i]"></span>
+            <span [(appInlineEdit)]="position.techStack[i]" [disabled]="!edit"></span>
+            @if (edit) {
             <button
               type="button"
               class="chip-remove font-sans"
@@ -20,6 +28,7 @@
             >
               <fa-icon [icon]="icon.faXmark"></fa-icon>
             </button>
+            }
           </span>
           @if (!isLast) { <span>|</span> } }
           <button
@@ -32,14 +41,19 @@
           </button>
         </p>
       </header>
-      <time class="text-[0.625rem]" [(appInlineEdit)]="position.period"></time>
+      <time
+        class="text-[0.625rem]"
+        [(appInlineEdit)]="position.period"
+        [disabled]="!edit"
+      ></time>
       <ul>
         @for (contribution of position.contributions; track $index; let c =
         $index) {
         <li class="contribution group/con relative">
-          <strong [(appInlineEdit)]="contribution.category"></strong>
+          <strong [(appInlineEdit)]="contribution.category" [disabled]="!edit"></strong>
           –
-          <span [(appInlineEdit)]="contribution.contribution"></span>
+          <span [(appInlineEdit)]="contribution.contribution" [disabled]="!edit"></span>
+          @if (edit) {
           <button
             type="button"
             class="row-remove font-sans"
@@ -48,9 +62,11 @@
           >
             <fa-icon [icon]="icon.faXmark"></fa-icon>
           </button>
+          }
         </li>
         }
       </ul>
+      @if (edit) {
       <div class="position-actions flex gap-2 font-sans">
         <button
           type="button"
@@ -79,6 +95,7 @@
         </button>
         }
       </div>
+      }
     </div>
     }
   </div>

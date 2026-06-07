@@ -5,7 +5,8 @@
   margin: -0.5rem;
   transition: border-color 120ms ease;
 
-  &:hover {
+  // Border affordance only in edit mode (.group set when removable).
+  &.group:hover {
     border-color: hsl(var(--bc, 0 0% 40%) / 0.35);
   }
 }

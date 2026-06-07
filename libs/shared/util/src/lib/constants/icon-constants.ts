@@ -27,6 +27,7 @@ import {
   faPlus,
   faBriefcase,
   faTrashCan,
+  faPen,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const Icon = {
@@ -55,6 +56,7 @@ export const Icon = {
   faPlus,
   faBriefcase,
   faTrashCan,
+  faPen,
 } as const satisfies Record<string, IconDefinition>;
 
 /** Icons offered in the link icon picker (brand/social + generic). */

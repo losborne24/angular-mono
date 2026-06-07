@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+} from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { InlineEditDirective } from '@angular-monorepo/shared/ui';
 import { Icon } from '@angular-monorepo/shared/util';
@@ -8,6 +13,7 @@ import {
   type ExperienceBlock as ExperienceBlockModel,
   type Position,
 } from '@angular-monorepo/resume/util';
+import { ResumeStore } from '../resume-store';
 
 @Component({
   selector: 'app-experience-block',
@@ -18,6 +24,7 @@ import {
 })
 export class ExperienceBlock {
   readonly icon = Icon;
+  readonly store = inject(ResumeStore);
   readonly block = input.required<ExperienceBlockModel>();
 
   addPosition(): void {

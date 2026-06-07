@@ -3,6 +3,21 @@
   height: 1066px;
   width: 754px;
 }
+
+// In edit mode the wrapper owns the scroll so the scrollbar sits outside the
+// card; the article grows to fit its content.
+.paper-scroll.editing {
+  height: 1066px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  // Gap between scrollbar and card.
+  padding-right: 0.5rem;
+}
+
+.paper-container.editing {
+  height: auto;
+  min-height: 1066px;
+}
 .icon-container {
   width: 16px;
 }

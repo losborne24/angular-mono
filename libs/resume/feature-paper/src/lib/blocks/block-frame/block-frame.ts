@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  output,
+} from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Icon } from '@angular-monorepo/shared/util';
 
@@ -16,6 +21,9 @@ import { Icon } from '@angular-monorepo/shared/util';
 })
 export class BlockFrame {
   readonly icon = Icon;
+
+  /** Show the remove control. Off outside edit mode. */
+  readonly removable = input<boolean>(true);
 
   readonly remove = output<void>();
 }
