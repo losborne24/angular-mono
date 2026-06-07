@@ -4,7 +4,7 @@ import {
   HostListener,
   signal,
 } from '@angular/core';
-import { Paper } from './core/paper/paper';
+import { Paper } from './paper/paper';
 import { CommonModule } from '@angular/common';
 import {
   FontPicker,

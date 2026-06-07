@@ -14,8 +14,6 @@
     "baseUrl": "src",
     "paths": {
       "@app/*": ["app/*"],
-      "@core/*": ["app/core/*"],
-      "@shared/*": ["app/shared/*"],
       "@angular-monorepo/shared/ui": ["../../../libs/shared/ui/src/index.ts"],
       "@angular-monorepo/shared/util": ["../../../libs/shared/util/src/index.ts"]
     }
