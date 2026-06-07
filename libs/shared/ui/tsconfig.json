@@ -1,24 +1,14 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
+    "target": "es2022",
+    "moduleResolution": "bundler",
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "target": "es2022",
-    "moduleResolution": "bundler",
-    "isolatedModules": true,
-    "emitDecoratorMetadata": false,
-    "module": "preserve",
-    "baseUrl": "src",
-    "paths": {
-      "@app/*": ["app/*"],
-      "@core/*": ["app/core/*"],
-      "@shared/*": ["app/shared/*"],
-      "@angular-monorepo/shared/ui": ["../../../libs/shared/ui/src/index.ts"],
-      "@angular-monorepo/shared/util": ["../../../libs/shared/util/src/index.ts"]
-    }
+    "module": "preserve"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -31,7 +21,7 @@
   "include": [],
   "references": [
     {
-      "path": "./tsconfig.app.json"
+      "path": "./tsconfig.lib.json"
     },
     {
       "path": "./tsconfig.spec.json"

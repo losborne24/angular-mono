@@ -1,4 +1,4 @@
-import { DAISYUI_THEMES } from './src/app/constants/daisyui-constants';
+import { DAISYUI_THEMES } from '../../libs/shared/util/src/lib/constants/daisyui-constants';
 const { createGlobPatternsForDependencies } = require('@nx/angular/tailwind');
 const { join } = require('path');
 

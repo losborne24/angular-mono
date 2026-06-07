@@ -8,9 +8,11 @@ import type {
   Experience,
   RightPanelSection,
 } from './paper-types';
-import { Icon } from '@app/constants/icon-constants';
-import { ExportPdfDirective } from '../../shared/directives/export-pdf.directive';
-import { CopyUrlDirective } from '../../shared/directives/copy-url.directive';
+import { Icon } from '@angular-monorepo/shared/util';
+import {
+  ExportPdfDirective,
+  CopyUrlDirective,
+} from '@angular-monorepo/shared/ui';
 
 @Component({
   selector: 'app-paper',

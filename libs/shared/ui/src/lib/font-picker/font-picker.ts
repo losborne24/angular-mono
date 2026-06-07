@@ -6,8 +6,7 @@ import {
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FONTS } from '@app/constants/font-constants';
-import { Font } from '@app/models/fonts-models';
+import { FONTS, Font } from '@angular-monorepo/shared/util';
 
 @Component({
   selector: 'app-font-picker',

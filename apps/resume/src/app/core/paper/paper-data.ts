@@ -1,4 +1,4 @@
-import { Icon } from '@app/constants/icon-constants';
+import { Icon } from '@angular-monorepo/shared/util';
 
 import type {
   ContactDetail,

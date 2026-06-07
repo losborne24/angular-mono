@@ -6,8 +6,7 @@ import {
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DAISYUI_THEMES } from '@app/constants/daisyui-constants';
-import { Theme } from '@app/models/daisyui-models';
+import { DAISYUI_THEMES, Theme } from '@angular-monorepo/shared/util';
 
 @Component({
   selector: 'app-theme-picker',

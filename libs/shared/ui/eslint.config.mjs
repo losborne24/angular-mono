@@ -1,5 +1,5 @@
 import nx from '@nx/eslint-plugin';
-import baseConfig from '../../eslint.config.mjs';
+import baseConfig from '../../../eslint.config.mjs';
 
 export default [
   ...baseConfig,
@@ -30,13 +30,5 @@ export default [
     files: ['**/*.html'],
     // Override or add rules here
     rules: {},
-  },
-  {
-    // tailwind.config.js is loaded by postcss via node require, which ignores
-    // tsconfig path aliases — it must use a relative import into the lib.
-    files: ['**/tailwind.config.js'],
-    rules: {
-      '@nx/enforce-module-boundaries': 'off',
-    },
   },
 ];

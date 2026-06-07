@@ -6,11 +6,11 @@ import {
 } from '@angular/core';
 import { Paper } from './core/paper/paper';
 import { CommonModule } from '@angular/common';
-import { DAISYUI_THEMES } from './constants/daisyui-constants';
-import { ThemePicker } from './features/theme-picker/theme-picker';
-import { Theme } from './models/daisyui-models';
-import { Font } from './models/fonts-models';
-import { FontPicker } from './features/font-picker/font-picker';
+import {
+  FontPicker,
+  ThemePicker,
+} from '@angular-monorepo/shared/ui';
+import { Theme, Font } from '@angular-monorepo/shared/util';
 
 @Component({
   selector: 'app-root',
