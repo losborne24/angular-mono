@@ -4,7 +4,7 @@ import {
   HostListener,
   signal,
 } from '@angular/core';
-import { Paper } from './paper/paper';
+import { Paper } from '@angular-monorepo/resume/feature-paper';
 import { CommonModule } from '@angular/common';
 import { FontPicker, ThemePicker } from '@angular-monorepo/shared/ui';
 import { Theme, Font } from '@angular-monorepo/shared/util';

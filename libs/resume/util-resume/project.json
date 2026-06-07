@@ -1,0 +1,19 @@
+{
+  "name": "resume-util-resume",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/resume/util-resume/src",
+  "projectType": "library",
+  "tags": ["type:util", "scope:resume"],
+  "targets": {
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../../coverage/libs/resume/util-resume"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

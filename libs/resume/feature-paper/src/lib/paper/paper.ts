@@ -7,7 +7,7 @@ import type {
   Links,
   Experience,
   RightPanelSection,
-} from './paper-types';
+} from '@angular-monorepo/resume/util';
 import { Icon } from '@angular-monorepo/shared/util';
 import {
   ExportPdfDirective,

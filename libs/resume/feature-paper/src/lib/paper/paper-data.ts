@@ -5,7 +5,7 @@ import type {
   Links,
   Experience,
   RightPanelSection,
-} from './paper-types';
+} from '@angular-monorepo/resume/util';
 
 export const CONTACT_DETAILS: ContactDetail[] = [
   { icon: Icon.faLocationDot, text: 'London, UK' },
