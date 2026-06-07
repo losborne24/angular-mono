@@ -5,7 +5,34 @@ import type {
   Links,
   Experience,
   RightPanelSection,
+  ResumeHeader,
+  Education,
+  SectionLabels,
 } from '@angular-monorepo/resume/util';
+
+export const HEADER: ResumeHeader = {
+  name: 'Leith Osborne',
+  title: 'Front-End Focused Product Engineer',
+};
+
+export const SECTION_LABELS: SectionLabels = {
+  experience: 'EXPERIENCE',
+  links: 'LINKS',
+  education: 'EDUCATION',
+};
+
+export const EDUCATION: Education[] = [
+  {
+    school: 'Durham University',
+    period: 'OCT 2017 - JUL 2020',
+    detail: 'BSc Computer Science, First Class Honours',
+  },
+  {
+    school: 'The Ashcombe School, Surrey',
+    period: 'SEP 2010 - AUG 2017',
+    items: ['Further Mathematics A*', 'Mathematics A*', 'Computer Science A'],
+  },
+];
 
 export const CONTACT_DETAILS: ContactDetail[] = [
   { icon: Icon.faLocationDot, text: 'London, UK' },

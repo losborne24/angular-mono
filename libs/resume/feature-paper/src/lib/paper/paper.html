@@ -12,33 +12,48 @@
         class="flex flex-col flex-none basis-[72%] p-8 gap-8 text-base-content"
       >
         <header>
-          <h1 class="text-5xl mb-2"><strong>Leith Osborne</strong></h1>
-          <h3>Front-End Focused Product Engineer</h3>
+          <h1 class="text-5xl mb-2">
+            <strong [(appInlineEdit)]="header.name"></strong>
+          </h1>
+          <!-- eslint-disable-next-line @angular-eslint/template/elements-content -->
+          <h3 [(appInlineEdit)]="header.title"></h3>
         </header>
         <section class="flex flex-col gap-2">
-          <h3 class="text-primary"><strong>EXPERIENCE</strong></h3>
+          <h3 class="text-primary">
+            <strong [(appInlineEdit)]="sectionLabels.experience"></strong>
+          </h3>
           <div class="flex flex-col gap-4">
             @for(company of experience; track $index) {
             <article>
-              <h2><strong>{{company.companyName}}</strong></h2>
+              <h2><strong [(appInlineEdit)]="company.companyName"></strong></h2>
               <div
                 class="flex flex-col gap-2 text-base-content text-opacity-75"
               >
                 @for(position of company.positions; track $index) {
                 <div>
                   <header class="flex items-center justify-between">
-                    <h3 class="text-base-content">{{position.position}}</h3>
-                    <p class="text-xs">
+                    <!-- eslint-disable-next-line @angular-eslint/template/elements-content -->
+                    <h3
+                      class="text-base-content"
+                      [(appInlineEdit)]="position.position"
+                    ></h3>
+                    <p class="text-xs flex gap-1">
                       @for (tech of position.techStack; track $index; let isLast
-                      = $last) { {{tech }} @if(!isLast) { |} }
+                      = $last; let i = $index) {
+                      <span [(appInlineEdit)]="position.techStack[i]"></span>
+                      @if(!isLast) { <span>|</span> } }
                     </p>
                   </header>
-                  <time class="text-[0.625rem]">{{position.period}}</time>
+                  <time
+                    class="text-[0.625rem]"
+                    [(appInlineEdit)]="position.period"
+                  ></time>
                   <ul>
                     @for(contribution of position.contributions; track $index) {
                     <li>
-                      <strong>{{contribution.category}}</strong>
-                      – {{contribution.contribution }}
+                      <strong [(appInlineEdit)]="contribution.category"></strong>
+                      –
+                      <span [(appInlineEdit)]="contribution.contribution"></span>
                     </li>
                     }
                   </ul>
@@ -50,7 +65,9 @@
           </div>
         </section>
         <section class="flex flex-col gap-2">
-          <h3 class="text-primary"><strong>LINKS</strong></h3>
+          <h3 class="text-primary">
+            <strong [(appInlineEdit)]="sectionLabels.links"></strong>
+          </h3>
           <nav class="flex flex-col text-base-content">
             @for (link of links; track $index) {
             <a
@@ -59,7 +76,7 @@
               class="flex items-center gap-2 text-base-content text-opacity-90"
             >
               <fa-icon [icon]="link.icon"></fa-icon>
-              <span class="text-secondary">{{link.href}}</span>
+              <span class="text-secondary" [(appInlineEdit)]="link.href"></span>
             </a>
             }
           </nav>
@@ -75,53 +92,60 @@
               <fa-icon [icon]="detail.icon"></fa-icon>
             </div>
             @if(detail.href) {
-            <a target="_blank" class="text-secondary" [href]="detail.href"
-              >{{detail.text}}</a
-            >
+            <!-- eslint-disable-next-line @angular-eslint/template/elements-content -->
+            <a
+              target="_blank"
+              class="text-secondary"
+              [href]="detail.href"
+              [(appInlineEdit)]="detail.text"
+            ></a>
             } @else {
-            <p>{{detail.text}}</p>
+            <p [(appInlineEdit)]="detail.text"></p>
             }
           </div>
           }
         </address>
         <section class="flex flex-col gap-2">
-          <h3 class="text-accent"><strong>EDUCATION</strong></h3>
+          <h3 class="text-accent">
+            <strong [(appInlineEdit)]="sectionLabels.education"></strong>
+          </h3>
           <div class="flex flex-col gap-4">
+            @for (edu of education; track $index) {
             <article class="flex flex-col gap-2">
               <header>
                 <h2>
-                  <strong class="text-neutral-content"
-                    >Durham University</strong
-                  >
+                  <strong
+                    class="text-neutral-content"
+                    [(appInlineEdit)]="edu.school"
+                  ></strong>
                 </h2>
-                <time class="text-[0.625rem]">OCT 2017 - JUL 2020</time>
+                <time
+                  class="text-[0.625rem]"
+                  [(appInlineEdit)]="edu.period"
+                ></time>
               </header>
-              <p>BSc Computer Science, First Class Honours</p>
-            </article>
-            <article class="flex flex-col gap-2">
-              <header>
-                <h2>
-                  <strong class="text-neutral-content"
-                    >The Ashcombe School, Surrey</strong
-                  >
-                </h2>
-                <time class="text-[0.625rem]">SEP 2010 - AUG 2017</time>
-              </header>
+              @if (edu.detail !== undefined) {
+              <p [(appInlineEdit)]="edu.detail"></p>
+              } @if (edu.items) {
               <ul>
-                <li>Further Mathematics A*</li>
-                <li>Mathematics A*</li>
-                <li>Computer Science A</li>
+                @for (item of edu.items; track $index; let i = $index) {
+                <li [(appInlineEdit)]="edu.items![i]"></li>
+                }
               </ul>
+              }
             </article>
+            }
           </div>
         </section>
         <section class="flex flex-col gap-8">
           @for(section of rightPanel; track $index ){
           <section class="flex flex-col gap-2">
-            <h3 class="text-accent"><strong>{{section.header}}</strong></h3>
+            <h3 class="text-accent">
+              <strong [(appInlineEdit)]="section.header"></strong>
+            </h3>
             <ul>
-              @for(item of section.items; track $index) {
-              <li>{{item}}</li>
+              @for(item of section.items; track $index; let i = $index) {
+              <li [(appInlineEdit)]="section.items[i]"></li>
               }
             </ul>
           </section>
