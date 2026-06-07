@@ -54,6 +54,14 @@ export default [
               sourceTag: 'scope:shared',
               onlyDependOnLibsWithTags: ['scope:shared'],
             },
+            {
+              sourceTag: 'scope:home',
+              onlyDependOnLibsWithTags: ['scope:home', 'scope:shared'],
+            },
+            {
+              sourceTag: 'scope:resume',
+              onlyDependOnLibsWithTags: ['scope:resume', 'scope:shared'],
+            },
           ],
         },
       ],

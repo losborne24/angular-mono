@@ -7,13 +7,13 @@
   "tags": ["scope:home", "type:app"],
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:browser",
+      "executor": "@angular/build:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/home",
+        "outputPath": { "base": "dist/apps/home", "browser": "" },
         "index": "apps/home/src/index.html",
         "baseHref": "/angular-mono/",
-        "main": "apps/home/src/main.ts",
+        "browser": "apps/home/src/main.ts",
         "polyfills": ["zone.js"],
         "tsConfig": "apps/home/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
@@ -51,7 +51,7 @@
       "defaultConfiguration": "production"
     },
     "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
+      "executor": "@angular/build:dev-server",
       "configurations": {
         "production": {
           "buildTarget": "home:build:production"
@@ -64,7 +64,7 @@
       "defaultConfiguration": "development"
     },
     "extract-i18n": {
-      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "executor": "@angular/build:extract-i18n",
       "options": {
         "buildTarget": "home:build"
       }

@@ -7,13 +7,13 @@
   "tags": ["scope:resume", "type:app"],
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:browser",
+      "executor": "@angular/build:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/resume",
+        "outputPath": { "base": "dist/apps/resume", "browser": "" },
         "index": "apps/resume/src/index.html",
         "baseHref": "/angular-mono/resume/",
-        "main": "apps/resume/src/main.ts",
+        "browser": "apps/resume/src/main.ts",
         "polyfills": ["zone.js"],
         "tsConfig": "apps/resume/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
@@ -51,7 +51,7 @@
       "defaultConfiguration": "production"
     },
     "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
+      "executor": "@angular/build:dev-server",
       "configurations": {
         "production": {
           "buildTarget": "resume:build:production"
@@ -64,7 +64,7 @@
       "defaultConfiguration": "development"
     },
     "extract-i18n": {
-      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "executor": "@angular/build:extract-i18n",
       "options": {
         "buildTarget": "resume:build"
       }
