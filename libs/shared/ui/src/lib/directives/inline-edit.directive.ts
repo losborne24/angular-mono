@@ -115,6 +115,13 @@ export class InlineEditDirective {
     const value = (this.el.nativeElement.textContent ?? '').trim();
     this.editing.set(false);
 
+    if (value === '') {
+      // Empty — discard edit, restore original, do not emit.
+      this.el.nativeElement.textContent = this.appInlineEdit();
+      this.editCancel.emit();
+      return;
+    }
+
     if (value === this.original.trim()) {
       // No change — restore canonical value, do not emit.
       this.el.nativeElement.textContent = this.appInlineEdit();
