@@ -7,67 +7,39 @@
   width: 16px;
 }
 
-.block-frame {
-  border: 1px dashed transparent;
-  border-radius: 0.375rem;
-  padding: 0.5rem;
-  margin: -0.5rem;
-  transition: border-color 120ms ease;
-
-  &:hover {
-    border-color: hsl(var(--bc, 0 0% 40%) / 0.35);
-  }
-}
-
-.block-remove {
-  flex: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  font-size: 0.875rem;
-  border-radius: 0.375rem;
-  background: transparent;
-  color: hsl(var(--bc, 0 0% 40%) / 0.6);
-  cursor: pointer;
-  transition: background 120ms ease, color 120ms ease;
-
-  &:hover {
-    background: hsl(var(--er, 0 70% 50%) / 0.12);
-    color: hsl(var(--er, 0 70% 50%));
-  }
-}
-
 .add-button {
   display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
-  padding: 0.375rem 0.75rem;
+  gap: 0.25rem;
+  // Negative margin keeps the label flush-left at rest; hover bg gets padding.
+  padding: 0.125rem 0.375rem;
+  margin: 0 -0.375rem;
   font-size: 0.75rem;
+  border: none;
   border-radius: 0.375rem;
-  border: 1px dashed hsl(var(--bc, 0 0% 40%) / 0.4);
-  color: hsl(var(--bc, 0 0% 30%) / 0.7);
+  background: transparent;
+  color: hsl(var(--bc, 0 0% 40%) / 0.5);
   cursor: pointer;
+  transition: color 120ms ease, background 120ms ease;
 
   &:hover {
-    border-color: hsl(var(--p, 220 70% 50%));
     color: hsl(var(--p, 220 70% 50%));
+    background: hsl(var(--p, 220 70% 50%) / 0.1);
   }
 }
 
-// "Add experience" bar: zero footprint until the left column is hovered.
-// margin-top cancels <main>'s 2rem flex gap while collapsed.
+// "Add experience" bar: zero footprint until the experience section is hovered.
+// margin-top cancels the section's 0.5rem (gap-2) flex gap while collapsed.
 .add-bar {
   height: 0;
-  margin-top: -2rem;
+  margin-top: -0.5rem;
   overflow: hidden;
   opacity: 0;
   transition: opacity 120ms ease, height 120ms ease, margin 120ms ease;
 }
 
 .group\/main:hover .add-bar {
-  height: 2rem;
+  height: 1.5rem;
   margin-top: 0;
   opacity: 1;
 }
@@ -80,12 +52,7 @@
   border-radius: 0 !important;
 }
 // Editing chrome must never appear in the exported PDF.
-.printable .block-remove,
+// (block-frame / block-remove handled in block-frame.scss)
 .printable .add-bar {
   display: none !important;
-}
-.printable .block-frame {
-  border-color: transparent !important;
-  padding: 0 !important;
-  margin: 0 !important;
 }

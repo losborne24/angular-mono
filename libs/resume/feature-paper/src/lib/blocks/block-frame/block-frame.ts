@@ -11,6 +11,7 @@ import { Icon } from '@angular-monorepo/shared/util';
   selector: 'app-block-frame',
   imports: [FontAwesomeModule],
   templateUrl: './block-frame.html',
+  styleUrl: './block-frame.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockFrame {
