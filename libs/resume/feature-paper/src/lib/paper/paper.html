@@ -42,21 +42,38 @@
           </nav>
         </section>
 
-        <section class="flex flex-col gap-2">
+        <section class="group/links flex flex-col gap-2">
           <h3 class="text-primary">
             <strong>{{ sectionLabels.links }}</strong>
           </h3>
           <nav class="flex flex-col text-base-content">
-            @for (link of links; track $index) {
-            <a
-              target="_blank"
-              [href]="link.href"
-              class="flex items-center gap-2 text-base-content text-opacity-90"
+            @for (link of links; track $index; let i = $index) {
+            <div
+              class="link-row group/link flex items-center gap-2 text-base-content text-opacity-90"
             >
-              <fa-icon [icon]="link.icon"></fa-icon>
-              <span class="text-secondary" [(appInlineEdit)]="link.href"></span>
-            </a>
+              <app-icon-picker
+                [icon]="link.icon"
+                (iconChanged)="setLinkIcon(link, $event)"
+              />
+              <a target="_blank" [href]="link.href" class="flex-1">
+                <span class="text-secondary" [(appInlineEdit)]="link.href"></span>
+              </a>
+              <button
+                type="button"
+                class="row-remove font-sans"
+                aria-label="Remove link"
+                (click)="removeLink(i)"
+              >
+                <fa-icon [icon]="icon.faXmark"></fa-icon>
+              </button>
+            </div>
             }
+          </nav>
+          <nav class="add-bar flex gap-2 font-sans">
+            <button type="button" class="add-button" (click)="addLink()">
+              <fa-icon [icon]="icon.faLink"></fa-icon>
+              <span>Add link</span>
+            </button>
           </nav>
         </section>
       </main>

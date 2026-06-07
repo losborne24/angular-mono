@@ -17,7 +17,10 @@ import {
   ExportPdfDirective,
   CopyUrlDirective,
   InlineEditDirective,
+  IconPicker,
 } from '@angular-monorepo/shared/ui';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import type { Links } from '@angular-monorepo/resume/util';
 import { ResumeStore } from '../blocks/resume-store';
 import { BlockFrame } from '../blocks/block-frame/block-frame';
 import { BLOCK_REGISTRY } from '../blocks/block-registry';
@@ -31,6 +34,7 @@ import { BLOCK_REGISTRY } from '../blocks/block-registry';
     ExportPdfDirective,
     CopyUrlDirective,
     InlineEditDirective,
+    IconPicker,
     BlockFrame,
   ],
   providers: [ResumeStore],
@@ -49,4 +53,16 @@ export class Paper {
   readonly contactDetails = CONTACT_DETAILS;
   readonly rightPanel = RIGHT_PANEL;
   readonly links = LINKS;
+
+  addLink(): void {
+    this.links.push({ icon: Icon.faLink, href: 'https://' });
+  }
+
+  removeLink(index: number): void {
+    this.links.splice(index, 1);
+  }
+
+  setLinkIcon(link: Links, icon: IconDefinition): void {
+    link.icon = icon;
+  }
 }
