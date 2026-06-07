@@ -75,7 +75,7 @@ describe('CopyUrlDirective', () => {
         .mockImplementation(() => null);
 
       vi.spyOn(navigator.clipboard, 'writeText').mockRejectedValue(
-        new Error('Clipboard error')
+        new Error('Clipboard error'),
       );
 
       await directive.copy();
@@ -83,7 +83,7 @@ describe('CopyUrlDirective', () => {
       expect(directive.copied()).toBe(false);
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Failed to copy URL to clipboard:',
-        expect.any(Error)
+        expect.any(Error),
       );
 
       consoleErrorSpy.mockRestore();

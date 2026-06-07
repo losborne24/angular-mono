@@ -41,7 +41,7 @@ export class ExportPdfDirective {
 
     const cleanupSvgStyles = (node: HTMLElement): void => {
       const svgElements = node.querySelectorAll(
-        'svg.svg-inline--fa, svg.fa-icon'
+        'svg.svg-inline--fa, svg.fa-icon',
       );
       svgElements.forEach((svg) => {
         if (svg instanceof SVGElement) {
@@ -57,7 +57,7 @@ export class ExportPdfDirective {
 
   private async generatePdfFromNode(
     original: HTMLElement,
-    clone: HTMLElement
+    clone: HTMLElement,
   ): Promise<void> {
     try {
       const dataUrl = await this.nodeToImage(original, clone);
@@ -71,7 +71,7 @@ export class ExportPdfDirective {
 
   private async nodeToImage(
     original: HTMLElement,
-    clone: HTMLElement
+    clone: HTMLElement,
   ): Promise<string> {
     const width = original.offsetWidth;
     const height = original.offsetHeight;

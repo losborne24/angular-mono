@@ -113,7 +113,7 @@ describe('ExportPdfDirective', () => {
         0,
         0,
         210,
-        157.5
+        157.5,
       );
       expect(mockSave).toHaveBeenCalledWith('document.pdf');
     });
@@ -124,7 +124,7 @@ describe('ExportPdfDirective', () => {
         .mockImplementation(() => undefined);
       const domtoimage = await import('dom-to-image-more');
       vi.spyOn(domtoimage.default, 'toPng').mockRejectedValueOnce(
-        new Error('Image conversion failed')
+        new Error('Image conversion failed'),
       );
 
       vi.useFakeTimers();
@@ -134,7 +134,7 @@ describe('ExportPdfDirective', () => {
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Error generating PDF:',
-        expect.any(Error)
+        expect.any(Error),
       );
 
       consoleErrorSpy.mockRestore();
@@ -151,7 +151,7 @@ describe('ExportPdfDirective', () => {
 
       const clonedNode = element.lastChild as HTMLElement;
       const clonedSvg = clonedNode.querySelector(
-        'svg.svg-inline--fa'
+        'svg.svg-inline--fa',
       ) as SVGElement & { style: CSSStyleDeclaration };
       expect(clonedSvg).toBeTruthy();
       expect(clonedSvg.style.border).toBe('');

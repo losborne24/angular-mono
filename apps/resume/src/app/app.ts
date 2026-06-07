@@ -6,10 +6,7 @@ import {
 } from '@angular/core';
 import { Paper } from './paper/paper';
 import { CommonModule } from '@angular/common';
-import {
-  FontPicker,
-  ThemePicker,
-} from '@angular-monorepo/shared/ui';
+import { FontPicker, ThemePicker } from '@angular-monorepo/shared/ui';
 import { Theme, Font } from '@angular-monorepo/shared/util';
 
 @Component({
