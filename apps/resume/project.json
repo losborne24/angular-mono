@@ -4,7 +4,7 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/resume/src",
-  "tags": [],
+  "tags": ["scope:resume", "type:app"],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
