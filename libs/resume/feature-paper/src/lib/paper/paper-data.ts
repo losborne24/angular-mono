@@ -182,13 +182,6 @@ export const RIGHT_PANEL: RightPanelSection[] = [
       'The Open Group Certified: TOGAF® 9 Certified',
     ],
   },
-  {
-    header: 'VOLUNTEERING',
-    items: [
-      '2017 - 2020 Badminton Coach, Durham University Badminton Club',
-      '2017 Badminton Coach, Dorking Badminton Club',
-    ],
-  },
 ];
 
 /**
