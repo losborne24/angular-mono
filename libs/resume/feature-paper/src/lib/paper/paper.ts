@@ -62,6 +62,11 @@ export class Paper {
     this.links.splice(index, 1);
   }
 
+  /** In edit mode, suppress navigation so the click edits the href text. */
+  onLinkClick(event: MouseEvent): void {
+    if (this.store.editMode()) event.preventDefault();
+  }
+
   setLinkIcon(link: Links, icon: IconDefinition): void {
     link.icon = icon;
   }

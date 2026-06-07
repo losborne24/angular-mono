@@ -14,22 +14,8 @@
   }
 }
 
-// Transparent full-viewport catcher so an outside click closes the popover.
-.icon-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  background: transparent;
-  border: none;
-  cursor: default;
-}
-
 .icon-grid {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: 50;
-  margin-top: 0.25rem;
+  // Position handled by the CDK overlay; this only styles the panel.
   display: grid;
   grid-template-columns: repeat(4, 1.75rem);
   gap: 0.25rem;
@@ -67,7 +53,6 @@
     pointer-events: none;
   }
 
-  .icon-backdrop,
   .icon-grid {
     display: none !important;
   }

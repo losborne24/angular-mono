@@ -70,9 +70,10 @@
               }
               <a
                 target="_blank"
-                [href]="edit ? null : link.href"
-                [class.pointer-events-none]="edit"
+                rel="noopener"
+                [href]="link.href"
                 class="flex-1"
+                (click)="onLinkClick($event)"
               >
                 <span
                   class="text-secondary"

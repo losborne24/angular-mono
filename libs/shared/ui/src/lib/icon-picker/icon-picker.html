@@ -1,20 +1,25 @@
-<div class="icon-picker relative inline-flex">
-  <button
-    type="button"
-    class="icon-trigger"
-    aria-label="Change icon"
-    (click)="toggle()"
-  >
-    <fa-icon [icon]="icon()"></fa-icon>
-  </button>
-  @if (open()) {
-  <button
-    type="button"
-    class="icon-backdrop"
-    aria-label="Close icon picker"
-    (click)="close()"
-  ></button>
-  <div class="icon-grid bg-base-100" role="listbox">
+<button
+  type="button"
+  class="icon-trigger"
+  cdkOverlayOrigin
+  #trigger="cdkOverlayOrigin"
+  aria-label="Change icon"
+  (click)="toggle()"
+>
+  <fa-icon [icon]="icon()"></fa-icon>
+</button>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="open()"
+  [cdkConnectedOverlayPositions]="positions"
+  [cdkConnectedOverlayHasBackdrop]="true"
+  cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+  (backdropClick)="close()"
+  (detach)="close()"
+>
+  <div class="icon-grid bg-base-100" role="listbox" [attr.data-theme]="theme()">
     @for (option of icons; track $index) {
     <button
       type="button"
@@ -26,5 +31,4 @@
     </button>
     }
   </div>
-  }
-</div>
+</ng-template>
