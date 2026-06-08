@@ -1,26 +1,20 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   inject,
+  viewChild,
 } from '@angular/core';
 import { CommonModule, NgComponentOutlet } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {
-  CONTACT_DETAILS,
-  RIGHT_PANEL,
-  EDUCATION,
-  SECTION_LABELS,
-  LINKS,
-} from './paper-data';
 import { Icon } from '@angular-monorepo/shared/util';
+import { parseResumeCsv } from '@angular-monorepo/resume/util';
 import {
   ExportPdfDirective,
   CopyUrlDirective,
   InlineEditDirective,
   IconPicker,
 } from '@angular-monorepo/shared/ui';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import type { Links, RightPanelSection } from '@angular-monorepo/resume/util';
 import { ResumeStore } from '../blocks/resume-store';
 import { BlockFrame } from '../blocks/block-frame/block-frame';
 import { BLOCK_REGISTRY } from '../blocks/block-registry';
@@ -47,47 +41,40 @@ export class Paper {
   readonly registry = BLOCK_REGISTRY;
   readonly store = inject(ResumeStore);
 
-  // Aside content (left as-is): sourced from paper-data, edited in place.
-  readonly sectionLabels = SECTION_LABELS;
-  readonly education = EDUCATION;
-  readonly contactDetails = CONTACT_DETAILS;
-  readonly rightPanel = RIGHT_PANEL;
-  readonly links = LINKS;
-
-  addLink(): void {
-    this.links.unshift({ icon: Icon.faLink, href: 'https://' });
-  }
-
-  removeLink(index: number): void {
-    this.links.splice(index, 1);
-  }
+  /** Hidden file input used to pick a CSV for upload. */
+  readonly fileInput = viewChild<ElementRef<HTMLInputElement>>('fileInput');
 
   /** In edit mode, suppress navigation so the click edits the href text. */
   onLinkClick(event: MouseEvent): void {
     if (this.store.editMode()) event.preventDefault();
   }
 
-  setLinkIcon(link: Links, icon: IconDefinition): void {
-    link.icon = icon;
-  }
-
-  addEducation(): void {
-    this.education.unshift({
-      school: 'School',
-      period: 'YEAR - YEAR',
-      detail: 'Details',
+  /** Serialize current state and trigger a CSV file download. */
+  downloadCsv(): void {
+    const blob = new Blob([this.store.toCsv()], {
+      type: 'text/csv;charset=utf-8',
     });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = 'resume.csv';
+    anchor.click();
+    URL.revokeObjectURL(url);
   }
 
-  removeEducation(index: number): void {
-    this.education.splice(index, 1);
+  /** Open the hidden file picker. */
+  triggerUpload(): void {
+    this.fileInput()?.nativeElement.click();
   }
 
-  addPanelItem(section: RightPanelSection): void {
-    section.items.unshift('New item');
-  }
-
-  removePanelItem(section: RightPanelSection, index: number): void {
-    section.items.splice(index, 1);
+  /** Parse the chosen CSV file and replace the current resume state. */
+  async onFileSelected(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+    const text = await file.text();
+    this.store.hydrate(parseResumeCsv(text));
+    // Reset so selecting the same file again re-triggers change.
+    input.value = '';
   }
 }

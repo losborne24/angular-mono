@@ -25,7 +25,7 @@
 
         <section class="group/main flex flex-col gap-2">
           <h3 class="text-primary">
-            <strong>{{ sectionLabels.experience }}</strong>
+            <strong>{{ store.sectionLabels().experience }}</strong>
           </h3>
           @if (edit) {
           <nav class="add-bar flex gap-2 font-sans">
@@ -52,25 +52,25 @@
 
         <section class="group/links flex flex-col gap-2">
           <h3 class="text-primary">
-            <strong>{{ sectionLabels.links }}</strong>
+            <strong>{{ store.sectionLabels().links }}</strong>
           </h3>
           @if (edit) {
           <nav class="add-bar flex gap-2 font-sans">
-            <button type="button" class="add-button" (click)="addLink()">
+            <button type="button" class="add-button" (click)="store.addLink()">
               <fa-icon [icon]="icon.faLink"></fa-icon>
               <span>Add link</span>
             </button>
           </nav>
           }
           <nav class="flex flex-col text-base-content">
-            @for (link of links; track $index; let i = $index) {
+            @for (link of store.links(); track $index; let i = $index) {
             <div
               class="link-row group/link flex items-center gap-2 text-base-content text-opacity-90"
             >
               @if (edit) {
               <app-icon-picker
                 [icon]="link.icon"
-                (iconChanged)="setLinkIcon(link, $event)"
+                (iconChanged)="store.setLinkIcon(link, $event)"
               />
               } @else {
               <fa-icon [icon]="link.icon"></fa-icon>
@@ -93,7 +93,7 @@
                 type="button"
                 class="row-remove font-sans"
                 aria-label="Remove link"
-                (click)="removeLink(i)"
+                (click)="store.removeLink(i)"
               >
                 <fa-icon [icon]="icon.faXmark"></fa-icon>
               </button>
@@ -107,7 +107,7 @@
         class="flex flex-col flex-none basis-[28%] bg-neutral text-neutral-content text-opacity-90 p-8 gap-8"
       >
         <address>
-          @for (detail of contactDetails; track $index) {
+          @for (detail of store.contactDetails(); track $index) {
           <div class="flex gap-2 items-center">
             <div class="icon-container">
               <fa-icon [icon]="detail.icon"></fa-icon>
@@ -129,18 +129,18 @@
         </address>
         <section class="group/education flex flex-col gap-2">
           <h3 class="text-accent">
-            <strong>{{ sectionLabels.education }}</strong>
+            <strong>{{ store.sectionLabels().education }}</strong>
           </h3>
           @if (edit) {
           <nav class="add-bar flex gap-2 font-sans">
-            <button type="button" class="add-button" (click)="addEducation()">
+            <button type="button" class="add-button" (click)="store.addEducation()">
               <fa-icon [icon]="icon.faGraduationCap"></fa-icon>
               <span>Add education</span>
             </button>
           </nav>
           }
           <div class="flex flex-col gap-4">
-            @for (edu of education; track $index; let i = $index) {
+            @for (edu of store.education(); track $index; let i = $index) {
             <article class="edu-row group/edu flex flex-col gap-2">
               <header>
                 <h2>
@@ -160,7 +160,7 @@
                   type="button"
                   class="row-remove font-sans"
                   aria-label="Remove education"
-                  (click)="removeEducation(i)"
+                  (click)="store.removeEducation(i)"
                 >
                   <fa-icon [icon]="icon.faXmark"></fa-icon>
                 </button>
@@ -180,14 +180,14 @@
           </div>
         </section>
         <section class="flex flex-col gap-8">
-          @for(section of rightPanel; track $index ){
+          @for(section of store.rightPanel(); track $index ){
           <section class="group/panel flex flex-col gap-2">
             <h3 class="text-accent">
               <strong>{{ section.header }}</strong>
             </h3>
             @if (edit) {
             <nav class="add-bar flex gap-2 font-sans">
-              <button type="button" class="add-button" (click)="addPanelItem(section)">
+              <button type="button" class="add-button" (click)="store.addPanelItem(section.header)">
                 <fa-icon
                   [icon]="section.header === 'CERTIFICATIONS' ? icon.faCertificate : icon.faTrophy"
                 ></fa-icon>
@@ -204,7 +204,7 @@
                   type="button"
                   class="row-remove font-sans"
                   aria-label="Remove item"
-                  (click)="removePanelItem(section, i)"
+                  (click)="store.removePanelItem(section.header, i)"
                 >
                   <fa-icon [icon]="icon.faXmark"></fa-icon>
                 </button>
@@ -245,5 +245,26 @@
     >
       <fa-icon [icon]="icon.faLink"></fa-icon>
     </button>
+    <button
+      class="circle-button tooltip tooltip-right font-sans"
+      data-tip="Download CSV"
+      (click)="downloadCsv()"
+    >
+      <fa-icon [icon]="icon.faFileCsv"></fa-icon>
+    </button>
+    <button
+      class="circle-button tooltip tooltip-right font-sans"
+      data-tip="Upload CSV"
+      (click)="triggerUpload()"
+    >
+      <fa-icon [icon]="icon.faFileArrowUp"></fa-icon>
+    </button>
+    <input
+      #fileInput
+      type="file"
+      accept=".csv,text/csv"
+      class="hidden"
+      (change)="onFileSelected($event)"
+    />
   </nav>
 </div>
