@@ -8,7 +8,7 @@ export interface ContactDetail {
 
 export interface Links {
   icon: IconDefinition;
-  href?: string;
+  href: string;
   link?: string;
 }
 
@@ -32,4 +32,25 @@ export interface Experience {
 export interface RightPanelSection {
   header: string;
   items: string[];
+}
+
+export interface ResumeHeader {
+  name: string;
+  title: string;
+}
+
+export interface Education {
+  school: string;
+  period: string;
+  /** Single line of detail (e.g. degree). Mutually exclusive with `items`. */
+  detail?: string;
+  /** List of detail lines (e.g. A-levels). Mutually exclusive with `detail`. */
+  items?: string[];
+}
+
+/** Editable labels for the static section headings. */
+export interface SectionLabels {
+  experience: string;
+  links: string;
+  education: string;
 }

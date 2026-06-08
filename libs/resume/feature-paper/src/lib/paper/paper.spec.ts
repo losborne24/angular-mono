@@ -1,17 +1,38 @@
+import { vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Paper } from './paper';
+
+/** Minimal CSV covering each section the template renders. */
+const CSV = `type,icon,a,b,c,d,e,f
+header,,name,Leith Osborne,,,,
+header,,title,Front-End Focused Product Engineer,,,,
+label,,experience,EXPERIENCE,,,,
+label,,links,LINKS,,,,
+label,,education,EDUCATION,,,,
+contact,faPhone,+44 7494 391933,,,,,
+link,faGithub,https://github.com/losborne24,,,,,
+education,,Durham University,OCT 2017 - JUL 2020,BSc Computer Science,,,
+experience,,OpenGamma Limited,Software Developer,JAN 2025 - PRESENT,Angular,Full UI Ownership,Owned the UI.
+panel,,ACHIEVEMENTS,An award,,,,
+`;
 
 describe('Paper', () => {
   let component: Paper;
   let fixture: ComponentFixture<Paper>;
 
   beforeEach(async () => {
+    vi.spyOn(globalThis, 'fetch').mockImplementation(
+      async () => new Response(CSV, { headers: { 'Content-Type': 'text/csv' } }),
+    );
+
     await TestBed.configureTestingModule({
       imports: [Paper],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Paper);
     component = fixture.componentInstance;
+    // Let the store's async load() settle before asserting on rendered data.
+    await component.store.load();
     fixture.detectChanges();
   });
 
@@ -32,15 +53,62 @@ describe('Paper', () => {
       expect(address).toBeTruthy();
     });
 
-    it('should render experience section', () => {
+    it('should render experience blocks', () => {
       const compiled = fixture.nativeElement;
-      expect(compiled.textContent).toContain('EXPERIENCE');
+      expect(compiled.querySelector('app-experience-block')).toBeTruthy();
+      expect(compiled.textContent).toContain('OpenGamma Limited');
+    });
+
+    it('hides add-block controls outside edit mode', () => {
+      const compiled = fixture.nativeElement;
+      const addButtons = compiled.querySelectorAll('.add-bar button');
+      expect(addButtons.length).toBe(0);
+    });
+
+    it('shows add-block controls in edit mode', () => {
+      component.store.editMode.set(true);
+      fixture.detectChanges();
+      const compiled = fixture.nativeElement;
+      const addButtons = compiled.querySelectorAll('.add-bar button');
+      expect(addButtons.length).toBeGreaterThan(0);
     });
 
     it('should render utility buttons', () => {
       const compiled = fixture.nativeElement;
       const buttons = compiled.querySelectorAll('nav.utility-container button');
-      expect(buttons.length).toBe(2);
+      expect(buttons.length).toBe(5);
+    });
+  });
+
+  describe('csv import/export', () => {
+    afterEach(() => vi.restoreAllMocks());
+
+    it('serializes current state on download', () => {
+      const click = vi.fn();
+      const create = vi.fn().mockReturnValue('blob:x');
+      // jsdom doesn't implement object URLs; stub them on.
+      URL.createObjectURL = create;
+      URL.revokeObjectURL = vi.fn();
+      vi.spyOn(document, 'createElement').mockReturnValue({
+        href: '',
+        download: '',
+        click,
+      } as unknown as HTMLAnchorElement);
+
+      component.downloadCsv();
+
+      expect(create).toHaveBeenCalled();
+      expect(click).toHaveBeenCalled();
+    });
+
+    it('hydrates store from an uploaded file', async () => {
+      const csv =
+        'type,icon,a,b,c,d,e,f\nheader,,name,Uploaded Person,,,,\n';
+      const input = { files: [{ text: async () => csv }], value: 'x' };
+      await component.onFileSelected({ target: input } as unknown as Event);
+
+      expect(component.store.header().name).toBe('Uploaded Person');
+      expect(input.value).toBe('');
     });
   });
 });

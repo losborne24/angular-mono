@@ -1,0 +1,13 @@
+<div class="block-frame relative flex items-start" [class.group]="removable()">
+  <div class="flex-1"><ng-content></ng-content></div>
+  @if (removable()) {
+  <button
+    type="button"
+    class="block-remove opacity-0 transition-opacity group-hover:opacity-100 font-sans"
+    aria-label="Remove block"
+    (click)="remove.emit()"
+  >
+    <fa-icon [icon]="icon.faXmark"></fa-icon>
+  </button>
+  }
+</div>

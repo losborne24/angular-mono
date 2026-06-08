@@ -1,0 +1,33 @@
+type,icon,a,b,c,d,e,f
+header,,name,Leith Osborne,,,,
+header,,title,Front-End Focused Product Engineer,,,,
+label,,experience,EXPERIENCE,,,,
+label,,links,LINKS,,,,
+label,,education,EDUCATION,,,,
+contact,faLocationDot,"London, UK",,,,,
+contact,faPhone,+44 7494 391933,,,,,
+contact,faEnvelope,osborneleith@gmail.com,mailto:osborneleith@gmail.com,,,,
+link,faLinkedin,https://www.linkedin.com/in/leith-osborne-5946161b3,,,,,
+link,faGithub,https://github.com/losborne24,,,,,
+link,faGlobe,https://losborne24.github.io,,,,,
+education,,Durham University,OCT 2017 - JUL 2020,"BSc Computer Science, First Class Honours",,,
+education,,"The Ashcombe School, Surrey",SEP 2010 - AUG 2017,,Further Mathematics A*|Mathematics A*|Computer Science A,,
+experience,,OpenGamma Limited,Software Developer,JAN 2025 - PRESENT,Angular|TypeScript|RxJS|Java|PostgreSQL|Node|AWS,Full UI Ownership,"Core member of a lean 1.5–3 developer team, owning the complete UI of the company’s flagship multi-million ARR margin optimisation analytics SaaS platform."
+experience,,OpenGamma Limited,Software Developer,JAN 2025 - PRESENT,Angular|TypeScript|RxJS|Java|PostgreSQL|Node|AWS,BI Integration,Implemented custom date pickers and calculation logic to drive dynamic API parameterisation in embedded AWS QuickSight dashboards.
+experience,,OpenGamma Limited,Software Developer,JAN 2025 - PRESENT,Angular|TypeScript|RxJS|Java|PostgreSQL|Node|AWS,Tenant-Specific UI Configuration,"Owned and delivered the full-stack implementation (database layer, data modeling, API services, and frontend UI orchestration) to power dynamic tenant-specific profiles, modules, navigation menus, and dashboards within a scalable multi-tenant ecosystem."
+experience,,OpenGamma Limited,Front-End Developer,APR 2022 - JAN 2025,Angular|TypeScript|RxJS|AG Grid|Figma|Node|AWS,On-Demand Risk Simulation Tools,"Designed and delivered a portfolio editor and calculation runner, enabling users to perform stressed margin analysis on modified portfolios."
+experience,,OpenGamma Limited,Front-End Developer,APR 2022 - JAN 2025,Angular|TypeScript|RxJS|AG Grid|Figma|Node|AWS,Tenant-Level Configuration Management,"Built a dynamic, tenant-level settings UI using editable AG Grid tables to manage complex business and system configurations, incorporating custom field components, validations, attributes, and integrated review/approval workflows."
+experience,,OpenGamma Limited,Front-End Developer,APR 2022 - JAN 2025,Angular|TypeScript|RxJS|AG Grid|Figma|Node|AWS,Micro-Frontend Architecture,"Led extraction of the Call Management platform from a monorepo into an independently deployable micro-frontend, including separation of shared frontend libraries into standalone repositories to enable modular releases and scalable delivery."
+experience,,OpenGamma Limited,Front-End Developer,APR 2022 - JAN 2025,Angular|TypeScript|RxJS|AG Grid|Figma|Node|AWS,Design Systems,"Created a Figma component library from reusable stateless UI components, standardising design-to-development consistency and accelerating mockup creation"
+experience,,Policy Monitor Limited,Software Engineer,OCT 2020 - APR 2022,Angular|TypeScript|RxJS|Java|MySQL|Node|AWS,Frontend Modernisation,"Played a key role in developing a B2B cybersecurity policy monitoring SaaS product; migrated legacy Dojo.js codebase to Angular 11 using NGXS, RxJS, Angular Material, and Storybook to improve scalability, maintainability, and UI consistency."
+experience,,Policy Monitor Limited,Software Engineer,OCT 2020 - APR 2022,Angular|TypeScript|RxJS|Java|MySQL|Node|AWS,API Integration,Integrated frontend components with a Java-based backend API and external platforms including Xero and GoCardless for accounting and payment processing functionality.
+experience,,Policy Monitor Limited,Software Engineer,OCT 2020 - APR 2022,Angular|TypeScript|RxJS|Java|MySQL|Node|AWS,DevOps / CI/CD,"Upgraded AWS CloudFormation templates for automated, repeatable cloud provisioning and streamlined Bitbucket Pipelines to optimize CI/CD workflows, reducing release cycle time and enhancing deployment reliability."
+panel,,ACHIEVEMENTS,"2022 First Year Impact Award, OpenGamma",,,,
+panel,,ACHIEVEMENTS,2019/20 Durham University Badminton Club 2nd Team Captain,,,,
+panel,,ACHIEVEMENTS,2018/19 Durham University Badminton Club Vice President,,,,
+panel,,ACHIEVEMENTS,2015/16 Gold Duke Of Edinburgh Award,,,,
+panel,,ACHIEVEMENTS,2014/15 Silver Duke Of Edinburgh Award,,,,
+panel,,ACHIEVEMENTS,2013/14 Bronze Duke Of Edinburgh Award,,,,
+panel,,CERTIFICATIONS,AWS Certified Developer - Associate,,,,
+panel,,CERTIFICATIONS,AWS Certified Cloud Practitioner,,,,
+panel,,CERTIFICATIONS,The Open Group Certified: TOGAF® 9 Certified,,,,

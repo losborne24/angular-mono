@@ -1,0 +1,34 @@
+<button
+  type="button"
+  class="icon-trigger"
+  cdkOverlayOrigin
+  #trigger="cdkOverlayOrigin"
+  aria-label="Change icon"
+  (click)="toggle()"
+>
+  <fa-icon [icon]="icon()"></fa-icon>
+</button>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="open()"
+  [cdkConnectedOverlayPositions]="positions"
+  [cdkConnectedOverlayHasBackdrop]="true"
+  cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+  (backdropClick)="close()"
+  (detach)="close()"
+>
+  <div class="icon-grid bg-base-100" role="listbox" [attr.data-theme]="theme()">
+    @for (option of icons; track $index) {
+    <button
+      type="button"
+      class="icon-option"
+      [class.icon-option--active]="option === icon()"
+      (click)="select(option)"
+    >
+      <fa-icon [icon]="option"></fa-icon>
+    </button>
+    }
+  </div>
+</ng-template>

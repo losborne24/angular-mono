@@ -1,35 +1,80 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  viewChild,
+} from '@angular/core';
+import { CommonModule, NgComponentOutlet } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { CONTACT_DETAILS, LINKS, EXPERIENCE, RIGHT_PANEL } from './paper-data';
-import type {
-  ContactDetail,
-  Links,
-  Experience,
-  RightPanelSection,
-} from '@angular-monorepo/resume/util';
 import { Icon } from '@angular-monorepo/shared/util';
+import { parseResumeCsv } from '@angular-monorepo/resume/util';
 import {
   ExportPdfDirective,
   CopyUrlDirective,
+  InlineEditDirective,
+  IconPicker,
 } from '@angular-monorepo/shared/ui';
+import { ResumeStore } from '../blocks/resume-store';
+import { BlockFrame } from '../blocks/block-frame/block-frame';
+import { BLOCK_REGISTRY } from '../blocks/block-registry';
 
 @Component({
   selector: 'app-paper',
   imports: [
     CommonModule,
+    NgComponentOutlet,
     FontAwesomeModule,
     ExportPdfDirective,
     CopyUrlDirective,
+    InlineEditDirective,
+    IconPicker,
+    BlockFrame,
   ],
+  providers: [ResumeStore],
   templateUrl: './paper.html',
   styleUrl: './paper.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Paper {
   readonly icon = Icon;
-  readonly contactDetails = CONTACT_DETAILS;
-  readonly links = LINKS;
-  readonly experience = EXPERIENCE;
-  readonly rightPanel = RIGHT_PANEL;
+  readonly registry = BLOCK_REGISTRY;
+  readonly store = inject(ResumeStore);
+
+  /** Hidden file input used to pick a CSV for upload. */
+  readonly fileInput = viewChild<ElementRef<HTMLInputElement>>('fileInput');
+
+  /** In edit mode, suppress navigation so the click edits the href text. */
+  onLinkClick(event: MouseEvent): void {
+    if (this.store.editMode()) event.preventDefault();
+  }
+
+  /** Serialize current state and trigger a CSV file download. */
+  downloadCsv(): void {
+    const blob = new Blob([this.store.toCsv()], {
+      type: 'text/csv;charset=utf-8',
+    });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = 'resume.csv';
+    anchor.click();
+    URL.revokeObjectURL(url);
+  }
+
+  /** Open the hidden file picker. */
+  triggerUpload(): void {
+    this.fileInput()?.nativeElement.click();
+  }
+
+  /** Parse the chosen CSV file and replace the current resume state. */
+  async onFileSelected(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+    const text = await file.text();
+    this.store.hydrate(parseResumeCsv(text));
+    // Reset so selecting the same file again re-triggers change.
+    input.value = '';
+  }
 }

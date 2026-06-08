@@ -1,66 +1,111 @@
+@let edit = store.editMode();
 <div class="flex gap-2">
   <div
     #pdfExporter="appExportPdf"
     appExportPdf
     [filename]="'Leith Osborne Resume.pdf'"
     [scale]="3"
+    class="paper-scroll"
+    [class.editing]="edit"
   >
     <article
       class="paper-container flex-row card bg-base-100 text-neutral overflow-hidden"
+      [class.editing]="edit"
     >
       <main
-        class="flex flex-col flex-none basis-[72%] p-8 gap-8 text-base-content"
+        class="group/main flex flex-col flex-none basis-[72%] p-8 gap-8 text-base-content"
       >
         <header>
-          <h1 class="text-5xl mb-2"><strong>Leith Osborne</strong></h1>
-          <h3>Front-End Focused Product Engineer</h3>
+          <h1 class="text-5xl mb-2">
+            <strong
+              [(appInlineEdit)]="store.header().name"
+              [disabled]="!edit"
+            ></strong>
+          </h1>
+          <!-- eslint-disable-next-line @angular-eslint/template/elements-content -->
+          <h3 [(appInlineEdit)]="store.header().title" [disabled]="!edit"></h3>
         </header>
-        <section class="flex flex-col gap-2">
-          <h3 class="text-primary"><strong>EXPERIENCE</strong></h3>
+
+        <section class="group/main flex flex-col gap-2">
+          <h3 class="text-primary">
+            <strong>{{ store.sectionLabels().experience }}</strong>
+          </h3>
+          @if (edit) {
+          <nav class="add-bar flex gap-2 font-sans">
+            <button
+              type="button"
+              class="add-button"
+              (click)="store.addBlock('experience')"
+            >
+              <fa-icon [icon]="icon.faBriefcase"></fa-icon>
+              <span>Add experience</span>
+            </button>
+          </nav>
+          }
           <div class="flex flex-col gap-4">
-            @for(company of experience; track $index) {
-            <article>
-              <h2><strong>{{company.companyName}}</strong></h2>
-              <div
-                class="flex flex-col gap-2 text-base-content text-opacity-75"
-              >
-                @for(position of company.positions; track $index) {
-                <div>
-                  <header class="flex items-center justify-between">
-                    <h3 class="text-base-content">{{position.position}}</h3>
-                    <p class="text-xs">
-                      @for (tech of position.techStack; track $index; let isLast
-                      = $last) { {{tech }} @if(!isLast) { |} }
-                    </p>
-                  </header>
-                  <time class="text-[0.625rem]">{{position.period}}</time>
-                  <ul>
-                    @for(contribution of position.contributions; track $index) {
-                    <li>
-                      <strong>{{contribution.category}}</strong>
-                      – {{contribution.contribution }}
-                    </li>
-                    }
-                  </ul>
-                </div>
-                }
-              </div>
-            </article>
+            @for (block of store.blocks(); track block.id) {
+            <app-block-frame
+              [removable]="edit"
+              (remove)="store.removeBlock(block.id)"
+            >
+              <ng-container
+                [ngComponentOutlet]="registry[block.kind]"
+                [ngComponentOutletInputs]="{ block }"
+              />
+            </app-block-frame>
             }
           </div>
         </section>
-        <section class="flex flex-col gap-2">
-          <h3 class="text-primary"><strong>LINKS</strong></h3>
+
+        <section class="group/links flex flex-col gap-2">
+          <h3 class="text-primary">
+            <strong>{{ store.sectionLabels().links }}</strong>
+          </h3>
+          @if (edit) {
+          <nav class="add-bar flex gap-2 font-sans">
+            <button type="button" class="add-button" (click)="store.addLink()">
+              <fa-icon [icon]="icon.faLink"></fa-icon>
+              <span>Add link</span>
+            </button>
+          </nav>
+          }
           <nav class="flex flex-col text-base-content">
-            @for (link of links; track $index) {
-            <a
-              target="_blank"
-              [href]="link.href"
-              class="flex items-center gap-2 text-base-content text-opacity-90"
+            @for (link of store.links(); track $index; let i = $index) {
+            <div
+              class="link-row group/link flex items-center gap-2 text-base-content text-opacity-90"
             >
+              @if (edit) {
+              <app-icon-picker
+                [icon]="link.icon"
+                (iconChanged)="store.setLinkIcon(link, $event)"
+              />
+              } @else {
               <fa-icon [icon]="link.icon"></fa-icon>
-              <span class="text-secondary">{{link.href}}</span>
-            </a>
+              }
+              <a
+                target="_blank"
+                rel="noopener"
+                [href]="link.href"
+                class="flex-1"
+                (click)="onLinkClick($event)"
+              >
+                <span
+                  class="text-secondary"
+                  [(appInlineEdit)]="link.href"
+                  [disabled]="!edit"
+                ></span>
+              </a>
+              @if (edit) {
+              <button
+                type="button"
+                class="row-remove font-sans"
+                aria-label="Remove link"
+                (click)="store.removeLink(i)"
+              >
+                <fa-icon [icon]="icon.faXmark"></fa-icon>
+              </button>
+              }
+            </div>
             }
           </nav>
         </section>
@@ -69,59 +114,127 @@
         class="flex flex-col flex-none basis-[28%] bg-neutral text-neutral-content text-opacity-90 p-8 gap-8"
       >
         <address>
-          @for (detail of contactDetails; track $index) {
+          @for (detail of store.contactDetails(); track $index) {
           <div class="flex gap-2 items-center">
             <div class="icon-container">
               <fa-icon [icon]="detail.icon"></fa-icon>
             </div>
             @if(detail.href) {
-            <a target="_blank" class="text-secondary" [href]="detail.href"
-              >{{detail.text}}</a
-            >
+            <!-- eslint-disable-next-line @angular-eslint/template/elements-content -->
+            <a
+              target="_blank"
+              class="text-secondary"
+              [href]="detail.href"
+              [(appInlineEdit)]="detail.text"
+              [disabled]="!edit"
+            ></a>
             } @else {
-            <p>{{detail.text}}</p>
+            <p [(appInlineEdit)]="detail.text" [disabled]="!edit"></p>
             }
           </div>
           }
         </address>
-        <section class="flex flex-col gap-2">
-          <h3 class="text-accent"><strong>EDUCATION</strong></h3>
+        <section class="group/education flex flex-col gap-2">
+          <h3 class="text-accent">
+            <strong>{{ store.sectionLabels().education }}</strong>
+          </h3>
+          @if (edit) {
+          <nav class="add-bar flex gap-2 font-sans">
+            <button
+              type="button"
+              class="add-button"
+              (click)="store.addEducation()"
+            >
+              <fa-icon [icon]="icon.faGraduationCap"></fa-icon>
+              <span>Add education</span>
+            </button>
+          </nav>
+          }
           <div class="flex flex-col gap-4">
-            <article class="flex flex-col gap-2">
+            @for (edu of store.education(); track $index; let i = $index) {
+            <article class="edu-row group/edu flex flex-col gap-2">
               <header>
                 <h2>
-                  <strong class="text-neutral-content"
-                    >Durham University</strong
-                  >
+                  <strong
+                    class="text-neutral-content"
+                    [(appInlineEdit)]="edu.school"
+                    [disabled]="!edit"
+                  ></strong>
                 </h2>
-                <time class="text-[0.625rem]">OCT 2017 - JUL 2020</time>
+                <time
+                  class="text-[0.625rem]"
+                  [(appInlineEdit)]="edu.period"
+                  [disabled]="!edit"
+                ></time>
+                @if (edit) {
+                <button
+                  type="button"
+                  class="row-remove font-sans"
+                  aria-label="Remove education"
+                  (click)="store.removeEducation(i)"
+                >
+                  <fa-icon [icon]="icon.faXmark"></fa-icon>
+                </button>
+                }
               </header>
-              <p>BSc Computer Science, First Class Honours</p>
-            </article>
-            <article class="flex flex-col gap-2">
-              <header>
-                <h2>
-                  <strong class="text-neutral-content"
-                    >The Ashcombe School, Surrey</strong
-                  >
-                </h2>
-                <time class="text-[0.625rem]">SEP 2010 - AUG 2017</time>
-              </header>
+              @if (edu.detail !== undefined) {
+              <p
+                class="edu-detail"
+                [(appInlineEdit)]="edu.detail"
+                [disabled]="!edit"
+              ></p>
+              } @if (edu.items) {
               <ul>
-                <li>Further Mathematics A*</li>
-                <li>Mathematics A*</li>
-                <li>Computer Science A</li>
+                @for (item of edu.items; track $index; let i = $index) {
+                <li [(appInlineEdit)]="edu.items![i]" [disabled]="!edit"></li>
+                }
               </ul>
+              }
             </article>
+            }
           </div>
         </section>
         <section class="flex flex-col gap-8">
-          @for(section of rightPanel; track $index ){
-          <section class="flex flex-col gap-2">
-            <h3 class="text-accent"><strong>{{section.header}}</strong></h3>
+          @for(section of store.rightPanel(); track $index ){
+          <section class="group/panel flex flex-col gap-2">
+            <h3 class="text-accent">
+              <strong>{{ section.header }}</strong>
+            </h3>
+            @if (edit) {
+            <nav class="add-bar flex gap-2 font-sans">
+              <button
+                type="button"
+                class="add-button"
+                (click)="store.addPanelItem(section.header)"
+              >
+                <fa-icon
+                  [icon]="section.header === 'CERTIFICATIONS' ? icon.faCertificate : icon.faTrophy"
+                ></fa-icon>
+                <span
+                  >{{ section.header === 'CERTIFICATIONS' ? 'Add certification'
+                  : 'Add achievement' }}</span
+                >
+              </button>
+            </nav>
+            }
             <ul>
-              @for(item of section.items; track $index) {
-              <li>{{item}}</li>
+              @for(item of section.items; track $index; let i = $index) {
+              <li class="panel-row group/panel-item">
+                <span
+                  [(appInlineEdit)]="section.items[i]"
+                  [disabled]="!edit"
+                ></span>
+                @if (edit) {
+                <button
+                  type="button"
+                  class="row-remove font-sans"
+                  aria-label="Remove item"
+                  (click)="store.removePanelItem(section.header, i)"
+                >
+                  <fa-icon [icon]="icon.faXmark"></fa-icon>
+                </button>
+                }
+              </li>
               }
             </ul>
           </section>
@@ -133,10 +246,41 @@
   <nav class="utility-container flex flex-col gap-2">
     <button
       class="circle-button tooltip tooltip-right font-sans"
+      [class.ring-2]="edit"
+      [class.ring-neutral]="edit"
+      [attr.data-tip]="edit ? 'Done editing' : 'Edit resume'"
+      [attr.aria-pressed]="edit"
+      (click)="store.toggleEditMode()"
+    >
+      <fa-icon [icon]="icon.faPen"></fa-icon>
+    </button>
+    <button
+      class="circle-button tooltip tooltip-right font-sans"
+      data-tip="Upload CSV"
+      (click)="triggerUpload()"
+    >
+      <fa-icon [icon]="icon.faFileArrowUp"></fa-icon>
+    </button>
+    <button
+      class="circle-button tooltip tooltip-right font-sans"
+      data-tip="Download CSV"
+      (click)="downloadCsv()"
+    >
+      <fa-icon [icon]="icon.faFileCsv"></fa-icon>
+    </button>
+    <input
+      #fileInput
+      type="file"
+      accept=".csv,text/csv"
+      class="hidden"
+      (change)="onFileSelected($event)"
+    />
+    <button
+      class="circle-button tooltip tooltip-right font-sans"
       data-tip="Export to pdf"
       (click)="pdfExporter.export()"
     >
-      <fa-icon [icon]="icon.faFileArrowDown"></fa-icon>
+      <fa-icon [icon]="icon.faFilePdf"></fa-icon>
     </button>
     <button
       #urlCopier="appCopyUrl"
