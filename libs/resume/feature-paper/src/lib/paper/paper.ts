@@ -49,6 +49,14 @@ export class Paper {
     if (this.store.editMode()) event.preventDefault();
   }
 
+  /** Clear the resume to a blank slate after confirmation. */
+  startAnew(): void {
+    const ok = confirm(
+      'Start a new, blank resume? This clears all current content.',
+    );
+    if (ok) this.store.reset();
+  }
+
   /** Serialize current state and trigger a CSV file download. */
   downloadCsv(): void {
     const blob = new Blob([this.store.toCsv()], {

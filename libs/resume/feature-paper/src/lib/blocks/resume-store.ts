@@ -71,6 +71,29 @@ export class ResumeStore {
     );
   }
 
+  /** Clear all content to a blank resume and switch on edit mode. */
+  reset(): void {
+    this.hydrate({
+      header: { name: 'Your Name', title: 'Your Title' },
+      sectionLabels: this.sectionLabels(),
+      // Contacts have no add-control, so seed the standard rows to edit.
+      contactDetails: [
+        { icon: Icon.faLocationDot, text: 'City, Country' },
+        { icon: Icon.faPhone, text: 'Phone number' },
+        { icon: Icon.faEnvelope, text: 'email@example.com', href: 'mailto:email@example.com' },
+      ],
+      links: [],
+      education: [],
+      experience: [],
+      // Keep empty sections so their add-item controls still render.
+      rightPanel: [
+        { header: 'ACHIEVEMENTS', items: [] },
+        { header: 'CERTIFICATIONS', items: [] },
+      ],
+    });
+    this.editMode.set(true);
+  }
+
   /** Snapshot the current state as a flat model (experience from blocks). */
   toModel(): ResumeModel {
     return {

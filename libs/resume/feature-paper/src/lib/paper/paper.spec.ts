@@ -76,7 +76,7 @@ describe('Paper', () => {
     it('should render utility buttons', () => {
       const compiled = fixture.nativeElement;
       const buttons = compiled.querySelectorAll('nav.utility-container button');
-      expect(buttons.length).toBe(5);
+      expect(buttons.length).toBe(6);
     });
   });
 
@@ -99,6 +99,25 @@ describe('Paper', () => {
 
       expect(create).toHaveBeenCalled();
       expect(click).toHaveBeenCalled();
+    });
+
+    it('clears state on confirmed start-anew', () => {
+      vi.spyOn(globalThis, 'confirm').mockReturnValue(true);
+      component.startAnew();
+
+      expect(component.store.blocks().length).toBe(0);
+      expect(component.store.links().length).toBe(0);
+      // Contact rows are seeded (no add-control for them).
+      expect(component.store.contactDetails().length).toBe(3);
+      expect(component.store.editMode()).toBe(true);
+    });
+
+    it('keeps state when start-anew is cancelled', () => {
+      vi.spyOn(globalThis, 'confirm').mockReturnValue(false);
+      const before = component.store.blocks().length;
+      component.startAnew();
+
+      expect(component.store.blocks().length).toBe(before);
     });
 
     it('hydrates store from an uploaded file', async () => {

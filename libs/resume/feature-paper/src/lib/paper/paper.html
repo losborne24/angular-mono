@@ -127,6 +127,7 @@
               [href]="detail.href"
               [(appInlineEdit)]="detail.text"
               [disabled]="!edit"
+              (click)="onLinkClick($event)"
             ></a>
             } @else {
             <p [(appInlineEdit)]="detail.text" [disabled]="!edit"></p>
@@ -253,6 +254,13 @@
       (click)="store.toggleEditMode()"
     >
       <fa-icon [icon]="icon.faPen"></fa-icon>
+    </button>
+    <button
+      class="circle-button tooltip tooltip-right font-sans"
+      data-tip="Start anew"
+      (click)="startAnew()"
+    >
+      <fa-icon [icon]="icon.faEraser"></fa-icon>
     </button>
     <button
       class="circle-button tooltip tooltip-right font-sans"
