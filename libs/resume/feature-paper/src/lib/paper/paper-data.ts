@@ -31,7 +31,7 @@ export const EDUCATION: Education[] = [
   {
     school: 'The Ashcombe School, Surrey',
     period: 'SEP 2010 - AUG 2017',
-    items: ['Further Mathematics A*', 'Mathematics A*', 'Computer Science A'],
+    detail: 'Further Mathematics A*\nMathematics A*\nComputer Science A',
   },
 ];
 

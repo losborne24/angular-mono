@@ -28,6 +28,9 @@ import {
   faBriefcase,
   faTrashCan,
   faPen,
+  faGraduationCap,
+  faTrophy,
+  faCertificate,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const Icon = {
@@ -57,6 +60,9 @@ export const Icon = {
   faBriefcase,
   faTrashCan,
   faPen,
+  faGraduationCap,
+  faTrophy,
+  faCertificate,
 } as const satisfies Record<string, IconDefinition>;
 
 /** Icons offered in the link icon picker (brand/social + generic). */

@@ -20,7 +20,7 @@ import {
   IconPicker,
 } from '@angular-monorepo/shared/ui';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import type { Links } from '@angular-monorepo/resume/util';
+import type { Links, RightPanelSection } from '@angular-monorepo/resume/util';
 import { ResumeStore } from '../blocks/resume-store';
 import { BlockFrame } from '../blocks/block-frame/block-frame';
 import { BLOCK_REGISTRY } from '../blocks/block-registry';
@@ -69,5 +69,25 @@ export class Paper {
 
   setLinkIcon(link: Links, icon: IconDefinition): void {
     link.icon = icon;
+  }
+
+  addEducation(): void {
+    this.education.push({
+      school: 'School',
+      period: 'YEAR - YEAR',
+      detail: 'Details',
+    });
+  }
+
+  removeEducation(index: number): void {
+    this.education.splice(index, 1);
+  }
+
+  addPanelItem(section: RightPanelSection): void {
+    section.items.push('New item');
+  }
+
+  removePanelItem(section: RightPanelSection, index: number): void {
+    section.items.splice(index, 1);
   }
 }

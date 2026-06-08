@@ -128,13 +128,13 @@
           </div>
           }
         </address>
-        <section class="flex flex-col gap-2">
+        <section class="group/education flex flex-col gap-2">
           <h3 class="text-accent">
             <strong>{{ sectionLabels.education }}</strong>
           </h3>
           <div class="flex flex-col gap-4">
-            @for (edu of education; track $index) {
-            <article class="flex flex-col gap-2">
+            @for (edu of education; track $index; let i = $index) {
+            <article class="edu-row group/edu flex flex-col gap-2">
               <header>
                 <h2>
                   <strong
@@ -148,9 +148,19 @@
                   [(appInlineEdit)]="edu.period"
                   [disabled]="!edit"
                 ></time>
+                @if (edit) {
+                <button
+                  type="button"
+                  class="row-remove font-sans"
+                  aria-label="Remove education"
+                  (click)="removeEducation(i)"
+                >
+                  <fa-icon [icon]="icon.faXmark"></fa-icon>
+                </button>
+                }
               </header>
               @if (edu.detail !== undefined) {
-              <p [(appInlineEdit)]="edu.detail" [disabled]="!edit"></p>
+              <p class="edu-detail" [(appInlineEdit)]="edu.detail" [disabled]="!edit"></p>
               } @if (edu.items) {
               <ul>
                 @for (item of edu.items; track $index; let i = $index) {
@@ -161,18 +171,48 @@
             </article>
             }
           </div>
+          @if (edit) {
+          <nav class="add-bar flex gap-2 font-sans">
+            <button type="button" class="add-button" (click)="addEducation()">
+              <fa-icon [icon]="icon.faGraduationCap"></fa-icon>
+              <span>Add education</span>
+            </button>
+          </nav>
+          }
         </section>
         <section class="flex flex-col gap-8">
           @for(section of rightPanel; track $index ){
-          <section class="flex flex-col gap-2">
+          <section class="group/panel flex flex-col gap-2">
             <h3 class="text-accent">
               <strong>{{ section.header }}</strong>
             </h3>
             <ul>
               @for(item of section.items; track $index; let i = $index) {
-              <li [(appInlineEdit)]="section.items[i]" [disabled]="!edit"></li>
+              <li class="panel-row group/panel-item">
+                <span [(appInlineEdit)]="section.items[i]" [disabled]="!edit"></span>
+                @if (edit) {
+                <button
+                  type="button"
+                  class="row-remove font-sans"
+                  aria-label="Remove item"
+                  (click)="removePanelItem(section, i)"
+                >
+                  <fa-icon [icon]="icon.faXmark"></fa-icon>
+                </button>
+                }
+              </li>
               }
             </ul>
+            @if (edit) {
+            <nav class="add-bar flex gap-2 font-sans">
+              <button type="button" class="add-button" (click)="addPanelItem(section)">
+                <fa-icon
+                  [icon]="section.header === 'CERTIFICATIONS' ? icon.faCertificate : icon.faTrophy"
+                ></fa-icon>
+                <span>{{ section.header === 'CERTIFICATIONS' ? 'Add certification' : 'Add achievement' }}</span>
+              </button>
+            </nav>
+            }
           </section>
           }
         </section>
