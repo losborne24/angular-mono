@@ -12,24 +12,28 @@ import { Theme, Font } from '@angular-monorepo/shared/util';
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
-  styleUrl: './app.scss',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Paper, CommonModule, FontPicker, ThemePicker],
 })
 export class App {
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    const screenWidth = window.innerWidth;
-    this.scaleFactor.set(Math.min(1, screenWidth / 950));
-  }
+  /**
+   * Viewport width below which the resume scales down. paper (754px) + side controls.
+   */
+  private readonly BASE_WIDTH = 950;
 
   selectedTheme = signal<Theme>('corporate');
   selectedFont = signal<string>('serif');
-  scaleFactor = signal<number>(1);
+  /**
+   * Scale applied to the resume container so it shrinks to fit narrow
+   * viewports. Capped at 1 (never enlarged); below the base width it scales
+   * down proportionally. Recomputed on window resize.
+   */
+  scaleFactor = signal<number>(this.computeScale());
 
-  constructor() {
-    this.onResize(null);
+  @HostListener('window:resize')
+  onResize() {
+    this.scaleFactor.set(this.computeScale());
   }
 
   onFontChanged(font: Font): void {
@@ -37,5 +41,9 @@ export class App {
   }
   onThemeChanged(theme: Theme): void {
     this.selectedTheme.set(theme);
+  }
+
+  private computeScale(): number {
+    return Math.min(1, window.innerWidth / this.BASE_WIDTH);
   }
 }
