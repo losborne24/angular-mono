@@ -55,7 +55,7 @@ export class Paper {
   readonly links = LINKS;
 
   addLink(): void {
-    this.links.push({ icon: Icon.faLink, href: 'https://' });
+    this.links.unshift({ icon: Icon.faLink, href: 'https://' });
   }
 
   removeLink(index: number): void {
@@ -72,7 +72,7 @@ export class Paper {
   }
 
   addEducation(): void {
-    this.education.push({
+    this.education.unshift({
       school: 'School',
       period: 'YEAR - YEAR',
       detail: 'Details',
@@ -84,7 +84,7 @@ export class Paper {
   }
 
   addPanelItem(section: RightPanelSection): void {
-    section.items.push('New item');
+    section.items.unshift('New item');
   }
 
   removePanelItem(section: RightPanelSection, index: number): void {

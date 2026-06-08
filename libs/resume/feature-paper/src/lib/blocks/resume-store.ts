@@ -31,7 +31,7 @@ export class ResumeStore {
       kind: 'experience',
       data: emptyExperience(),
     };
-    this.blocks.update((blocks) => [...blocks, block]);
+    this.blocks.update((blocks) => [block, ...blocks]);
   }
 
   removeBlock(id: string): void {

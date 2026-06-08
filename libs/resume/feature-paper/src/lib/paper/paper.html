@@ -27,6 +27,14 @@
           <h3 class="text-primary">
             <strong>{{ sectionLabels.experience }}</strong>
           </h3>
+          @if (edit) {
+          <nav class="add-bar flex gap-2 font-sans">
+            <button type="button" class="add-button" (click)="store.addBlock('experience')">
+              <fa-icon [icon]="icon.faBriefcase"></fa-icon>
+              <span>Add experience</span>
+            </button>
+          </nav>
+          }
           <div class="flex flex-col gap-4">
             @for (block of store.blocks(); track block.id) {
             <app-block-frame
@@ -40,21 +48,20 @@
             </app-block-frame>
             }
           </div>
-
-          @if (edit) {
-          <nav class="add-bar flex gap-2 font-sans">
-            <button type="button" class="add-button" (click)="store.addBlock('experience')">
-              <fa-icon [icon]="icon.faBriefcase"></fa-icon>
-              <span>Add experience</span>
-            </button>
-          </nav>
-          }
         </section>
 
         <section class="group/links flex flex-col gap-2">
           <h3 class="text-primary">
             <strong>{{ sectionLabels.links }}</strong>
           </h3>
+          @if (edit) {
+          <nav class="add-bar flex gap-2 font-sans">
+            <button type="button" class="add-button" (click)="addLink()">
+              <fa-icon [icon]="icon.faLink"></fa-icon>
+              <span>Add link</span>
+            </button>
+          </nav>
+          }
           <nav class="flex flex-col text-base-content">
             @for (link of links; track $index; let i = $index) {
             <div
@@ -94,14 +101,6 @@
             </div>
             }
           </nav>
-          @if (edit) {
-          <nav class="add-bar flex gap-2 font-sans">
-            <button type="button" class="add-button" (click)="addLink()">
-              <fa-icon [icon]="icon.faLink"></fa-icon>
-              <span>Add link</span>
-            </button>
-          </nav>
-          }
         </section>
       </main>
       <aside
@@ -132,6 +131,14 @@
           <h3 class="text-accent">
             <strong>{{ sectionLabels.education }}</strong>
           </h3>
+          @if (edit) {
+          <nav class="add-bar flex gap-2 font-sans">
+            <button type="button" class="add-button" (click)="addEducation()">
+              <fa-icon [icon]="icon.faGraduationCap"></fa-icon>
+              <span>Add education</span>
+            </button>
+          </nav>
+          }
           <div class="flex flex-col gap-4">
             @for (edu of education; track $index; let i = $index) {
             <article class="edu-row group/edu flex flex-col gap-2">
@@ -171,14 +178,6 @@
             </article>
             }
           </div>
-          @if (edit) {
-          <nav class="add-bar flex gap-2 font-sans">
-            <button type="button" class="add-button" (click)="addEducation()">
-              <fa-icon [icon]="icon.faGraduationCap"></fa-icon>
-              <span>Add education</span>
-            </button>
-          </nav>
-          }
         </section>
         <section class="flex flex-col gap-8">
           @for(section of rightPanel; track $index ){
@@ -186,6 +185,16 @@
             <h3 class="text-accent">
               <strong>{{ section.header }}</strong>
             </h3>
+            @if (edit) {
+            <nav class="add-bar flex gap-2 font-sans">
+              <button type="button" class="add-button" (click)="addPanelItem(section)">
+                <fa-icon
+                  [icon]="section.header === 'CERTIFICATIONS' ? icon.faCertificate : icon.faTrophy"
+                ></fa-icon>
+                <span>{{ section.header === 'CERTIFICATIONS' ? 'Add certification' : 'Add achievement' }}</span>
+              </button>
+            </nav>
+            }
             <ul>
               @for(item of section.items; track $index; let i = $index) {
               <li class="panel-row group/panel-item">
@@ -203,16 +212,6 @@
               </li>
               }
             </ul>
-            @if (edit) {
-            <nav class="add-bar flex gap-2 font-sans">
-              <button type="button" class="add-button" (click)="addPanelItem(section)">
-                <fa-icon
-                  [icon]="section.header === 'CERTIFICATIONS' ? icon.faCertificate : icon.faTrophy"
-                ></fa-icon>
-                <span>{{ section.header === 'CERTIFICATIONS' ? 'Add certification' : 'Add achievement' }}</span>
-              </button>
-            </nav>
-            }
           </section>
           }
         </section>
