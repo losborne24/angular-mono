@@ -28,7 +28,7 @@ import {
   host: {
     '[attr.contenteditable]': 'editable()',
     '[attr.role]': '"textbox"',
-    // Affordance: dashed outline + pointer on hover, solid ring while editing.
+    // Affordance: dashed outline + pointer on hover, solid blue ring while focused/editing.
     // Outline (not border/padding) avoids layout shift.
     '[style.cursor]': 'editable() ? "text" : null',
     '[style.outline]': 'outlineStyle()',
@@ -37,10 +37,11 @@ import {
     '[style.transition]': '"outline-color 120ms ease"',
     '(mouseenter)': 'hovered.set(true)',
     '(mouseleave)': 'hovered.set(false)',
+    '(focus)': 'focused.set(true)',
     '(click)': 'startEdit()',
     '(keydown.enter)': 'onEnter($event)',
     '(keydown.escape)': 'onEscape($event)',
-    '(blur)': 'commit()',
+    '(blur)': 'onBlur()',
   },
 })
 export class InlineEditDirective {
@@ -57,6 +58,7 @@ export class InlineEditDirective {
 
   readonly editing = signal<boolean>(false);
   readonly hovered = signal<boolean>(false);
+  readonly focused = signal<boolean>(false);
   private original = '';
 
   /** True when the element can be entered (not disabled). */
@@ -64,7 +66,8 @@ export class InlineEditDirective {
 
   /** Outline shown by the hover/edit affordance. */
   readonly outlineStyle = computed(() => {
-    if (this.editing()) return '2px solid rgba(59, 130, 246, 0.7)';
+    if (this.editing() || this.focused())
+      return '2px solid rgba(59, 130, 246, 0.7)';
     if (this.hovered() && this.editable())
       return '1px dashed rgba(120, 120, 120, 0.6)';
     return 'none';
@@ -107,6 +110,11 @@ export class InlineEditDirective {
     this.editing.set(false);
     this.editCancel.emit();
     this.el.nativeElement.blur();
+  }
+
+  onBlur(): void {
+    this.focused.set(false);
+    this.commit();
   }
 
   commit(): void {
