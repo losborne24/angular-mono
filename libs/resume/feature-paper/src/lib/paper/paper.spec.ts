@@ -104,9 +104,9 @@ describe('Paper', () => {
       expect(click).toHaveBeenCalled();
     });
 
-    it('clears state on confirmed start-anew', () => {
+    it('clears state on confirmed start-over', () => {
       vi.spyOn(globalThis, 'confirm').mockReturnValue(true);
-      component.startAnew();
+      component.startOver();
 
       expect(component.store.blocks().length).toBe(0);
       expect(component.store.links().length).toBe(0);
@@ -115,10 +115,10 @@ describe('Paper', () => {
       expect(component.store.editMode()).toBe(true);
     });
 
-    it('keeps state when start-anew is cancelled', () => {
+    it('keeps state when start-over is cancelled', () => {
       vi.spyOn(globalThis, 'confirm').mockReturnValue(false);
       const before = component.store.blocks().length;
-      component.startAnew();
+      component.startOver();
 
       expect(component.store.blocks().length).toBe(before);
     });

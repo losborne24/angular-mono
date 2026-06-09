@@ -40,9 +40,9 @@ export class Paper {
   }
 
   /** Clear the resume to a blank slate after confirmation. */
-  startAnew(): void {
+  startOver(): void {
     const ok = confirm(
-      'Start a new, blank resume? This clears all current content.',
+      'Start over with a new, blank resume? This clears all current content.',
     );
     if (ok) this.store.reset();
   }

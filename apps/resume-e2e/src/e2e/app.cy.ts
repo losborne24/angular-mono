@@ -59,7 +59,7 @@ describe('resume-e2e', () => {
   it('starts a blank resume and lets the user fill it in', () => {
     cy.on('window:confirm', () => true);
 
-    cy.dataCy('start-anew').click();
+    cy.dataCy('start-over').click();
 
     // Blank template loads and edit mode is auto-enabled.
     getName().should('contain.text', 'Your Name');
@@ -73,10 +73,10 @@ describe('resume-e2e', () => {
     getTitle().should('contain.text', 'Rear Admiral');
   });
 
-  it('keeps the existing resume when Start anew is dismissed', () => {
+  it('keeps the existing resume when Start over is dismissed', () => {
     cy.on('window:confirm', () => false);
 
-    cy.dataCy('start-anew').click();
+    cy.dataCy('start-over').click();
     getName().should('contain.text', 'Leith Osborne');
   });
 
