@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+export {};
+
 // ***********************************************
 // This example commands.ts shows you how to
 // create various custom commands and overwrite
@@ -13,16 +15,17 @@
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    interface Chainable<Subject> {
-      login(email: string, password: string): void;
+    interface Chainable {
+      /** Select an element by its `data-cy` hook: `cy.dataCy('paper-container')`. */
+      dataCy(value: string): Chainable<JQuery<HTMLElement>>;
     }
   }
 }
 
-// -- This is a parent command --
-Cypress.Commands.add('login', (email, password) => {
-  console.log('Custom command example: Login', email, password);
+// Select by the dedicated `data-cy` test hook — decouples specs from styling
+// classes and UI copy.
+Cypress.Commands.add('dataCy', (value: string) => {
+  return cy.get(`[data-cy="${value}"]`);
 });
 //
 // -- This is a child command --

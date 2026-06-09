@@ -1,9 +1,11 @@
 <div class="flex flex-col gap-2">
   @for (theme of themes; track $index) {
   <button
+    data-cy="theme-button"
     class="circle-button relative overflow-hidden"
     (click)="setTheme(theme)"
     [ngClass]="{'ring-2 ring-neutral': theme === selectedTheme()}"
+    [attr.data-selected]="theme === selectedTheme()"
     [attr.aria-label]="selectedTheme()"
   >
     <div [attr.data-theme]="theme">

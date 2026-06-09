@@ -1,98 +1,127 @@
-import { getGreeting } from '../support/app.po';
+// Tests are organised around user journeys; selectors use `data-cy` hooks.
+// See the E2E testing section in the workspace CLAUDE.md for the conventions.
+
+const getName = () => cy.dataCy('resume-name');
+const getTitle = () => cy.dataCy('resume-title');
+
+/** Replace a contenteditable field's text and commit it (Enter). */
+function rename(hook: string, value: string): void {
+  cy.dataCy(hook).clear();
+  cy.dataCy(hook).type(`${value}{enter}`);
+  cy.dataCy(hook).should('contain.text', value);
+}
 
 describe('resume-e2e', () => {
   beforeEach(() => cy.visit('/angular-mono/resume/'));
 
-  describe('Page Load and Content Display', () => {
-    it('should display the main title', () => {
-      getGreeting().should('contain.text', 'Leith Osborne');
-    });
-
-    it('should display the job title', () => {
-      cy.contains('Full-Stack / UI Engineer').should('be.visible');
-    });
-
-    it('should display the resume paper container', () => {
-      cy.get('.paper-container').should('be.visible');
-    });
+  // Fast sanity check that the app boots and renders its seed content.
+  it('loads the resume with its default content', () => {
+    cy.dataCy('paper-container').should('be.visible');
+    getName().should('contain.text', 'Leith Osborne');
   });
 
-  describe('Theme Picker', () => {
-    it('should display theme picker buttons', () => {
-      cy.get('app-theme-picker button.circle-button').should(
-        'have.length.at.least',
-        1,
-      );
-    });
+  it('lets a user edit their resume and export it to CSV', () => {
+    // Enter edit mode and confirm content unlocks.
+    cy.dataCy('edit-toggle').click();
+    cy.dataCy('edit-toggle').should('have.attr', 'aria-pressed', 'true');
+    cy.dataCy('paper-scroll').should('have.attr', 'data-editing', 'true');
 
-    it('should have a default theme selected', () => {
-      cy.get('app-theme-picker button.circle-button.ring-2').should(
-        'have.length',
-        1,
-      );
-    });
+    // Edit the header fields in place.
+    rename('resume-name', 'Ada Lovelace');
+    rename('resume-title', 'Founding Engineer');
 
-    it('should change theme when clicking a different theme button', () => {
-      // Get the root element's current theme
-      cy.get('[data-theme]')
-        .first()
-        .invoke('attr', 'data-theme')
-        .then((initialTheme) => {
-          // Find a button whose child div has a DIFFERENT data-theme value
-          cy.get('app-theme-picker button.circle-button > div').each(($div) => {
+    // Export and verify both edits round-tripped into the file.
+    cy.dataCy('download-csv').click();
+    cy.readFile('cypress/downloads/resume.csv', { timeout: 10000 })
+      .should('contain', 'header,,name,Ada Lovelace')
+      .should('contain', 'header,,title,Founding Engineer');
+  });
+
+  it('imports a CSV, edits the imported content, and re-exports it', () => {
+    // Upload replaces the whole resume from file.
+    getName().should('not.contain.text', 'Jane Doe');
+    cy.dataCy('file-input').selectFile('src/fixtures/resume.csv', {
+      force: true,
+    });
+    getName().should('contain.text', 'Jane Doe');
+    getTitle().should('contain.text', 'Principal Engineer');
+
+    // Tweak the imported resume, then export the merged result.
+    cy.dataCy('edit-toggle').click();
+    rename('resume-title', 'Distinguished Engineer');
+
+    cy.dataCy('download-csv').click();
+    cy.readFile('cypress/downloads/resume.csv', { timeout: 10000 })
+      .should('contain', 'header,,name,Jane Doe')
+      .should('contain', 'header,,title,Distinguished Engineer');
+  });
+
+  it('starts a blank resume and lets the user fill it in', () => {
+    cy.on('window:confirm', () => true);
+
+    cy.dataCy('start-anew').click();
+
+    // Blank template loads and edit mode is auto-enabled.
+    getName().should('contain.text', 'Your Name');
+    cy.dataCy('edit-toggle').should('have.attr', 'aria-pressed', 'true');
+
+    // User fills in the header.
+    rename('resume-name', 'Grace Hopper');
+    rename('resume-title', 'Rear Admiral');
+
+    getName().should('contain.text', 'Grace Hopper');
+    getTitle().should('contain.text', 'Rear Admiral');
+  });
+
+  it('keeps the existing resume when Start anew is dismissed', () => {
+    cy.on('window:confirm', () => false);
+
+    cy.dataCy('start-anew').click();
+    getName().should('contain.text', 'Leith Osborne');
+  });
+
+  it('customises appearance and shares the resume', () => {
+    // Switch theme and confirm the root data-theme changes.
+    cy.get('[data-theme]')
+      .first()
+      .invoke('attr', 'data-theme')
+      .then((initialTheme) => {
+        cy.dataCy('theme-button')
+          .children('div')
+          .each(($div) => {
             const buttonTheme = $div.attr('data-theme');
             if (buttonTheme && buttonTheme !== initialTheme) {
-              // Click the parent button
               cy.wrap($div).parent().click();
-              // Stop after first click
-              return false;
+              return false; // stop after the first different theme
             }
             return undefined;
           });
 
-          // Verify the root element's theme has changed
-          cy.get('[data-theme]')
-            .first()
-            .invoke('attr', 'data-theme')
-            .should('not.equal', initialTheme);
-        });
-    });
+        cy.get('[data-theme]')
+          .first()
+          .invoke('attr', 'data-theme')
+          .should('not.equal', initialTheme);
+      });
 
-    it('should show visual indicator on selected theme', () => {
-      cy.get('app-theme-picker button.circle-button.ring-2').should(
-        'have.length',
-        1,
-      );
+    // Switch font and confirm the selection indicator follows.
+    cy.dataCy('font-button').eq(1).click();
+    cy.dataCy('font-button').eq(1).should('have.attr', 'data-selected', 'true');
+
+    // Copy the page URL to the clipboard.
+    cy.window().then((win) => {
+      cy.stub(win.navigator.clipboard, 'writeText').as('writeText').resolves();
     });
+    cy.dataCy('copy-url').click();
+    cy.get('@writeText').should(
+      'have.been.calledWith',
+      `${Cypress.config('baseUrl')}/angular-mono/resume/`,
+    );
+    cy.dataCy('copy-url').should('have.attr', 'data-copied', 'true');
   });
 
-  describe('Font Picker', () => {
-    it('should display font picker buttons', () => {
-      cy.get('app-font-picker button.circle-button').should(
-        'have.length.at.least',
-        1,
-      );
-    });
-
-    it('should change font when clicking a font button', () => {
-      cy.get('app-font-picker button.circle-button').eq(1).click();
-      cy.get('app-font-picker button.circle-button')
-        .eq(1)
-        .should('have.class', 'ring-2');
-    });
-  });
-
-  describe('Utility Buttons', () => {
-    it('should display export PDF button', () => {
-      cy.get('.utility-container button[data-tip*="Export"]').should(
-        'be.visible',
-      );
-    });
-
-    it('should display copy URL button', () => {
-      cy.get('.utility-container button[data-tip*="Copy"]').should(
-        'be.visible',
-      );
-    });
+  it('exports to PDF without throwing', () => {
+    // PDF generation is offscreen + async; assert the click is wired up and
+    // does not surface an uncaught error.
+    cy.dataCy('export-pdf').should('be.visible').click();
   });
 });

@@ -2,9 +2,11 @@
   @for (font of fonts; track $index) {
 
   <button
+    data-cy="font-button"
     class="circle-button"
     [class]="'font-' + font"
     [ngClass]="{'ring-2 ring-neutral': font === selectedFont()}"
+    [attr.data-selected]="font === selectedFont()"
     (click)="setFont(font)"
   >
     T

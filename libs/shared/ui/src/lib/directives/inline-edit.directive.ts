@@ -26,7 +26,7 @@ import {
   standalone: true,
   exportAs: 'appInlineEdit',
   host: {
-    '[attr.contenteditable]': 'editing()',
+    '[attr.contenteditable]': 'editable()',
     '[attr.role]': '"textbox"',
     // Affordance: dashed outline + pointer on hover, solid ring while editing.
     // Outline (not border/padding) avoids layout shift.

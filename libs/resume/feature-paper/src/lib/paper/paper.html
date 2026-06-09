@@ -7,8 +7,11 @@
     [scale]="3"
     class="paper-scroll"
     [class.editing]="edit"
+    [attr.data-cy]="'paper-scroll'"
+    [attr.data-editing]="edit"
   >
     <article
+      data-cy="paper-container"
       class="paper-container flex-row card bg-base-100 text-neutral overflow-hidden"
       [class.editing]="edit"
     >
@@ -18,12 +21,17 @@
         <header>
           <h1 class="text-5xl mb-2">
             <strong
+              data-cy="resume-name"
               [(appInlineEdit)]="store.header().name"
               [disabled]="!edit"
             ></strong>
           </h1>
           <!-- eslint-disable-next-line @angular-eslint/template/elements-content -->
-          <h3 [(appInlineEdit)]="store.header().title" [disabled]="!edit"></h3>
+          <h3
+            data-cy="resume-title"
+            [(appInlineEdit)]="store.header().title"
+            [disabled]="!edit"
+          ></h3>
         </header>
 
         <section class="group/main flex flex-col gap-2">
@@ -246,6 +254,7 @@
   </div>
   <nav class="utility-container flex flex-col gap-2">
     <button
+      data-cy="edit-toggle"
       class="circle-button tooltip tooltip-right font-sans"
       [class.ring-2]="edit"
       [class.ring-neutral]="edit"
@@ -256,6 +265,7 @@
       <fa-icon [icon]="icon.faPen"></fa-icon>
     </button>
     <button
+      data-cy="start-anew"
       class="circle-button tooltip tooltip-right font-sans"
       data-tip="Start anew"
       (click)="startAnew()"
@@ -263,6 +273,7 @@
       <fa-icon [icon]="icon.faEraser"></fa-icon>
     </button>
     <button
+      data-cy="upload-csv"
       class="circle-button tooltip tooltip-right font-sans"
       data-tip="Upload CSV"
       (click)="triggerUpload()"
@@ -270,6 +281,7 @@
       <fa-icon [icon]="icon.faFileArrowUp"></fa-icon>
     </button>
     <button
+      data-cy="download-csv"
       class="circle-button tooltip tooltip-right font-sans"
       data-tip="Download CSV"
       (click)="downloadCsv()"
@@ -278,12 +290,14 @@
     </button>
     <input
       #fileInput
+      data-cy="file-input"
       type="file"
       accept=".csv,text/csv"
       class="hidden"
       (change)="onFileSelected($event)"
     />
     <button
+      data-cy="export-pdf"
       class="circle-button tooltip tooltip-right font-sans"
       data-tip="Export to pdf"
       (click)="pdfExporter.export()"
@@ -293,8 +307,10 @@
     <button
       #urlCopier="appCopyUrl"
       appCopyUrl
+      data-cy="copy-url"
       class="circle-button tooltip tooltip-right font-sans"
       [attr.data-tip]="urlCopier.copied() ? 'Copied!': 'Copy to clipboard'"
+      [attr.data-copied]="urlCopier.copied()"
       (click)="urlCopier.copy()"
     >
       <fa-icon [icon]="icon.faLink"></fa-icon>
