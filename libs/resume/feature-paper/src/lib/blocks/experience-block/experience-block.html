@@ -28,10 +28,24 @@
         [(appInlineEdit)]="position.period"
         [disabled]="!edit"
       ></time>
-      <ul>
+      <ul
+        cdkDropList
+        [cdkDropListDisabled]="!edit"
+        (cdkDropListDropped)="moveContribution(position, $event)"
+      >
         @for (contribution of position.contributions; track $index; let c =
         $index) {
-        <li class="contribution group/con relative">
+        <li class="contribution group/con relative" cdkDrag [cdkDragDisabled]="!edit">
+          @if (edit) {
+          <button
+            type="button"
+            class="row-drag font-sans"
+            aria-label="Reorder contribution"
+            cdkDragHandle
+          >
+            <fa-icon [icon]="icon.faGripVertical"></fa-icon>
+          </button>
+          }
           <strong [(appInlineEdit)]="contribution.category" [disabled]="!edit"></strong>
           –
           <span [(appInlineEdit)]="contribution.contribution" [disabled]="!edit"></span>

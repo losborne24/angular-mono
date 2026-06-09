@@ -4,6 +4,13 @@ import {
   inject,
   input,
 } from '@angular/core';
+import {
+  CdkDrag,
+  CdkDragDrop,
+  CdkDragHandle,
+  CdkDropList,
+  moveItemInArray,
+} from '@angular/cdk/drag-drop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { InlineEditDirective } from '@angular-monorepo/shared/ui';
 import { Icon } from '@angular-monorepo/shared/util';
@@ -17,7 +24,13 @@ import { ResumeStore } from '../resume-store';
 
 @Component({
   selector: 'app-experience-block',
-  imports: [FontAwesomeModule, InlineEditDirective],
+  imports: [
+    FontAwesomeModule,
+    InlineEditDirective,
+    CdkDropList,
+    CdkDrag,
+    CdkDragHandle,
+  ],
   templateUrl: './experience-block.html',
   styleUrl: './experience-block.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -54,5 +67,13 @@ export class ExperienceBlock {
 
   removeContribution(position: Position, index: number): void {
     position.contributions.splice(index, 1);
+  }
+
+  moveContribution(position: Position, event: CdkDragDrop<unknown>): void {
+    moveItemInArray(
+      position.contributions,
+      event.previousIndex,
+      event.currentIndex,
+    );
   }
 }

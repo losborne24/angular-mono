@@ -82,6 +82,62 @@ article.editing:hover {
   opacity: 1;
 }
 
+.row-drag {
+  // Inline grip at the start of the row; collapses to zero footprint until the
+  // row is hovered.
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  width: 0;
+  height: 0.875rem;
+  margin-right: 0;
+  overflow: hidden;
+  font-size: 0.5rem;
+  color: hsl(var(--bc, 0 0% 40%) / 0.5);
+  cursor: grab;
+  opacity: 0;
+  transition: opacity 120ms ease, width 120ms ease, margin 120ms ease;
+
+  fa-icon {
+    font-size: 0.5rem;
+    line-height: 1;
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.contribution:hover .row-drag {
+  width: 0.875rem;
+  margin-right: 0.25rem;
+  opacity: 1;
+}
+
+// CDK drag-drop visuals.
+.cdk-drag-preview {
+  box-sizing: border-box;
+  // Preview is cloned to <body>, so it loses the paper's inherited font size.
+  // Restore it to match the contribution row text.
+  font-size: 0.75rem;
+  line-height: 1.4;
+  border-radius: 0.25rem;
+  background: hsl(var(--b1, 0 0% 100%));
+  box-shadow: 0 2px 8px hsl(0 0% 0% / 0.18);
+  padding: 0 0.25rem;
+  list-style: none;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.4;
+}
+
+.cdk-drag-animating,
+.contribution.cdk-drag-dragging ~ .contribution {
+  transition: transform 180ms cubic-bezier(0, 0, 0.2, 1);
+}
+
 .position-actions {
   // Collapse to zero footprint until the position is hovered.
   margin-top: 0;
@@ -134,6 +190,7 @@ article.editing:hover {
   .chip-add,
   .chip-remove,
   .row-remove,
+  .row-drag,
   .position-actions,
   .add-button {
     display: none !important;

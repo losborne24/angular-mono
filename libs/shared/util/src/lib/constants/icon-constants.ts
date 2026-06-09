@@ -35,6 +35,7 @@ import {
   faGraduationCap,
   faTrophy,
   faCertificate,
+  faGripVertical,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const Icon = {
@@ -71,6 +72,7 @@ export const Icon = {
   faGraduationCap,
   faTrophy,
   faCertificate,
+  faGripVertical,
 } as const satisfies Record<string, IconDefinition>;
 
 /** Icons offered in the link icon picker (brand/social + generic). */
