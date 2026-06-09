@@ -6,7 +6,7 @@ import type {
   ResumeHeader,
   RightPanelSection,
   SectionLabels,
-} from './paper-types';
+} from './paper-model';
 
 /**
  * Aggregate of every piece of resume content. Single source of truth that the

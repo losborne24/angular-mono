@@ -22,15 +22,17 @@
           <h1 class="text-5xl mb-2">
             <strong
               data-cy="resume-name"
-              [(appInlineEdit)]="store.header().name"
+              [appInlineEdit]="store.header().name"
               [disabled]="!edit"
+              (editCommit)="store.updateHeaderName($event)"
             ></strong>
           </h1>
           <!-- eslint-disable-next-line @angular-eslint/template/elements-content -->
           <h3
             data-cy="resume-title"
-            [(appInlineEdit)]="store.header().title"
+            [appInlineEdit]="store.header().title"
             [disabled]="!edit"
+            (editCommit)="store.updateHeaderTitle($event)"
           ></h3>
         </header>
 
@@ -95,8 +97,9 @@
               >
                 <span
                   class="text-secondary"
-                  [(appInlineEdit)]="link.href"
+                  [appInlineEdit]="link.href"
                   [disabled]="!edit"
+                  (editCommit)="store.updateLinkHref(i, $event)"
                 ></span>
               </a>
               @if (edit) {
@@ -118,7 +121,7 @@
         class="flex flex-col flex-none basis-[28%] bg-neutral text-neutral-content text-opacity-90 p-8 gap-8"
       >
         <address>
-          @for (detail of store.contactDetails(); track $index) {
+          @for (detail of store.contactDetails(); track $index; let i = $index) {
           <div class="flex gap-2 items-center">
             <div class="icon-container">
               <fa-icon [icon]="detail.icon"></fa-icon>
@@ -129,12 +132,17 @@
               target="_blank"
               class="text-secondary"
               [href]="detail.href"
-              [(appInlineEdit)]="detail.text"
+              [appInlineEdit]="detail.text"
               [disabled]="!edit"
+              (editCommit)="store.updateContactText(i, $event)"
               (click)="onLinkClick($event)"
             ></a>
             } @else {
-            <p [(appInlineEdit)]="detail.text" [disabled]="!edit"></p>
+            <p
+              [appInlineEdit]="detail.text"
+              [disabled]="!edit"
+              (editCommit)="store.updateContactText(i, $event)"
+            ></p>
             }
           </div>
           }
@@ -162,14 +170,16 @@
                 <h2>
                   <strong
                     class="text-neutral-content"
-                    [(appInlineEdit)]="edu.school"
+                    [appInlineEdit]="edu.school"
                     [disabled]="!edit"
+                    (editCommit)="store.updateEducationSchool(i, $event)"
                   ></strong>
                 </h2>
                 <time
                   class="text-[0.625rem]"
-                  [(appInlineEdit)]="edu.period"
+                  [appInlineEdit]="edu.period"
                   [disabled]="!edit"
+                  (editCommit)="store.updateEducationPeriod(i, $event)"
                 ></time>
                 @if (edit) {
                 <button
@@ -185,13 +195,18 @@
               @if (edu.detail !== undefined) {
               <p
                 class="edu-detail"
-                [(appInlineEdit)]="edu.detail"
+                [appInlineEdit]="edu.detail"
                 [disabled]="!edit"
+                (editCommit)="store.updateEducationDetail(i, $event)"
               ></p>
               } @if (edu.items) {
               <ul>
-                @for (item of edu.items; track $index; let i = $index) {
-                <li [(appInlineEdit)]="edu.items![i]" [disabled]="!edit"></li>
+                @for (item of edu.items; track $index; let itemIndex = $index) {
+                <li
+                  [appInlineEdit]="edu.items![itemIndex]"
+                  [disabled]="!edit"
+                  (editCommit)="store.updateEducationItem(i, itemIndex, $event)"
+                ></li>
                 }
               </ul>
               }
@@ -226,8 +241,9 @@
               @for(item of section.items; track $index; let i = $index) {
               <li class="panel-row group/panel-item">
                 <span
-                  [(appInlineEdit)]="section.items[i]"
+                  [appInlineEdit]="section.items[i]"
                   [disabled]="!edit"
+                  (editCommit)="store.updatePanelItem(section.header, i, $event)"
                 ></span>
                 @if (edit) {
                 <button

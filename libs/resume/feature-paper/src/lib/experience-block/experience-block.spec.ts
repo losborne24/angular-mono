@@ -54,14 +54,4 @@ describe('ExperienceBlock', () => {
       'Angular | TypeScript',
     );
   });
-
-  it('splits an edited line back into the tech stack', () => {
-    const position = { techStack: [] } as never;
-    fixture.componentInstance.setTechStack(position, 'Angular | TypeScript | RxJS');
-    expect((position as { techStack: string[] }).techStack).toEqual([
-      'Angular',
-      'TypeScript',
-      'RxJS',
-    ]);
-  });
 });

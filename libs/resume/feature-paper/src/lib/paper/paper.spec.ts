@@ -66,7 +66,7 @@ describe('Paper', () => {
     });
 
     it('shows add-block controls in edit mode', () => {
-      component.store.editMode.set(true);
+      component.store.setEditMode(true);
       fixture.detectChanges();
       const compiled = fixture.nativeElement;
       const addButtons = compiled.querySelectorAll('.add-bar button');

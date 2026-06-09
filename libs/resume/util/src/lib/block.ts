@@ -1,4 +1,4 @@
-import type { Contribution, Experience, Position } from './paper-types';
+import type { Contribution, Experience, Position } from './paper-model';
 
 export type BlockKind = 'experience';
 

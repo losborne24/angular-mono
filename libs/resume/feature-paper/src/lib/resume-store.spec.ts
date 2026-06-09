@@ -75,4 +75,81 @@ describe('ResumeStore', () => {
       expect(csv).toContain('OpenGamma Limited');
     });
   });
+
+  describe('contributions', () => {
+    it('adds a contribution to a position immutably', () => {
+      const id = store.blocks()[0].id;
+      const before = store.blocks()[0];
+      const count = before.data.positions[0].contributions.length;
+
+      store.addContribution(id, 0);
+
+      const after = store.blocks()[0];
+      expect(after.data.positions[0].contributions.length).toBe(count + 1);
+      // Previous snapshot untouched (new object references throughout the path).
+      expect(after).not.toBe(before);
+      expect(after.data.positions[0].contributions.length).not.toBe(
+        before.data.positions[0].contributions.length,
+      );
+    });
+
+    it('removes a contribution by index', () => {
+      const id = store.blocks()[0].id;
+      store.addContribution(id, 0);
+      const count = store.blocks()[0].data.positions[0].contributions.length;
+
+      store.removeContribution(id, 0, 0);
+
+      expect(store.blocks()[0].data.positions[0].contributions.length).toBe(
+        count - 1,
+      );
+    });
+
+    it('reorders contributions without mutating the prior snapshot', () => {
+      const id = store.blocks()[0].id;
+      store.addContribution(id, 0); // ensure at least two rows
+      const before = store.blocks()[0].data.positions[0].contributions;
+      const firstCategory = before[0].category;
+
+      store.moveContribution(id, 0, 0, 1);
+
+      const after = store.blocks()[0].data.positions[0].contributions;
+      expect(after).not.toBe(before);
+      expect(after[1].category).toBe(firstCategory);
+      // Original array order is preserved (immutability).
+      expect(before[0].category).toBe(firstCategory);
+    });
+
+    it('edits contribution text and round-trips it to CSV', () => {
+      const id = store.blocks()[0].id;
+
+      store.updateContributionText(id, 0, 0, 'Rebuilt the platform');
+
+      expect(
+        store.blocks()[0].data.positions[0].contributions[0].contribution,
+      ).toBe('Rebuilt the platform');
+      expect(store.toCsv()).toContain('Rebuilt the platform');
+    });
+  });
+
+  describe('setTechStack', () => {
+    it('splits an edited line back into the tech stack array', () => {
+      const id = store.blocks()[0].id;
+      store.setTechStack(id, 0, 'Angular | TypeScript | RxJS');
+      expect(store.blocks()[0].data.positions[0].techStack).toEqual([
+        'Angular',
+        'TypeScript',
+        'RxJS',
+      ]);
+    });
+  });
+
+  describe('editMode', () => {
+    it('sets edit mode explicitly', () => {
+      store.setEditMode(true);
+      expect(store.editMode()).toBe(true);
+      store.setEditMode(false);
+      expect(store.editMode()).toBe(false);
+    });
+  });
 });
