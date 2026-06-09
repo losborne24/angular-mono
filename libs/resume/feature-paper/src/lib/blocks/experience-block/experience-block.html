@@ -1,6 +1,7 @@
 @let company = block().data;
 @let edit = store.editMode();
-<article [class.editing]="edit">
+<div class="block-frame relative flex items-start" [class.group]="removable()">
+  <article class="flex-1" [class.editing]="edit">
   <h2>
     <strong [(appInlineEdit)]="company.companyName" [disabled]="!edit"></strong>
   </h2>
@@ -95,4 +96,15 @@
     </div>
     }
   </div>
-</article>
+  </article>
+  @if (removable()) {
+  <button
+    type="button"
+    class="block-remove opacity-0 transition-opacity group-hover:opacity-100 font-sans"
+    aria-label="Remove block"
+    (click)="remove.emit()"
+  >
+    <fa-icon [icon]="icon.faXmark"></fa-icon>
+  </button>
+  }
+</div>

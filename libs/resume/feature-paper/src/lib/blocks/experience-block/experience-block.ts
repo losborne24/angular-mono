@@ -3,6 +3,7 @@ import {
   Component,
   inject,
   input,
+  output,
 } from '@angular/core';
 import {
   CdkDrag,
@@ -39,6 +40,9 @@ export class ExperienceBlock {
   readonly icon = Icon;
   readonly store = inject(ResumeStore);
   readonly block = input.required<ExperienceBlockModel>();
+  /** Show the remove control. Off outside edit mode. */
+  readonly removable = input<boolean>(true);
+  readonly remove = output<void>();
 
   addPosition(): void {
     this.block().data.positions.push(emptyPosition());

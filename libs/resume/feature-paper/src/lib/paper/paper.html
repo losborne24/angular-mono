@@ -52,15 +52,11 @@
           }
           <div class="flex flex-col gap-4">
             @for (block of store.blocks(); track block.id) {
-            <app-block-frame
+            <app-experience-block
+              [block]="block"
               [removable]="edit"
               (remove)="store.removeBlock(block.id)"
-            >
-              <ng-container
-                [ngComponentOutlet]="registry[block.kind]"
-                [ngComponentOutletInputs]="{ block }"
-              />
-            </app-block-frame>
+            />
             }
           </div>
         </section>

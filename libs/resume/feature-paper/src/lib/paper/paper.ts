@@ -5,7 +5,7 @@ import {
   inject,
   viewChild,
 } from '@angular/core';
-import { CommonModule, NgComponentOutlet } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Icon } from '@angular-monorepo/shared/util';
 import { parseResumeCsv } from '@angular-monorepo/resume/util';
@@ -16,20 +16,18 @@ import {
   IconPicker,
 } from '@angular-monorepo/shared/ui';
 import { ResumeStore } from '../blocks/resume-store';
-import { BlockFrame } from '../blocks/block-frame/block-frame';
-import { BLOCK_REGISTRY } from '../blocks/block-registry';
+import { ExperienceBlock } from '../blocks/experience-block/experience-block';
 
 @Component({
   selector: 'app-paper',
   imports: [
     CommonModule,
-    NgComponentOutlet,
     FontAwesomeModule,
     ExportPdfDirective,
     CopyUrlDirective,
     InlineEditDirective,
     IconPicker,
-    BlockFrame,
+    ExperienceBlock,
   ],
   providers: [ResumeStore],
   templateUrl: './paper.html',
@@ -38,7 +36,6 @@ import { BLOCK_REGISTRY } from '../blocks/block-registry';
 })
 export class Paper {
   readonly icon = Icon;
-  readonly registry = BLOCK_REGISTRY;
   readonly store = inject(ResumeStore);
 
   /** Hidden file input used to pick a CSV for upload. */
