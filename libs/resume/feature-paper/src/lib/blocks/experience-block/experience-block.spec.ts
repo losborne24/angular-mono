@@ -47,4 +47,21 @@ describe('ExperienceBlock', () => {
     expect(text).toContain('Acme Corp');
     expect(text).toContain('Engineer');
   });
+
+  it('joins the tech stack into one line', () => {
+    const position = { techStack: ['Angular', 'TypeScript'] } as never;
+    expect(fixture.componentInstance.techStackText(position)).toBe(
+      'Angular | TypeScript',
+    );
+  });
+
+  it('splits an edited line back into the tech stack', () => {
+    const position = { techStack: [] } as never;
+    fixture.componentInstance.setTechStack(position, 'Angular | TypeScript | RxJS');
+    expect((position as { techStack: string[] }).techStack).toEqual([
+      'Angular',
+      'TypeScript',
+      'RxJS',
+    ]);
+  });
 });

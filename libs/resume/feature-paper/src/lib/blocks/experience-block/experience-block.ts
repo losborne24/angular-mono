@@ -35,12 +35,17 @@ export class ExperienceBlock {
     this.block().data.positions.splice(index, 1);
   }
 
-  addTech(position: Position): void {
-    position.techStack.push('Tech');
+  /** Tech stack joined into one editable line (e.g. "Angular | TypeScript"). */
+  techStackText(position: Position): string {
+    return position.techStack.join(' | ');
   }
 
-  removeTech(position: Position, index: number): void {
-    position.techStack.splice(index, 1);
+  /** Split the edited line back into the techStack array. */
+  setTechStack(position: Position, value: string): void {
+    position.techStack = value
+      .split('|')
+      .map((tech) => tech.trim())
+      .filter((tech) => tech.length > 0);
   }
 
   addContribution(position: Position): void {

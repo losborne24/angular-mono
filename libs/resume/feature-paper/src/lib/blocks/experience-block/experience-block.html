@@ -15,30 +15,12 @@
           [disabled]="!edit"
         ></h3>
         <p class="text-xs flex gap-1 items-center">
-          @for (tech of position.techStack; track $index; let isLast = $last;
-          let i = $index) {
-          <span class="tech group/tech relative inline-flex items-center">
-            <span [(appInlineEdit)]="position.techStack[i]" [disabled]="!edit"></span>
-            @if (edit) {
-            <button
-              type="button"
-              class="chip-remove font-sans"
-              aria-label="Remove tech"
-              (click)="removeTech(position, i)"
-            >
-              <fa-icon [icon]="icon.faXmark"></fa-icon>
-            </button>
-            }
-          </span>
-          @if (!isLast) { <span>|</span> } }
-          <button
-            type="button"
-            class="chip-add font-sans"
-            aria-label="Add tech"
-            (click)="addTech(position)"
-          >
-            <fa-icon [icon]="icon.faPlus"></fa-icon>
-          </button>
+          <span
+            class="tech-stack"
+            [appInlineEdit]="techStackText(position)"
+            [disabled]="!edit"
+            (editCommit)="setTechStack(position, $event)"
+          ></span>
         </p>
       </header>
       <time
