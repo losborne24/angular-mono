@@ -4,7 +4,8 @@
     data-cy="theme-button"
     class="circle-button relative overflow-hidden"
     (click)="setTheme(theme)"
-    [ngClass]="{'ring-2 ring-neutral': theme === selectedTheme()}"
+    [class.ring-2]="theme === selectedTheme()"
+    [class.ring-neutral]="theme === selectedTheme()"
     [attr.data-selected]="theme === selectedTheme()"
     [attr.aria-label]="selectedTheme()"
   >

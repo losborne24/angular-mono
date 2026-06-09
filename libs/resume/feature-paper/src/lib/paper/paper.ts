@@ -1,11 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
   inject,
-  viewChild,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Icon } from '@angular-monorepo/shared/util';
 import { parseResumeCsv } from '@angular-monorepo/resume/util';
@@ -21,7 +18,6 @@ import { ExperienceBlock } from '../experience-block/experience-block';
 @Component({
   selector: 'app-paper',
   imports: [
-    CommonModule,
     FontAwesomeModule,
     ExportPdfDirective,
     CopyUrlDirective,
@@ -37,9 +33,6 @@ import { ExperienceBlock } from '../experience-block/experience-block';
 export class Paper {
   readonly icon = Icon;
   readonly store = inject(ResumeStore);
-
-  /** Hidden file input used to pick a CSV for upload. */
-  readonly fileInput = viewChild<ElementRef<HTMLInputElement>>('fileInput');
 
   /** In edit mode, suppress navigation so the click edits the href text. */
   onLinkClick(event: MouseEvent): void {
@@ -65,11 +58,6 @@ export class Paper {
     anchor.download = 'resume.csv';
     anchor.click();
     URL.revokeObjectURL(url);
-  }
-
-  /** Open the hidden file picker. */
-  triggerUpload(): void {
-    this.fileInput()?.nativeElement.click();
   }
 
   /** Parse the chosen CSV file and replace the current resume state. */

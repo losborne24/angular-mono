@@ -268,14 +268,14 @@
     >
       <fa-icon [icon]="icon.faEraser"></fa-icon>
     </button>
-    <button
+    <label
+      for="fileInput"
       data-cy="upload-csv"
       class="circle-button tooltip tooltip-right font-sans"
       data-tip="Upload CSV"
-      (click)="triggerUpload()"
     >
       <fa-icon [icon]="icon.faFileArrowUp"></fa-icon>
-    </button>
+    </label>
     <button
       data-cy="download-csv"
       class="circle-button tooltip tooltip-right font-sans"
@@ -285,7 +285,7 @@
       <fa-icon [icon]="icon.faFileCsv"></fa-icon>
     </button>
     <input
-      #fileInput
+      id="fileInput"
       data-cy="file-input"
       type="file"
       accept=".csv,text/csv"

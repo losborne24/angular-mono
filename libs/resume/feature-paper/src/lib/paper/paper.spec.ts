@@ -75,8 +75,11 @@ describe('Paper', () => {
 
     it('should render utility buttons', () => {
       const compiled = fixture.nativeElement;
-      const buttons = compiled.querySelectorAll('nav.utility-container button');
-      expect(buttons.length).toBe(6);
+      // Upload is a <label for> wrapping the hidden file input; the rest are buttons.
+      const controls = compiled.querySelectorAll(
+        'nav.utility-container button, nav.utility-container label',
+      );
+      expect(controls.length).toBe(6);
     });
   });
 

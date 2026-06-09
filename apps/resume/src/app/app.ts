@@ -5,7 +5,6 @@ import {
   signal,
 } from '@angular/core';
 import { Paper } from '@angular-monorepo/resume/feature-paper';
-import { CommonModule } from '@angular/common';
 import { FontPicker, ThemePicker } from '@angular-monorepo/shared/ui';
 import { Theme, Font } from '@angular-monorepo/shared/util';
 
@@ -14,7 +13,7 @@ import { Theme, Font } from '@angular-monorepo/shared/util';
   templateUrl: './app.html',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Paper, CommonModule, FontPicker, ThemePicker],
+  imports: [Paper, FontPicker, ThemePicker],
 })
 export class App {
   /**
