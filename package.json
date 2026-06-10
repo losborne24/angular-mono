@@ -15,6 +15,7 @@
     "@fortawesome/angular-fontawesome": "^2.0.1",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@ngrx/signals": "^20",
     "dom-to-image-more": "^3.6.0",
     "jspdf": "^3.0.1",
     "rxjs": "~7.8.0",

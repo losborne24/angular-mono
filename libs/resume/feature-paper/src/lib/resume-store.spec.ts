@@ -1,3 +1,4 @@
+import { TestBed } from '@angular/core/testing';
 import { vi } from 'vitest';
 import { ResumeStore } from './resume-store';
 
@@ -15,11 +16,14 @@ panel,,ACHIEVEMENTS,An award,,,,
 `;
 
 describe('ResumeStore', () => {
-  let store: ResumeStore;
+  let store: InstanceType<typeof ResumeStore>;
 
   beforeEach(async () => {
-    vi.spyOn(globalThis, 'fetch').mockImplementation(async () => new Response(CSV));
-    store = new ResumeStore();
+    vi.spyOn(globalThis, 'fetch').mockImplementation(
+      async () => new Response(CSV),
+    );
+    TestBed.configureTestingModule({ providers: [ResumeStore] });
+    store = TestBed.inject(ResumeStore);
     await store.load();
   });
 
