@@ -1,45 +1,43 @@
-@let company = block().data;
-@let id = block().id;
-@let edit = store.editMode();
+@let company = block().data; @let id = block().id; @let edit = store.editMode();
 <div class="block-frame relative flex items-start" [class.group]="removable()">
   <article class="flex-1" [class.editing]="edit">
-  <h2>
-    <strong
-      [appInlineEdit]="company.companyName"
-      [disabled]="!edit"
-      (editCommit)="store.updateCompanyName(id, $event)"
-    ></strong>
-  </h2>
-  <div class="flex flex-col gap-2 text-base-content text-opacity-75">
-    @for (position of company.positions; track $index; let posIndex = $index) {
-    <div class="position group/pos relative">
-      <header class="flex items-center justify-between">
-        <!-- eslint-disable-next-line @angular-eslint/template/elements-content -->
-        <h3
-          class="text-base-content"
-          [appInlineEdit]="position.position"
-          [disabled]="!edit"
-          (editCommit)="store.updatePositionTitle(id, posIndex, $event)"
-        ></h3>
-        <p class="text-xs flex gap-1 items-center">
-          <span
-            class="tech-stack"
-            [appInlineEdit]="techStackText(position)"
-            [disabled]="!edit"
-            (editCommit)="store.setTechStack(id, posIndex, $event)"
-          ></span>
-        </p>
-      </header>
-      <time
-        class="text-[0.625rem]"
-        [appInlineEdit]="position.period"
+    <h2>
+      <strong
+        [appInlineEdit]="company.companyName"
         [disabled]="!edit"
-        (editCommit)="store.updatePositionPeriod(id, posIndex, $event)"
-      ></time>
-      <ul
-        cdkDropList
-        [cdkDropListDisabled]="!edit"
-        (cdkDropListDropped)="
+        (editCommit)="store.updateCompanyName(id, $event)"
+      ></strong>
+    </h2>
+    <div class="flex flex-col gap-2 text-base-content text-opacity-75">
+      @for (position of company.positions; track $index; let posIndex = $index) {
+      <div class="position group/pos relative">
+        <header class="flex items-center justify-between">
+          <!-- eslint-disable-next-line @angular-eslint/template/elements-content -->
+          <h3
+            class="text-base-content"
+            [appInlineEdit]="position.position"
+            [disabled]="!edit"
+            (editCommit)="store.updatePositionTitle(id, posIndex, $event)"
+          ></h3>
+          <p class="text-xs flex gap-1 items-center">
+            <span
+              class="tech-stack"
+              [appInlineEdit]="techStackText(position)"
+              [disabled]="!edit"
+              (editCommit)="store.setTechStack(id, posIndex, $event)"
+            ></span>
+          </p>
+        </header>
+        <time
+          class="text-[0.625rem]"
+          [appInlineEdit]="position.period"
+          [disabled]="!edit"
+          (editCommit)="store.updatePositionPeriod(id, posIndex, $event)"
+        ></time>
+        <ul
+          cdkDropList
+          [cdkDropListDisabled]="!edit"
+          (cdkDropListDropped)="
           store.moveContribution(
             id,
             posIndex,
@@ -47,77 +45,63 @@
             $event.currentIndex
           )
         "
-      >
-        @for (contribution of position.contributions; track $index; let c =
-        $index) {
-        <li class="contribution group/con relative" cdkDrag [cdkDragDisabled]="!edit">
-          @if (edit) {
-          <button
-            type="button"
-            class="row-drag font-sans"
-            aria-label="Reorder contribution"
-            cdkDragHandle
-          >
-            <fa-icon [icon]="icon.faGripVertical"></fa-icon>
-          </button>
+        >
+          @for (contribution of position.contributions; track $index; let c = $index) {
+          <li class="contribution group/con relative" cdkDrag [cdkDragDisabled]="!edit">
+            @if (edit) {
+            <button type="button" class="row-drag font-sans" aria-label="Reorder contribution" cdkDragHandle>
+              <fa-icon [icon]="icon.faGripVertical"></fa-icon>
+            </button>
+            }
+            <strong
+              [appInlineEdit]="contribution.category"
+              [disabled]="!edit"
+              (editCommit)="store.updateContributionCategory(id, posIndex, c, $event)"
+            ></strong>
+            –
+            <span
+              [appInlineEdit]="contribution.contribution"
+              [disabled]="!edit"
+              (editCommit)="store.updateContributionText(id, posIndex, c, $event)"
+            ></span>
+            @if (edit) {
+            <button
+              type="button"
+              class="row-remove font-sans"
+              aria-label="Remove contribution"
+              (click)="store.removeContribution(id, posIndex, c)"
+            >
+              <fa-icon [icon]="icon.faXmark"></fa-icon>
+            </button>
+            }
+          </li>
           }
-          <strong
-            [appInlineEdit]="contribution.category"
-            [disabled]="!edit"
-            (editCommit)="store.updateContributionCategory(id, posIndex, c, $event)"
-          ></strong>
-          –
-          <span
-            [appInlineEdit]="contribution.contribution"
-            [disabled]="!edit"
-            (editCommit)="store.updateContributionText(id, posIndex, c, $event)"
-          ></span>
-          @if (edit) {
+        </ul>
+        @if (edit) {
+        <div class="position-actions flex gap-2 font-sans">
+          <button type="button" class="add-button add-button--sm" (click)="store.addContribution(id, posIndex)">
+            <fa-icon [icon]="icon.faPlus"></fa-icon>
+            <span>Add contribution</span>
+          </button>
+          <button type="button" class="add-button add-button--sm" (click)="store.addPosition(id)">
+            <fa-icon [icon]="icon.faPlus"></fa-icon>
+            <span>Add role</span>
+          </button>
+          @if (company.positions.length > 1) {
           <button
             type="button"
-            class="row-remove font-sans"
-            aria-label="Remove contribution"
-            (click)="store.removeContribution(id, posIndex, c)"
+            class="add-button add-button--sm add-button--danger"
+            (click)="store.removePosition(id, posIndex)"
           >
             <fa-icon [icon]="icon.faXmark"></fa-icon>
+            <span>Remove role</span>
           </button>
           }
-        </li>
-        }
-      </ul>
-      @if (edit) {
-      <div class="position-actions flex gap-2 font-sans">
-        <button
-          type="button"
-          class="add-button add-button--sm"
-          (click)="store.addContribution(id, posIndex)"
-        >
-          <fa-icon [icon]="icon.faPlus"></fa-icon>
-          <span>Add contribution</span>
-        </button>
-        <button
-          type="button"
-          class="add-button add-button--sm"
-          (click)="store.addPosition(id)"
-        >
-          <fa-icon [icon]="icon.faPlus"></fa-icon>
-          <span>Add role</span>
-        </button>
-        @if (company.positions.length > 1) {
-        <button
-          type="button"
-          class="add-button add-button--sm add-button--danger"
-          (click)="store.removePosition(id, posIndex)"
-        >
-          <fa-icon [icon]="icon.faXmark"></fa-icon>
-          <span>Remove role</span>
-        </button>
+        </div>
         }
       </div>
       }
     </div>
-    }
-  </div>
   </article>
   @if (removable()) {
   <button

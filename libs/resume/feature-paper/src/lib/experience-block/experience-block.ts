@@ -1,29 +1,14 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  input,
-  output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { CdkDrag, CdkDragHandle, CdkDropList } from '@angular/cdk/drag-drop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { InlineEditDirective } from '@angular-monorepo/shared/ui';
 import { Icon } from '@angular-monorepo/shared/util';
-import {
-  type ExperienceBlock as ExperienceBlockModel,
-  type Position,
-} from '@angular-monorepo/resume/util';
+import { type ExperienceBlock as ExperienceBlockModel, type Position } from '@angular-monorepo/resume/util';
 import { ResumeStore } from '../resume-store';
 
 @Component({
   selector: 'app-experience-block',
-  imports: [
-    FontAwesomeModule,
-    InlineEditDirective,
-    CdkDropList,
-    CdkDrag,
-    CdkDragHandle,
-  ],
+  imports: [FontAwesomeModule, InlineEditDirective, CdkDropList, CdkDrag, CdkDragHandle],
   templateUrl: './experience-block.html',
   styleUrl: './experience-block.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

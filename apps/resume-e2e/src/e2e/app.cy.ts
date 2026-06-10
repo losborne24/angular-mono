@@ -97,10 +97,7 @@ describe('resume-e2e', () => {
             return undefined;
           });
 
-        cy.get('[data-theme]')
-          .first()
-          .invoke('attr', 'data-theme')
-          .should('not.equal', initialTheme);
+        cy.get('[data-theme]').first().invoke('attr', 'data-theme').should('not.equal', initialTheme);
       });
 
     // Switch font and confirm the selection indicator follows.
@@ -112,10 +109,7 @@ describe('resume-e2e', () => {
       cy.stub(win.navigator.clipboard, 'writeText').as('writeText').resolves();
     });
     cy.dataCy('copy-url').click();
-    cy.get('@writeText').should(
-      'have.been.calledWith',
-      `${Cypress.config('baseUrl')}/angular-mono/resume/`,
-    );
+    cy.get('@writeText').should('have.been.calledWith', `${Cypress.config('baseUrl')}/angular-mono/resume/`);
     cy.dataCy('copy-url').should('have.attr', 'data-copied', 'true');
   });
 

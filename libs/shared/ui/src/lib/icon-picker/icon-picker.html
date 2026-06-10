@@ -21,12 +21,7 @@
 >
   <div class="icon-grid bg-base-100" role="listbox" [attr.data-theme]="theme()">
     @for (option of icons; track $index) {
-    <button
-      type="button"
-      class="icon-option"
-      [class.icon-option--active]="option === icon()"
-      (click)="select(option)"
-    >
+    <button type="button" class="icon-option" [class.icon-option--active]="option === icon()" (click)="select(option)">
       <fa-icon [icon]="option"></fa-icon>
     </button>
     }

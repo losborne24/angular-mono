@@ -8,12 +8,12 @@ libs/<domain>/<type>
 
 ## Types
 
-| type          | purpose                                            | can depend on            |
-| ------------- | -------------------------------------------------- | ------------------------ |
-| `feature`     | smart UI: routed/lazy pages, wires data + ui       | feature, ui, data-access, util |
-| `ui`          | dumb presentational components, no app state       | ui, util                 |
-| `data-access` | services, state, HTTP clients, models              | data-access, util        |
-| `util`        | pure helpers, types, constants — no Angular state  | util                     |
+| type          | purpose                                           | can depend on                  |
+| ------------- | ------------------------------------------------- | ------------------------------ |
+| `feature`     | smart UI: routed/lazy pages, wires data + ui      | feature, ui, data-access, util |
+| `ui`          | dumb presentational components, no app state      | ui, util                       |
+| `data-access` | services, state, HTTP clients, models             | data-access, util              |
+| `util`        | pure helpers, types, constants — no Angular state | util                           |
 
 `shared` is a domain for cross-domain code, e.g. `libs/shared/ui`.
 

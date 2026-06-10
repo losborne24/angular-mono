@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  HostListener,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, signal } from '@angular/core';
 import { Paper } from '@angular-monorepo/resume/feature-paper';
 import { FontPicker, ThemePicker } from '@angular-monorepo/shared/ui';
 import { Theme, Font } from '@angular-monorepo/shared/util';

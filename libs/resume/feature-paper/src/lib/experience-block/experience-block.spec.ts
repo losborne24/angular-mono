@@ -24,9 +24,7 @@ describe('ExperienceBlock', () => {
   let fixture: ComponentFixture<ExperienceBlock>;
 
   beforeEach(async () => {
-    vi.spyOn(globalThis, 'fetch').mockImplementation(
-      async () => new Response('type,icon,a,b,c,d,e,f\n'),
-    );
+    vi.spyOn(globalThis, 'fetch').mockImplementation(async () => new Response('type,icon,a,b,c,d,e,f\n'));
 
     await TestBed.configureTestingModule({
       imports: [ExperienceBlock],
@@ -50,8 +48,6 @@ describe('ExperienceBlock', () => {
 
   it('joins the tech stack into one line', () => {
     const position = { techStack: ['Angular', 'TypeScript'] } as never;
-    expect(fixture.componentInstance.techStackText(position)).toBe(
-      'Angular | TypeScript',
-    );
+    expect(fixture.componentInstance.techStackText(position)).toBe('Angular | TypeScript');
   });
 });

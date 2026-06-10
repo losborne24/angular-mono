@@ -40,9 +40,7 @@ export class ExportPdfDirective {
     });
 
     const cleanupSvgStyles = (node: HTMLElement): void => {
-      const svgElements = node.querySelectorAll(
-        'svg.svg-inline--fa, svg.fa-icon',
-      );
+      const svgElements = node.querySelectorAll('svg.svg-inline--fa, svg.fa-icon');
       svgElements.forEach((svg) => {
         if (svg instanceof SVGElement) {
           svg.style.border = 'none';
@@ -55,10 +53,7 @@ export class ExportPdfDirective {
     return clone;
   }
 
-  private async generatePdfFromNode(
-    original: HTMLElement,
-    clone: HTMLElement,
-  ): Promise<void> {
+  private async generatePdfFromNode(original: HTMLElement, clone: HTMLElement): Promise<void> {
     try {
       const dataUrl = await this.nodeToImage(original, clone);
       await this.createAndSavePdf(dataUrl);
@@ -69,10 +64,7 @@ export class ExportPdfDirective {
     }
   }
 
-  private async nodeToImage(
-    original: HTMLElement,
-    clone: HTMLElement,
-  ): Promise<string> {
+  private async nodeToImage(original: HTMLElement, clone: HTMLElement): Promise<string> {
     const width = original.offsetWidth;
     const height = original.offsetHeight;
     const scale = this.scale();

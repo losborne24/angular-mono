@@ -107,35 +107,21 @@ describe('ExportPdfDirective', () => {
       await vi.runAllTimersAsync();
       vi.useRealTimers();
 
-      expect(mockAddImage).toHaveBeenCalledWith(
-        'data:image/png;base64,mock',
-        'PNG',
-        0,
-        0,
-        210,
-        157.5,
-      );
+      expect(mockAddImage).toHaveBeenCalledWith('data:image/png;base64,mock', 'PNG', 0, 0, 210, 157.5);
       expect(mockSave).toHaveBeenCalledWith('document.pdf');
     });
 
     it('should handle errors gracefully', async () => {
-      const consoleErrorSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => undefined);
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
       const domtoimage = await import('dom-to-image-more');
-      vi.spyOn(domtoimage.default, 'toPng').mockRejectedValueOnce(
-        new Error('Image conversion failed'),
-      );
+      vi.spyOn(domtoimage.default, 'toPng').mockRejectedValueOnce(new Error('Image conversion failed'));
 
       vi.useFakeTimers();
       directive.export();
       await vi.runAllTimersAsync();
       vi.useRealTimers();
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'Error generating PDF:',
-        expect.any(Error),
-      );
+      expect(consoleErrorSpy).toHaveBeenCalledWith('Error generating PDF:', expect.any(Error));
 
       consoleErrorSpy.mockRestore();
     });
@@ -143,16 +129,13 @@ describe('ExportPdfDirective', () => {
     it('should clean up SVG styles in clone', () => {
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       svg.classList.add('svg-inline--fa');
-      (svg as SVGElement & { style: CSSStyleDeclaration }).style.border =
-        '1px solid red';
+      (svg as SVGElement & { style: CSSStyleDeclaration }).style.border = '1px solid red';
       element.appendChild(svg);
 
       directive.export();
 
       const clonedNode = element.lastChild as HTMLElement;
-      const clonedSvg = clonedNode.querySelector(
-        'svg.svg-inline--fa',
-      ) as SVGElement & { style: CSSStyleDeclaration };
+      const clonedSvg = clonedNode.querySelector('svg.svg-inline--fa') as SVGElement & { style: CSSStyleDeclaration };
       expect(clonedSvg).toBeTruthy();
       expect(clonedSvg.style.border).toBe('');
     });

@@ -15,9 +15,7 @@
       class="paper-container flex-row card bg-base-100 text-neutral overflow-hidden"
       [class.editing]="edit"
     >
-      <main
-        class="group/main flex flex-col flex-none basis-[72%] p-8 gap-8 text-base-content"
-      >
+      <main class="group/main flex flex-col flex-none basis-[72%] p-8 gap-8 text-base-content">
         <header>
           <h1 class="text-5xl mb-2">
             <strong
@@ -42,11 +40,7 @@
           </h3>
           @if (edit) {
           <nav class="add-bar flex gap-2 font-sans">
-            <button
-              type="button"
-              class="add-button"
-              (click)="store.addBlock('experience')"
-            >
+            <button type="button" class="add-button" (click)="store.addBlock('experience')">
               <fa-icon [icon]="icon.faBriefcase"></fa-icon>
               <span>Add experience</span>
             </button>
@@ -54,11 +48,7 @@
           }
           <div class="flex flex-col gap-4">
             @for (block of store.blocks(); track block.id) {
-            <app-experience-block
-              [block]="block"
-              [removable]="edit"
-              (remove)="store.removeBlock(block.id)"
-            />
+            <app-experience-block [block]="block" [removable]="edit" (remove)="store.removeBlock(block.id)" />
             }
           </div>
         </section>
@@ -77,24 +67,13 @@
           }
           <nav class="flex flex-col text-base-content">
             @for (link of store.links(); track $index; let i = $index) {
-            <div
-              class="link-row group/link flex items-center gap-2 text-base-content text-opacity-90"
-            >
+            <div class="link-row group/link flex items-center gap-2 text-base-content text-opacity-90">
               @if (edit) {
-              <app-icon-picker
-                [icon]="link.icon"
-                (iconChanged)="store.setLinkIcon(link, $event)"
-              />
+              <app-icon-picker [icon]="link.icon" (iconChanged)="store.setLinkIcon(link, $event)" />
               } @else {
               <fa-icon [icon]="link.icon"></fa-icon>
               }
-              <a
-                target="_blank"
-                rel="noopener"
-                [href]="link.href"
-                class="flex-1"
-                (click)="onLinkClick($event)"
-              >
+              <a target="_blank" rel="noopener" [href]="link.href" class="flex-1" (click)="onLinkClick($event)">
                 <span
                   class="text-secondary"
                   [appInlineEdit]="link.href"
@@ -103,12 +82,7 @@
                 ></span>
               </a>
               @if (edit) {
-              <button
-                type="button"
-                class="row-remove font-sans"
-                aria-label="Remove link"
-                (click)="store.removeLink(i)"
-              >
+              <button type="button" class="row-remove font-sans" aria-label="Remove link" (click)="store.removeLink(i)">
                 <fa-icon [icon]="icon.faXmark"></fa-icon>
               </button>
               }
@@ -117,9 +91,7 @@
           </nav>
         </section>
       </main>
-      <aside
-        class="flex flex-col flex-none basis-[28%] bg-neutral text-neutral-content text-opacity-90 p-8 gap-8"
-      >
+      <aside class="flex flex-col flex-none basis-[28%] bg-neutral text-neutral-content text-opacity-90 p-8 gap-8">
         <address>
           @for (detail of store.contactDetails(); track $index; let i = $index) {
           <div class="flex gap-2 items-center">
@@ -138,11 +110,7 @@
               (click)="onLinkClick($event)"
             ></a>
             } @else {
-            <p
-              [appInlineEdit]="detail.text"
-              [disabled]="!edit"
-              (editCommit)="store.updateContactText(i, $event)"
-            ></p>
+            <p [appInlineEdit]="detail.text" [disabled]="!edit" (editCommit)="store.updateContactText(i, $event)"></p>
             }
           </div>
           }
@@ -153,11 +121,7 @@
           </h3>
           @if (edit) {
           <nav class="add-bar flex gap-2 font-sans">
-            <button
-              type="button"
-              class="add-button"
-              (click)="store.addEducation()"
-            >
+            <button type="button" class="add-button" (click)="store.addEducation()">
               <fa-icon [icon]="icon.faGraduationCap"></fa-icon>
               <span>Add education</span>
             </button>
@@ -222,18 +186,9 @@
             </h3>
             @if (edit) {
             <nav class="add-bar flex gap-2 font-sans">
-              <button
-                type="button"
-                class="add-button"
-                (click)="store.addPanelItem(section.header)"
-              >
-                <fa-icon
-                  [icon]="section.header === 'CERTIFICATIONS' ? icon.faCertificate : icon.faTrophy"
-                ></fa-icon>
-                <span
-                  >{{ section.header === 'CERTIFICATIONS' ? 'Add certification'
-                  : 'Add achievement' }}</span
-                >
+              <button type="button" class="add-button" (click)="store.addPanelItem(section.header)">
+                <fa-icon [icon]="section.header === 'CERTIFICATIONS' ? icon.faCertificate : icon.faTrophy"></fa-icon>
+                <span>{{ section.header === 'CERTIFICATIONS' ? 'Add certification' : 'Add achievement' }}</span>
               </button>
             </nav>
             }

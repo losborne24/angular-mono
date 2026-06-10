@@ -1,11 +1,5 @@
 import { moveItemInArray } from '@angular/cdk/drag-drop';
-import {
-  patchState,
-  signalStore,
-  withHooks,
-  withMethods,
-  withState,
-} from '@ngrx/signals';
+import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { Icon } from '@angular-monorepo/shared/util';
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import {
@@ -88,14 +82,9 @@ export const ResumeStore = signalStore(
     // --- private immutable-rebuild helpers ------------------------------------
 
     /** Immutably replace one block's Experience data, found by id. */
-    function updateExperience(
-      id: string,
-      recipe: (data: Experience) => Experience,
-    ): void {
+    function updateExperience(id: string, recipe: (data: Experience) => Experience): void {
       patchState(store, {
-        blocks: store
-          .blocks()
-          .map((b) => (b.id === id ? { ...b, data: recipe(b.data) } : b)),
+        blocks: store.blocks().map((b) => (b.id === id ? { ...b, data: recipe(b.data) } : b)),
       });
     }
 
@@ -103,15 +92,11 @@ export const ResumeStore = signalStore(
     function updatePosition(
       id: string,
       posIndex: number,
-      recipe: (
-        p: Experience['positions'][number],
-      ) => Experience['positions'][number],
+      recipe: (p: Experience['positions'][number]) => Experience['positions'][number],
     ): void {
       updateExperience(id, (data) => ({
         ...data,
-        positions: data.positions.map((p, i) =>
-          i === posIndex ? recipe(p) : p,
-        ),
+        positions: data.positions.map((p, i) => (i === posIndex ? recipe(p) : p)),
       }));
     }
 
@@ -126,9 +111,7 @@ export const ResumeStore = signalStore(
     ): void {
       updatePosition(id, posIndex, (p) => ({
         ...p,
-        contributions: p.contributions.map((c, i) =>
-          i === conIndex ? recipe(c) : c,
-        ),
+        contributions: p.contributions.map((c, i) => (i === conIndex ? recipe(c) : c)),
       }));
     }
 
@@ -289,12 +272,7 @@ export const ResumeStore = signalStore(
         }));
       },
 
-      moveContribution(
-        id: string,
-        posIndex: number,
-        from: number,
-        to: number,
-      ): void {
+      moveContribution(id: string, posIndex: number, from: number, to: number): void {
         updatePosition(id, posIndex, (p) => {
           // moveItemInArray mutates in place — apply it to a copy.
           const contributions = [...p.contributions];
@@ -303,21 +281,11 @@ export const ResumeStore = signalStore(
         });
       },
 
-      updateContributionCategory(
-        id: string,
-        posIndex: number,
-        conIndex: number,
-        category: string,
-      ): void {
+      updateContributionCategory(id: string, posIndex: number, conIndex: number, category: string): void {
         updateContribution(id, posIndex, conIndex, (c) => ({ ...c, category }));
       },
 
-      updateContributionText(
-        id: string,
-        posIndex: number,
-        conIndex: number,
-        contribution: string,
-      ): void {
+      updateContributionText(id: string, posIndex: number, conIndex: number, contribution: string): void {
         updateContribution(id, posIndex, conIndex, (c) => ({
           ...c,
           contribution,
@@ -354,9 +322,7 @@ export const ResumeStore = signalStore(
 
       updateContactText(index: number, text: string): void {
         patchState(store, {
-          contactDetails: store
-            .contactDetails()
-            .map((d, i) => (i === index ? { ...d, text } : d)),
+          contactDetails: store.contactDetails().map((d, i) => (i === index ? { ...d, text } : d)),
         });
       },
 
@@ -364,10 +330,7 @@ export const ResumeStore = signalStore(
 
       addEducation(): void {
         patchState(store, {
-          education: [
-            { school: 'School', period: 'YEAR - YEAR', detail: 'Details' },
-            ...store.education(),
-          ],
+          education: [{ school: 'School', period: 'YEAR - YEAR', detail: 'Details' }, ...store.education()],
         });
       },
 
@@ -379,42 +342,30 @@ export const ResumeStore = signalStore(
 
       updateEducationSchool(index: number, school: string): void {
         patchState(store, {
-          education: store
-            .education()
-            .map((e, i) => (i === index ? { ...e, school } : e)),
+          education: store.education().map((e, i) => (i === index ? { ...e, school } : e)),
         });
       },
 
       updateEducationPeriod(index: number, period: string): void {
         patchState(store, {
-          education: store
-            .education()
-            .map((e, i) => (i === index ? { ...e, period } : e)),
+          education: store.education().map((e, i) => (i === index ? { ...e, period } : e)),
         });
       },
 
       updateEducationDetail(index: number, detail: string): void {
         patchState(store, {
-          education: store
-            .education()
-            .map((e, i) => (i === index ? { ...e, detail } : e)),
+          education: store.education().map((e, i) => (i === index ? { ...e, detail } : e)),
         });
       },
 
-      updateEducationItem(
-        eduIndex: number,
-        itemIndex: number,
-        value: string,
-      ): void {
+      updateEducationItem(eduIndex: number, itemIndex: number, value: string): void {
         patchState(store, {
           education: store.education().map((e, i) =>
             i !== eduIndex
               ? e
               : {
                   ...e,
-                  items: (e.items ?? []).map((item, j) =>
-                    j === itemIndex ? value : item,
-                  ),
+                  items: (e.items ?? []).map((item, j) => (j === itemIndex ? value : item)),
                 },
           ),
         });
@@ -426,11 +377,7 @@ export const ResumeStore = signalStore(
         patchState(store, {
           rightPanel: store
             .rightPanel()
-            .map((s) =>
-              s.header === header
-                ? { ...s, items: ['New item', ...s.items] }
-                : s,
-            ),
+            .map((s) => (s.header === header ? { ...s, items: ['New item', ...s.items] } : s)),
         });
       },
 
@@ -438,11 +385,7 @@ export const ResumeStore = signalStore(
         patchState(store, {
           rightPanel: store
             .rightPanel()
-            .map((s) =>
-              s.header === header
-                ? { ...s, items: s.items.filter((_, i) => i !== index) }
-                : s,
-            ),
+            .map((s) => (s.header === header ? { ...s, items: s.items.filter((_, i) => i !== index) } : s)),
         });
       },
 

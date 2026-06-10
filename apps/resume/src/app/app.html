@@ -1,12 +1,5 @@
-<div
-  [attr.data-theme]="selectedTheme()"
-  [class]="'font-' + selectedFont()"
-  class="bg-base-300 w-full"
->
-  <div
-    class="origin-top flex justify-center gap-2"
-    [style.transform]="'scale(' + scaleFactor() + ')'"
-  >
+<div [attr.data-theme]="selectedTheme()" [class]="'font-' + selectedFont()" class="bg-base-300 w-full">
+  <div class="origin-top flex justify-center gap-2" [style.transform]="'scale(' + scaleFactor() + ')'">
     <div class="flex-1 flex justify-center py-8">
       <app-paper></app-paper>
     </div>
@@ -15,9 +8,7 @@
     </div>
 
     <div class="flex-none scrollbar-none flex flex-col gap-2 pr-8 py-8">
-      <app-theme-picker
-        (themeChanged)="onThemeChanged($event)"
-      ></app-theme-picker>
+      <app-theme-picker (themeChanged)="onThemeChanged($event)"></app-theme-picker>
     </div>
   </div>
 </div>

@@ -1,14 +1,4 @@
-import {
-  Directive,
-  ElementRef,
-  computed,
-  effect,
-  inject,
-  input,
-  model,
-  output,
-  signal,
-} from '@angular/core';
+import { Directive, ElementRef, computed, effect, inject, input, model, output, signal } from '@angular/core';
 
 /**
  * Makes the host element's text editable in place on click.
@@ -66,10 +56,8 @@ export class InlineEditDirective {
 
   /** Outline shown by the hover/edit affordance. */
   readonly outlineStyle = computed(() => {
-    if (this.editing() || this.focused())
-      return '2px solid rgba(59, 130, 246, 0.7)';
-    if (this.hovered() && this.editable())
-      return '1px dashed rgba(120, 120, 120, 0.6)';
+    if (this.editing() || this.focused()) return '2px solid rgba(59, 130, 246, 0.7)';
+    if (this.hovered() && this.editable()) return '1px dashed rgba(120, 120, 120, 0.6)';
     return 'none';
   });
 

@@ -70,21 +70,14 @@ describe('CopyUrlDirective', () => {
     });
 
     it('should handle clipboard errors gracefully', async () => {
-      const consoleErrorSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => null);
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => null);
 
-      vi.spyOn(navigator.clipboard, 'writeText').mockRejectedValue(
-        new Error('Clipboard error'),
-      );
+      vi.spyOn(navigator.clipboard, 'writeText').mockRejectedValue(new Error('Clipboard error'));
 
       await directive.copy();
 
       expect(directive.copied()).toBe(false);
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'Failed to copy URL to clipboard:',
-        expect.any(Error),
-      );
+      expect(consoleErrorSpy).toHaveBeenCalledWith('Failed to copy URL to clipboard:', expect.any(Error));
 
       consoleErrorSpy.mockRestore();
     });

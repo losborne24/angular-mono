@@ -45,9 +45,7 @@ describe('resume-csv', () => {
   it('preserves commas, quotes and em-dashes in fields', () => {
     const parsed = parseResumeCsv(serializeResumeCsv(MODEL));
     expect(parsed.contactDetails[0].text).toBe('London, UK');
-    expect(parsed.experience[0].positions[0].contributions[0].contribution).toBe(
-      'Owned the UI, "scaled" it.',
-    );
+    expect(parsed.experience[0].positions[0].contributions[0].contribution).toBe('Owned the UI, "scaled" it.');
   });
 
   it('maps icon names back to definitions', () => {

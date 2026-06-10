@@ -19,9 +19,7 @@ describe('ResumeStore', () => {
   let store: InstanceType<typeof ResumeStore>;
 
   beforeEach(async () => {
-    vi.spyOn(globalThis, 'fetch').mockImplementation(
-      async () => new Response(CSV),
-    );
+    vi.spyOn(globalThis, 'fetch').mockImplementation(async () => new Response(CSV));
     TestBed.configureTestingModule({ providers: [ResumeStore] });
     store = TestBed.inject(ResumeStore);
     await store.load();
@@ -92,9 +90,7 @@ describe('ResumeStore', () => {
       expect(after.data.positions[0].contributions.length).toBe(count + 1);
       // Previous snapshot untouched (new object references throughout the path).
       expect(after).not.toBe(before);
-      expect(after.data.positions[0].contributions.length).not.toBe(
-        before.data.positions[0].contributions.length,
-      );
+      expect(after.data.positions[0].contributions.length).not.toBe(before.data.positions[0].contributions.length);
     });
 
     it('removes a contribution by index', () => {
@@ -104,9 +100,7 @@ describe('ResumeStore', () => {
 
       store.removeContribution(id, 0, 0);
 
-      expect(store.blocks()[0].data.positions[0].contributions.length).toBe(
-        count - 1,
-      );
+      expect(store.blocks()[0].data.positions[0].contributions.length).toBe(count - 1);
     });
 
     it('reorders contributions without mutating the prior snapshot', () => {
@@ -129,9 +123,7 @@ describe('ResumeStore', () => {
 
       store.updateContributionText(id, 0, 0, 'Rebuilt the platform');
 
-      expect(
-        store.blocks()[0].data.positions[0].contributions[0].contribution,
-      ).toBe('Rebuilt the platform');
+      expect(store.blocks()[0].data.positions[0].contributions[0].contribution).toBe('Rebuilt the platform');
       expect(store.toCsv()).toContain('Rebuilt the platform');
     });
   });
@@ -140,11 +132,7 @@ describe('ResumeStore', () => {
     it('splits an edited line back into the tech stack array', () => {
       const id = store.blocks()[0].id;
       store.setTechStack(id, 0, 'Angular | TypeScript | RxJS');
-      expect(store.blocks()[0].data.positions[0].techStack).toEqual([
-        'Angular',
-        'TypeScript',
-        'RxJS',
-      ]);
+      expect(store.blocks()[0].data.positions[0].techStack).toEqual(['Angular', 'TypeScript', 'RxJS']);
     });
   });
 

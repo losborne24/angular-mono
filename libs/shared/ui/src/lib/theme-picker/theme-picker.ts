@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  effect,
-  output,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, output, signal } from '@angular/core';
 import { DAISYUI_THEMES, Theme } from '@angular-monorepo/shared/util';
 
 @Component({

@@ -76,9 +76,7 @@ describe('Paper', () => {
     it('should render utility buttons', () => {
       const compiled = fixture.nativeElement;
       // Upload is a <label for> wrapping the hidden file input; the rest are buttons.
-      const controls = compiled.querySelectorAll(
-        'nav.utility-container button, nav.utility-container label',
-      );
+      const controls = compiled.querySelectorAll('nav.utility-container button, nav.utility-container label');
       expect(controls.length).toBe(6);
     });
   });
@@ -124,8 +122,7 @@ describe('Paper', () => {
     });
 
     it('hydrates store from an uploaded file', async () => {
-      const csv =
-        'type,icon,a,b,c,d,e,f\nheader,,name,Uploaded Person,,,,\n';
+      const csv = 'type,icon,a,b,c,d,e,f\nheader,,name,Uploaded Person,,,,\n';
       const input = { files: [{ text: async () => csv }], value: 'x' };
       await component.onFileSelected({ target: input } as unknown as Event);
 

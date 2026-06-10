@@ -5,14 +5,14 @@ import { vi } from 'vitest';
 
 @Component({
   template: `<!-- eslint-disable-next-line @angular-eslint/template/elements-content -->
-  <h1
-    [(appInlineEdit)]="text"
-    [disabled]="disabled()"
-    #editor="appInlineEdit"
-    (editStart)="started = started + 1"
-    (editCommit)="committed = $event"
-    (editCancel)="cancelled = cancelled + 1"
-  ></h1>`,
+    <h1
+      [(appInlineEdit)]="text"
+      [disabled]="disabled()"
+      #editor="appInlineEdit"
+      (editStart)="started = started + 1"
+      (editCommit)="committed = $event"
+      (editCancel)="cancelled = cancelled + 1"
+    ></h1>`,
   standalone: true,
   imports: [InlineEditDirective],
 })
