@@ -1,0 +1,6 @@
+<button type="button" [attr.aria-label]="ariaLabel()" (click)="action.emit()">
+  <fa-icon [icon]="icon()"></fa-icon>
+  @if (text(); as t) {
+  <span>{{ t }}</span>
+  }
+</button>

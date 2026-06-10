@@ -40,10 +40,12 @@
           </h3>
           @if (edit) {
           <nav class="add-bar flex gap-2 font-sans">
-            <button type="button" class="add-button" (click)="store.addBlock('experience')">
-              <fa-icon [icon]="icon.faBriefcase"></fa-icon>
-              <span>Add experience</span>
-            </button>
+            <app-icon-button
+              class="add-button"
+              [icon]="icon.faBriefcase"
+              text="Add experience"
+              (action)="store.addBlock('experience')"
+            />
           </nav>
           }
           <div class="flex flex-col gap-4">
@@ -59,10 +61,7 @@
           </h3>
           @if (edit) {
           <nav class="add-bar flex gap-2 font-sans">
-            <button type="button" class="add-button" (click)="store.addLink()">
-              <fa-icon [icon]="icon.faLink"></fa-icon>
-              <span>Add link</span>
-            </button>
+            <app-icon-button class="add-button" [icon]="icon.faLink" text="Add link" (action)="store.addLink()" />
           </nav>
           }
           <nav class="flex flex-col text-base-content">
@@ -82,9 +81,12 @@
                 ></span>
               </a>
               @if (edit) {
-              <button type="button" class="row-remove font-sans" aria-label="Remove link" (click)="store.removeLink(i)">
-                <fa-icon [icon]="icon.faXmark"></fa-icon>
-              </button>
+              <app-icon-button
+                class="row-remove font-sans"
+                [icon]="icon.faXmark"
+                label="Remove link"
+                (action)="store.removeLink(i)"
+              />
               }
             </div>
             }
@@ -121,10 +123,12 @@
           </h3>
           @if (edit) {
           <nav class="add-bar flex gap-2 font-sans">
-            <button type="button" class="add-button" (click)="store.addEducation()">
-              <fa-icon [icon]="icon.faGraduationCap"></fa-icon>
-              <span>Add education</span>
-            </button>
+            <app-icon-button
+              class="add-button"
+              [icon]="icon.faGraduationCap"
+              text="Add education"
+              (action)="store.addEducation()"
+            />
           </nav>
           }
           <div class="flex flex-col gap-4">
@@ -146,14 +150,12 @@
                   (editCommit)="store.updateEducationPeriod(i, $event)"
                 ></time>
                 @if (edit) {
-                <button
-                  type="button"
+                <app-icon-button
                   class="row-remove font-sans"
-                  aria-label="Remove education"
-                  (click)="store.removeEducation(i)"
-                >
-                  <fa-icon [icon]="icon.faXmark"></fa-icon>
-                </button>
+                  [icon]="icon.faXmark"
+                  label="Remove education"
+                  (action)="store.removeEducation(i)"
+                />
                 }
               </header>
               @if (edu.detail !== undefined) {
@@ -186,10 +188,12 @@
             </h3>
             @if (edit) {
             <nav class="add-bar flex gap-2 font-sans">
-              <button type="button" class="add-button" (click)="store.addPanelItem(section.header)">
-                <fa-icon [icon]="section.header === 'CERTIFICATIONS' ? icon.faCertificate : icon.faTrophy"></fa-icon>
-                <span>{{ section.header === 'CERTIFICATIONS' ? 'Add certification' : 'Add achievement' }}</span>
-              </button>
+              <app-icon-button
+                class="add-button"
+                [icon]="section.header === 'CERTIFICATIONS' ? icon.faCertificate : icon.faTrophy"
+                [text]="section.header === 'CERTIFICATIONS' ? 'Add certification' : 'Add achievement'"
+                (action)="store.addPanelItem(section.header)"
+              />
             </nav>
             }
             <ul>
@@ -201,14 +205,12 @@
                   (editCommit)="store.updatePanelItem(section.header, i, $event)"
                 ></span>
                 @if (edit) {
-                <button
-                  type="button"
+                <app-icon-button
                   class="row-remove font-sans"
-                  aria-label="Remove item"
-                  (click)="store.removePanelItem(section.header, i)"
-                >
-                  <fa-icon [icon]="icon.faXmark"></fa-icon>
-                </button>
+                  [icon]="icon.faXmark"
+                  label="Remove item"
+                  (action)="store.removePanelItem(section.header, i)"
+                />
                 }
               </li>
               }

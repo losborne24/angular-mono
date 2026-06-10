@@ -2,13 +2,27 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Icon } from '@angular-monorepo/shared/util';
 import { parseResumeCsv } from '@angular-monorepo/resume/util';
-import { ExportPdfDirective, CopyUrlDirective, InlineEditDirective, IconPicker } from '@angular-monorepo/shared/ui';
+import {
+  ExportPdfDirective,
+  CopyUrlDirective,
+  InlineEditDirective,
+  IconButton,
+  IconPicker,
+} from '@angular-monorepo/shared/ui';
 import { ResumeStore } from '../resume-store';
 import { ExperienceBlock } from '../experience-block/experience-block';
 
 @Component({
   selector: 'app-paper',
-  imports: [FontAwesomeModule, ExportPdfDirective, CopyUrlDirective, InlineEditDirective, IconPicker, ExperienceBlock],
+  imports: [
+    FontAwesomeModule,
+    ExportPdfDirective,
+    CopyUrlDirective,
+    InlineEditDirective,
+    IconButton,
+    IconPicker,
+    ExperienceBlock,
+  ],
   providers: [ResumeStore],
   templateUrl: './paper.html',
   styleUrl: './paper.scss',

@@ -65,37 +65,37 @@
               (editCommit)="store.updateContributionText(id, posIndex, c, $event)"
             ></span>
             @if (edit) {
-            <button
-              type="button"
+            <app-icon-button
               class="row-remove font-sans"
-              aria-label="Remove contribution"
-              (click)="store.removeContribution(id, posIndex, c)"
-            >
-              <fa-icon [icon]="icon.faXmark"></fa-icon>
-            </button>
+              [icon]="icon.faXmark"
+              label="Remove contribution"
+              (action)="store.removeContribution(id, posIndex, c)"
+            />
             }
           </li>
           }
         </ul>
         @if (edit) {
         <div class="position-actions flex gap-2 font-sans">
-          <button type="button" class="add-button add-button--sm" (click)="store.addContribution(id, posIndex)">
-            <fa-icon [icon]="icon.faPlus"></fa-icon>
-            <span>Add contribution</span>
-          </button>
-          <button type="button" class="add-button add-button--sm" (click)="store.addPosition(id)">
-            <fa-icon [icon]="icon.faPlus"></fa-icon>
-            <span>Add role</span>
-          </button>
+          <app-icon-button
+            class="add-button add-button--sm"
+            [icon]="icon.faPlus"
+            text="Add contribution"
+            (action)="store.addContribution(id, posIndex)"
+          />
+          <app-icon-button
+            class="add-button add-button--sm"
+            [icon]="icon.faPlus"
+            text="Add role"
+            (action)="store.addPosition(id)"
+          />
           @if (company.positions.length > 1) {
-          <button
-            type="button"
+          <app-icon-button
             class="add-button add-button--sm add-button--danger"
-            (click)="store.removePosition(id, posIndex)"
-          >
-            <fa-icon [icon]="icon.faXmark"></fa-icon>
-            <span>Remove role</span>
-          </button>
+            [icon]="icon.faXmark"
+            text="Remove role"
+            (action)="store.removePosition(id, posIndex)"
+          />
           }
         </div>
         }
@@ -104,13 +104,11 @@
     </div>
   </article>
   @if (removable()) {
-  <button
-    type="button"
+  <app-icon-button
     class="block-remove opacity-0 transition-opacity group-hover:opacity-100 font-sans"
-    aria-label="Remove block"
-    (click)="remove.emit()"
-  >
-    <fa-icon [icon]="icon.faXmark"></fa-icon>
-  </button>
+    [icon]="icon.faXmark"
+    label="Remove block"
+    (action)="remove.emit()"
+  />
   }
 </div>
