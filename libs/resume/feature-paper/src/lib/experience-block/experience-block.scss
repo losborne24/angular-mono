@@ -43,35 +43,32 @@
   }
 }
 
-// Add/remove chrome only reveals in edit mode, on block hover.
-article.editing:hover {
-  .position-actions,
-  .add-button {
-    opacity: 1;
-  }
-}
-
-.row-remove {
-  // Inline at the end of the contribution text; collapses to zero footprint
-  // until the row is hovered.
+// Inline affordance shared by the row remove/drag controls: collapses to zero
+// footprint until the row is hovered.
+%row-affordance {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   vertical-align: middle;
   width: 0;
   height: 0.875rem;
-  margin-left: 0;
   overflow: hidden;
   font-size: 0.5rem;
-  border-radius: 9999px;
-  background: hsl(var(--er, 0 70% 50%));
-  color: hsl(var(--erc, 0 0% 100%));
   cursor: pointer;
   opacity: 0;
   transition:
     opacity 120ms ease,
     width 120ms ease,
     margin 120ms ease;
+}
+
+.row-remove {
+  @extend %row-affordance;
+  // Sits at the end of the contribution text.
+  margin-left: 0;
+  border-radius: 9999px;
+  background: hsl(var(--er, 0 70% 50%));
+  color: hsl(var(--erc, 0 0% 100%));
 }
 
 .contribution:hover .row-remove {
@@ -81,24 +78,11 @@ article.editing:hover {
 }
 
 .row-drag {
-  // Inline grip at the start of the row; collapses to zero footprint until the
-  // row is hovered.
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  vertical-align: middle;
-  width: 0;
-  height: 0.875rem;
+  @extend %row-affordance;
+  // Grip at the start of the row.
   margin-right: 0;
-  overflow: hidden;
-  font-size: 0.5rem;
   color: hsl(var(--bc, 0 0% 40%) / 0.5);
   cursor: grab;
-  opacity: 0;
-  transition:
-    opacity 120ms ease,
-    width 120ms ease,
-    margin 120ms ease;
 
   fa-icon {
     font-size: 0.5rem;
@@ -155,6 +139,10 @@ article.editing:hover {
   margin-top: 0.25rem;
   height: 1.5rem;
   opacity: 1;
+
+  .add-button {
+    opacity: 1;
+  }
 }
 
 .add-button {
