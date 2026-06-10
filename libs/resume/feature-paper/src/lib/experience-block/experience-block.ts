@@ -33,7 +33,7 @@ export class ExperienceBlock {
   readonly store = inject(ResumeStore);
   readonly block = input.required<ExperienceBlockModel>();
   /** Show the remove control. Off outside edit mode. */
-  readonly removable = input<boolean>(true);
+  readonly removable = input<boolean>(false);
   readonly remove = output<void>();
 
   /** Tech stack joined into one editable line (e.g. "Angular | TypeScript"). */
