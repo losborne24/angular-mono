@@ -10,7 +10,10 @@
       "executor": "@angular/build:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": { "base": "dist/apps/resume", "browser": "" },
+        "outputPath": {
+          "base": "dist/apps/resume",
+          "browser": ""
+        },
         "index": "apps/resume/src/index.html",
         "baseHref": "/angular-mono/resume/",
         "browser": "apps/resume/src/main.ts",
@@ -79,7 +82,7 @@
       }
     },
     "test": {
-      "executor": "@nx/vite:test",
+      "executor": "@nx/vitest:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
         "reportsDirectory": "../../coverage/apps/resume"

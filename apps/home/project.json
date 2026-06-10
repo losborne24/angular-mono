@@ -10,7 +10,10 @@
       "executor": "@angular/build:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": { "base": "dist/apps/home", "browser": "" },
+        "outputPath": {
+          "base": "dist/apps/home",
+          "browser": ""
+        },
         "index": "apps/home/src/index.html",
         "baseHref": "/angular-mono/",
         "browser": "apps/home/src/main.ts",
@@ -76,7 +79,7 @@
       }
     },
     "test": {
-      "executor": "@nx/vite:test",
+      "executor": "@nx/vitest:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
         "reportsDirectory": "../../coverage/apps/home"
