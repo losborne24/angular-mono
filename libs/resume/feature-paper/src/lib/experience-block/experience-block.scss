@@ -32,7 +32,8 @@
     background 120ms ease,
     color 120ms ease;
 
-  .block-frame:hover & {
+  // .group marks the removable (edit-mode) block; reveal on its hover.
+  .block-frame.group:hover & {
     width: 1.75rem;
     margin-left: 0.5rem;
   }
