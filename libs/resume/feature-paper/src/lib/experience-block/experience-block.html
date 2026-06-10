@@ -46,7 +46,7 @@
           )
         "
         >
-          @for (contribution of position.contributions; track $index; let c = $index) {
+          @for (contribution of position.contributions; track contribution; let c = $index) {
           <li class="contribution group/con relative" cdkDrag [cdkDragDisabled]="!edit">
             @if (edit) {
             <button type="button" class="row-drag font-sans" aria-label="Reorder contribution" cdkDragHandle>
