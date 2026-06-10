@@ -1,0 +1,26 @@
+// Shared Angular CDK drag-drop reorder visuals.
+//
+// Generic across any cdkDropList of reorderable rows. Component styles still own
+// the look of the dragged element itself (`.cdk-drag-preview`) — font, padding,
+// shadow — since that is list-specific. This mixin covers only the behaviour
+// that is the same everywhere: the faded gap left behind, and the smooth
+// settle/shift animation.
+//
+// Usage:
+//   @use '../../../shared/ui/src/styles/cdk-drag' as cdk;
+//   @include cdk.reorder('.contribution');
+//
+// $item — selector for a single draggable row, used to animate the siblings
+// after the one being dragged so they slide aside to make room.
+@mixin reorder($item) {
+  // Faded gap marking where the dragged row will land.
+  .cdk-drag-placeholder {
+    opacity: 0.4;
+  }
+
+  // Settle animation on drop, plus the live shift of trailing siblings.
+  .cdk-drag-animating,
+  #{$item}.cdk-drag-dragging ~ #{$item} {
+    transition: transform 180ms cubic-bezier(0, 0, 0.2, 1);
+  }
+}

@@ -17,6 +17,9 @@
         "polyfills": ["zone.js"],
         "tsConfig": "apps/resume/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs"]
+        },
         "assets": [
           {
             "glob": "**/*",

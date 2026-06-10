@@ -1,5 +1,5 @@
 @let company = block().data; @let id = block().id; @let edit = store.editMode();
-<div class="block-frame relative flex items-start" [class.group]="removable()">
+<div class="block-container relative flex items-start" [class.group]="removable()">
   <article class="flex-1" [class.editing]="edit">
     <h2>
       <strong
@@ -105,7 +105,7 @@
   </article>
   @if (removable()) {
   <app-icon-button
-    class="block-remove font-sans"
+    class="block-remove flex flex-none items-center justify-center font-sans"
     [icon]="icon.faXmark"
     label="Remove block"
     (action)="remove.emit()"

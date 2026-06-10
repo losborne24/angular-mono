@@ -29,22 +29,22 @@
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  // Negative margin keeps the label flush-left at rest; hover bg gets padding.
+  // No negative margin: the parent (.add-bar / .position-actions) clips overflow
+  // for its height collapse, which would slice the hover background's left edge.
   padding: 0.125rem 0.375rem;
-  margin: 0 -0.375rem;
   font-size: 0.75rem;
   border: none;
   border-radius: 0.375rem;
   background: transparent;
-  color: hsl(var(--bc, 0 0% 40%) / 0.5);
+  color: oklch(var(--bc, 0.4 0 0) / 0.5);
   cursor: pointer;
   transition:
     color 120ms ease,
-    background 120ms ease;
+    background-color 120ms ease;
 
   &:hover {
-    color: hsl(var(--p, 220 70% 50%));
-    background: hsl(var(--p, 220 70% 50%) / 0.1);
+    color: oklch(var(--p, 0.55 0.2 264));
+    background: oklch(var(--p, 0.55 0.2 264) / 0.1);
   }
 }
 
@@ -85,8 +85,8 @@
   overflow: hidden;
   font-size: 0.5rem;
   border-radius: 9999px;
-  background: hsl(var(--er, 0 70% 50%));
-  color: hsl(var(--erc, 0 0% 100%));
+  background: oklch(var(--er, 0.58 0.22 27));
+  color: oklch(var(--erc, 1 0 0));
   cursor: pointer;
   opacity: 0;
   transition:
@@ -119,7 +119,7 @@
   border-radius: 0 !important;
 }
 // Editing chrome must never appear in the exported PDF.
-// (block-frame / block-remove handled in block-frame.scss)
+// (block-container / block-remove handled in experience-block.scss)
 .printable .add-bar {
   display: none !important;
 }

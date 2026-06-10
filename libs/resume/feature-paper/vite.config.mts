@@ -1,4 +1,5 @@
 /// <reference types='vitest' />
+import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 import angular from '@analogjs/vite-plugin-angular';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
@@ -8,6 +9,13 @@ export default defineConfig(() => ({
   root: __dirname,
   cacheDir: '../../../node_modules/.vite/libs/resume/feature-paper',
   plugins: [angular(), nxViteTsPaths(), nxCopyAssetsPlugin(['*.md'])],
+  // Mirror the resume app's `stylePreprocessorOptions.includePaths` so component
+  // scss can `@use 'shared/...'` without long relative paths.
+  css: {
+    preprocessorOptions: {
+      scss: { loadPaths: [resolve(__dirname, '../../..', 'libs')] },
+    },
+  },
   // Uncomment this if you are using workers.
   // worker: {
   //  plugins: [ nxViteTsPaths() ],

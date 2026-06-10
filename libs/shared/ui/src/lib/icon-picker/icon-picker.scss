@@ -7,12 +7,12 @@
   padding: 0.125rem;
   margin: -0.125rem;
   transition:
-    background 120ms ease,
+    background-color 120ms ease,
     color 120ms ease;
 
   &:hover {
-    background: hsl(var(--bc, 0 0% 40%) / 0.1);
-    color: hsl(var(--p, 220 70% 50%));
+    background: oklch(var(--bc, 0.4 0 0) / 0.1);
+    color: oklch(var(--p, 0.55 0.2 264));
   }
 }
 
@@ -23,7 +23,7 @@
   gap: 0.25rem;
   padding: 0.5rem;
   border-radius: 0.5rem;
-  border: 1px solid hsl(var(--bc, 0 0% 40%) / 0.15);
+  border: 1px solid oklch(var(--bc, 0.4 0 0) / 0.15);
   box-shadow: 0 4px 12px hsl(0 0% 0% / 0.15);
 }
 
@@ -35,19 +35,19 @@
   height: 1.75rem;
   border-radius: 0.375rem;
   cursor: pointer;
-  color: hsl(var(--bc, 0 0% 30%));
+  color: oklch(var(--bc, 0.3 0 0));
   transition:
-    background 120ms ease,
+    background-color 120ms ease,
     color 120ms ease;
 
   &:hover {
-    background: hsl(var(--p, 220 70% 50%) / 0.1);
-    color: hsl(var(--p, 220 70% 50%));
+    background: oklch(var(--p, 0.55 0.2 264) / 0.1);
+    color: oklch(var(--p, 0.55 0.2 264));
   }
 
   &--active {
-    background: hsl(var(--p, 220 70% 50%) / 0.15);
-    color: hsl(var(--p, 220 70% 50%));
+    background: oklch(var(--p, 0.55 0.2 264) / 0.15);
+    color: oklch(var(--p, 0.55 0.2 264));
   }
 }
 
