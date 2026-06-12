@@ -6,19 +6,21 @@ import { vi } from 'vitest';
 // Mock jsPDF
 vi.mock('jspdf', () => {
   return {
-    default: vi.fn().mockImplementation(() => ({
-      getImageProperties: vi.fn().mockReturnValue({
-        width: 800,
-        height: 600,
-      }),
-      internal: {
-        pageSize: {
-          getWidth: vi.fn().mockReturnValue(210),
+    default: vi.fn().mockImplementation(function () {
+      return {
+        getImageProperties: vi.fn().mockReturnValue({
+          width: 800,
+          height: 600,
+        }),
+        internal: {
+          pageSize: {
+            getWidth: vi.fn().mockReturnValue(210),
+          },
         },
-      },
-      addImage: vi.fn(),
-      save: vi.fn(),
-    })),
+        addImage: vi.fn(),
+        save: vi.fn(),
+      };
+    }),
   };
 });
 
@@ -91,16 +93,18 @@ describe('ExportPdfDirective', () => {
       });
       const mockGetWidth = vi.fn().mockReturnValue(210);
 
-      (jsPDF as unknown as ReturnType<typeof vi.fn>).mockImplementation(() => ({
-        getImageProperties: mockGetImageProperties,
-        internal: {
-          pageSize: {
-            getWidth: mockGetWidth,
+      (jsPDF as unknown as ReturnType<typeof vi.fn>).mockImplementation(function () {
+        return {
+          getImageProperties: mockGetImageProperties,
+          internal: {
+            pageSize: {
+              getWidth: mockGetWidth,
+            },
           },
-        },
-        addImage: mockAddImage,
-        save: mockSave,
-      }));
+          addImage: mockAddImage,
+          save: mockSave,
+        };
+      });
 
       vi.useFakeTimers();
       directive.export();

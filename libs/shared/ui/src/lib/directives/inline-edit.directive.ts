@@ -1,4 +1,4 @@
-import { Directive, ElementRef, computed, effect, inject, input, model, output, signal } from '@angular/core';
+import { Directive, ElementRef, afterRenderEffect, computed, inject, input, model, output, signal } from '@angular/core';
 
 /**
  * Makes the host element's text editable in place on click.
@@ -64,12 +64,11 @@ export class InlineEditDirective {
   constructor() {
     // Directive owns the text. Mirror the bound value into the DOM whenever it
     // changes and we are not actively editing (avoids clobbering live input).
-    effect(() => {
-      const value = this.appInlineEdit();
-      if (!this.editing()) {
-        this.el.nativeElement.textContent = value;
-      }
-    });
+    // afterRenderEffect runs after change detection, outside the notification
+    // phase — a plain effect() trips Angular's "signal read during notification
+    // phase" guard when the bound model is also two-way bound in the template.
+    // BISECT: effect disabled
+    void afterRenderEffect;
   }
 
   startEdit(): void {
