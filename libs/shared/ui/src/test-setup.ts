@@ -1,7 +1,9 @@
 import '@angular/compiler';
-import '@analogjs/vitest-angular/setup-zone';
+import '@analogjs/vitest-angular/setup-snapshots';
 
-import { BrowserTestingModule, platformBrowserTesting } from '@angular/platform-browser/testing';
-import { getTestBed } from '@angular/core/testing';
+import { setupTestBed } from '@analogjs/vitest-angular/setup-testbed';
 
-getTestBed().initTestEnvironment(BrowserTestingModule, platformBrowserTesting());
+// Zoneless test environment — mirrors the resume app's runtime change detection
+// (provideZonelessChangeDetection). No zone.js, so specs must drive change
+// detection explicitly: prefer `await fixture.whenStable()` over detectChanges().
+setupTestBed({ zoneless: true });
