@@ -30,7 +30,7 @@
             "output": "/"
           }
         ],
-        "styles": ["apps/resume/src/styles.scss"]
+        "styles": ["apps/resume/src/styles.css"]
       },
       "configurations": {
         "production": {
