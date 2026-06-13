@@ -1,4 +1,13 @@
-import { Directive, ElementRef, computed, effect, inject, input, model, output, signal } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  afterRenderEffect,
+  computed,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 
 /**
  * Makes the host element's text editable in place on click.
@@ -7,7 +16,11 @@ import { Directive, ElementRef, computed, effect, inject, input, model, output, 
  * bound signal inside the element (e.g. `{{ title() }}`), or Angular's binding
  * will fight the directive's manual DOM writes. Leave the element empty:
  *
- *   <h1 [(appInlineEdit)]="title"></h1>
+ *   <h1 [appInlineEdit]="title()" (editCommit)="title.set($event)"></h1>
+ *
+ * One-way binding only: pass the value in via `[appInlineEdit]` and listen to
+ * `editCommit` to persist the new value. The directive never writes back into
+ * the bound input.
  *
  * Behaviour: click → editable; Enter or blur commits; Escape reverts.
  */
@@ -37,8 +50,8 @@ import { Directive, ElementRef, computed, effect, inject, input, model, output, 
 export class InlineEditDirective {
   private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);
 
-  /** Two-way bound text value: `[(appInlineEdit)]="signal"`. */
-  readonly appInlineEdit = model<string>('');
+  /** Text value to display: `[appInlineEdit]="signal()"`. */
+  readonly appInlineEdit = input<string>('');
   /** When true, clicks do not enter edit mode. */
   readonly disabled = input<boolean>(false);
 
@@ -64,7 +77,10 @@ export class InlineEditDirective {
   constructor() {
     // Directive owns the text. Mirror the bound value into the DOM whenever it
     // changes and we are not actively editing (avoids clobbering live input).
-    effect(() => {
+    // afterRenderEffect runs after change detection, outside the notification
+    // phase — a plain effect() trips Angular's "signal read during notification
+    // phase" guard when the bound model is also two-way bound in the template.
+    afterRenderEffect(() => {
       const value = this.appInlineEdit();
       if (!this.editing()) {
         this.el.nativeElement.textContent = value;
@@ -124,7 +140,6 @@ export class InlineEditDirective {
       return;
     }
 
-    this.appInlineEdit.set(value);
     this.editCommit.emit(value);
   }
 

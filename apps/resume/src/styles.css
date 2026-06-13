@@ -1,8 +1,25 @@
 @import '@angular/cdk/overlay-prebuilt.css';
+@import 'tailwindcss';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Scan workspace libs for class usage (replaces v3 createGlobPatternsForDependencies). */
+@source '../../../libs';
+
+/* Theme/font classes built dynamically in Angular templates — keep them generated. */
+@source inline('font-sans font-serif font-mono');
+
+@plugin 'daisyui' {
+  themes: light --default, dark, cupcake, bumblebee, emerald, corporate, synthwave,
+    retro, cyberpunk, valentine, halloween, garden, forest, aqua, pastel, fantasy,
+    wireframe, dracula, cmyk, business, acid, lemonade, night, winter, dim, nord, sunset;
+}
+
+@plugin 'tailwind-scrollbar';
+
+@theme {
+  --font-serif: Cambria, serif;
+  --font-mono: Menlo, monospace;
+  --font-sans: Helvetica, sans-serif;
+}
 
 /* You can add global styles to this file, and also import other style files */
 
@@ -38,8 +55,8 @@
 
 @layer components {
   .circle-button {
-    @apply btn btn-circle btn-sm w-8 h-8 text-lg 
-           bg-base-100 border-base-100 
+    @apply btn btn-circle btn-sm w-8 h-8 text-lg
+           bg-base-100 border-base-100
            hover:bg-base-200 hover:border-base-200;
   }
 }

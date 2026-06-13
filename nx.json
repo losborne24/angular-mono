@@ -30,12 +30,14 @@
       "cache": true,
       "inputs": [
         "default",
+        "^default",
         "{workspaceRoot}/.eslintrc.json",
         "{workspaceRoot}/.eslintignore",
-        "{workspaceRoot}/eslint.config.mjs"
+        "{workspaceRoot}/eslint.config.mjs",
+        "{workspaceRoot}/tools/eslint-rules/**/*"
       ]
     },
-    "@nx/vite:test": {
+    "@nx/vitest:test": {
       "cache": true,
       "inputs": ["default", "^production"]
     }
@@ -60,7 +62,6 @@
       "plugin": "@nx/vite/plugin",
       "options": {
         "buildTargetName": "build",
-        "testTargetName": "vite:test",
         "serveTargetName": "serve",
         "devTargetName": "dev",
         "previewTargetName": "preview",
@@ -69,6 +70,12 @@
         "buildDepsTargetName": "build-deps",
         "watchDepsTargetName": "watch-deps"
       }
+    },
+    {
+      "plugin": "@nx/vitest",
+      "options": {
+        "testTargetName": "vite:test"
+      }
     }
   ],
   "generators": {
@@ -76,17 +83,18 @@
       "e2eTestRunner": "cypress",
       "linter": "eslint",
       "style": "scss",
-      "unitTestRunner": "vitest"
+      "unitTestRunner": "vitest-analog"
     },
     "@nx/angular:component": {
       "style": "scss"
     },
     "@nx/angular:library": {
       "linter": "eslint",
-      "unitTestRunner": "vitest"
+      "unitTestRunner": "vitest-analog"
     }
   },
   "cli": {
     "packageManager": "yarn"
-  }
+  },
+  "analytics": false
 }
