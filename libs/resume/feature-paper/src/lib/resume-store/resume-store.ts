@@ -18,8 +18,13 @@ import {
 /** The two fixed side-panel lists. */
 export type PanelKey = 'achievements' | 'certifications';
 
-/** URL of the seed CSV shipped as a static asset. */
-const RESUME_CSV_URL = '/resume.csv';
+/**
+ * URL of the seed CSV shipped as a static asset. Relative (no leading slash) so
+ * it resolves against the document `<base href>` — under GitHub Pages the app is
+ * served from a sub-path (`/angular-mono/resume/`), and a root-absolute
+ * `/resume.csv` would 404.
+ */
+const RESUME_CSV_URL = 'resume.csv';
 
 /**
  * Editable resume content: a {@link ResumeModel} whose flat `experience` array
