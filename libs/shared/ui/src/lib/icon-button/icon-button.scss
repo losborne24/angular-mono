@@ -1,10 +1,18 @@
 // The styled, animated box is the contextual class the consumer puts on this
-// host (`add-btn`, `row-remove-btn`, `block-remove-btn`): it owns display, sizing,
-// colour and the parent-hover reveal/collapse transitions. Leave the host
-// undeclared so those rules win without a specificity fight, and let the inner
-// <button> dissolve into the host box so the icon and label are its children.
+// host (`add-btn`, `row-remove-btn`, `block-remove-btn`): it owns colour, the
+// reveal/collapse transitions and the size it animates to. The inner <button>
+// fills that box edge-to-edge so the whole coloured square is the click target,
+// inheriting the host's flex layout, font and cursor rather than imposing its
+// own.
 button {
-  display: contents;
+  display: flex;
+  align-items: inherit;
+  justify-content: inherit;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
   font: inherit;
   color: inherit;
   cursor: inherit;

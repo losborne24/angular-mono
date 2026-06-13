@@ -9,8 +9,6 @@ $page-width: 754px;
 // Named to mirror the short CSS token 1:1 ($fallback-bc <-> --bc).
 $fallback-bc: 0.4 0 0; // base-content
 $fallback-p: 0.55 0.2 264; // primary
-$fallback-er: 0.58 0.22 27; // error
-$fallback-erc: 1 0 0; // error-content
 
 .paper-container {
   height: $page-height;
@@ -120,8 +118,8 @@ $fallback-erc: 1 0 0; // error-content
   @include row.collapsed;
   margin-left: 0;
   border-radius: 50%;
-  background: oklch(var(--er, #{$fallback-er}));
-  color: oklch(var(--erc, #{$fallback-erc}));
+  background: var(--color-error);
+  color: var(--color-error-content);
 }
 
 .link-row:hover .row-remove-btn {
@@ -144,11 +142,6 @@ $fallback-erc: 1 0 0; // error-content
     color: var(--color-neutral-content);
     background: color-mix(in oklch, var(--color-neutral-content) 10%, transparent);
   }
-}
-
-.panel-row .row-remove-btn {
-  background: var(--color-error);
-  color: var(--color-error-content);
 }
 
 // `.printable` marks the export/print render. Strip every border and the card
