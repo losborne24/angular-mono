@@ -83,13 +83,13 @@ export const ResumeStore = signalStore(
     // --- private draft helpers (immer) ----------------------------------------
 
     /** Apply an immer recipe to the resume content, producing a new immutable slice. */
-    function mutate(recipe: (content: ResumeContent) => void): void {
+    function mutateContent(recipe: (content: ResumeContent) => void): void {
       patchState(store, (state) => ({ content: produce(state.content, recipe) }));
     }
 
     /** Run a recipe against one block's Experience data, found by id. */
     function updateExperience(id: string, recipe: (data: Experience) => void): void {
-      mutate((content) => {
+      mutateContent((content) => {
         const block = content.blocks.find((b) => b.id === id);
         if (block) recipe(block.data);
       });
@@ -131,7 +131,7 @@ export const ResumeStore = signalStore(
       async load(url = RESUME_CSV_URL): Promise<void> {
         const res = await fetch(url);
         const text = await res.text();
-        patchState(store, { content: contentFromModel(parseResumeCsv(text)), editMode: false });
+        this.hydrate(parseResumeCsv(text));
       },
 
       /** Replace all content from a parsed model. */
@@ -188,13 +188,13 @@ export const ResumeStore = signalStore(
       // --- header -------------------------------------------------------------
 
       updateHeaderName(name: string): void {
-        mutate((content) => {
+        mutateContent((content) => {
           content.header.name = name;
         });
       },
 
       updateHeaderTitle(title: string): void {
-        mutate((content) => {
+        mutateContent((content) => {
           content.header.title = title;
         });
       },
@@ -203,13 +203,13 @@ export const ResumeStore = signalStore(
 
       addBlock(): void {
         const block: ResumeBlock = { id: newId(), data: emptyExperience() };
-        mutate((content) => {
+        mutateContent((content) => {
           content.blocks.unshift(block);
         });
       },
 
       removeBlock(id: string): void {
-        mutate((content) => {
+        mutateContent((content) => {
           content.blocks = content.blocks.filter((b) => b.id !== id);
         });
       },
@@ -292,13 +292,13 @@ export const ResumeStore = signalStore(
       // --- links --------------------------------------------------------------
 
       addLink(): void {
-        mutate((content) => {
+        mutateContent((content) => {
           content.links.unshift({ icon: Icon.faLink, href: 'https://' });
         });
       },
 
       removeLink(index: number): void {
-        mutate((content) => {
+        mutateContent((content) => {
           content.links.splice(index, 1);
         });
       },
@@ -306,13 +306,13 @@ export const ResumeStore = signalStore(
       setLinkIcon(link: Links, icon: IconDefinition): void {
         const index = store.content().links.indexOf(link);
         if (index < 0) return;
-        mutate((content) => {
+        mutateContent((content) => {
           content.links[index].icon = icon;
         });
       },
 
       updateLinkHref(index: number, href: string): void {
-        mutate((content) => {
+        mutateContent((content) => {
           content.links[index].href = href;
         });
       },
@@ -320,7 +320,7 @@ export const ResumeStore = signalStore(
       // --- contact details ----------------------------------------------------
 
       updateContactText(index: number, text: string): void {
-        mutate((content) => {
+        mutateContent((content) => {
           content.contactDetails[index].text = text;
         });
       },
@@ -328,31 +328,31 @@ export const ResumeStore = signalStore(
       // --- education ----------------------------------------------------------
 
       addEducation(): void {
-        mutate((content) => {
+        mutateContent((content) => {
           content.education.unshift({ school: 'School', period: 'YEAR - YEAR', detail: 'Details' });
         });
       },
 
       removeEducation(index: number): void {
-        mutate((content) => {
+        mutateContent((content) => {
           content.education.splice(index, 1);
         });
       },
 
       updateEducationSchool(index: number, school: string): void {
-        mutate((content) => {
+        mutateContent((content) => {
           content.education[index].school = school;
         });
       },
 
       updateEducationPeriod(index: number, period: string): void {
-        mutate((content) => {
+        mutateContent((content) => {
           content.education[index].period = period;
         });
       },
 
       updateEducationDetail(index: number, detail: string): void {
-        mutate((content) => {
+        mutateContent((content) => {
           content.education[index].detail = detail;
         });
       },
@@ -360,19 +360,19 @@ export const ResumeStore = signalStore(
       // --- side-panel lists (achievements / certifications) -------------------
 
       addPanelItem(key: PanelKey): void {
-        mutate((content) => {
+        mutateContent((content) => {
           content[key].unshift('New item');
         });
       },
 
       removePanelItem(key: PanelKey, index: number): void {
-        mutate((content) => {
+        mutateContent((content) => {
           content[key].splice(index, 1);
         });
       },
 
       updatePanelItem(key: PanelKey, index: number, value: string): void {
-        mutate((content) => {
+        mutateContent((content) => {
           content[key][index] = value;
         });
       },
