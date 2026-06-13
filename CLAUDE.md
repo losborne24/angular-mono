@@ -14,6 +14,11 @@ and font selection state, edit-mode toggling, CSV parsing — belongs in
 component/unit specs, which are faster and isolate the failure. Reserve e2e for
 the integration regressions only a full workflow can catch.
 
+Group related journeys under a nested `describe` by capability area (e.g. File
+Management, Customization). One `it` per journey still holds — `describe`
+organizes the suite, it does not license splitting a journey into per-widget
+specs.
+
 ### Selectors
 
 Prefer dedicated `data-cy` hooks via a `cy.dataCy(...)` custom command, plus
