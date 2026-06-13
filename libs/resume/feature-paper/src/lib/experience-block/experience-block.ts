@@ -4,7 +4,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IconButton, InlineEditDirective } from '@angular-monorepo/shared/ui';
 import { Icon } from '@angular-monorepo/shared/util';
 import { type ExperienceBlock as ExperienceBlockModel, type Position } from '@angular-monorepo/resume/util';
-import { ResumeStore } from '../resume-store';
+import { ResumeStore } from '../resume-store/resume-store';
 
 @Component({
   selector: 'app-experience-block',

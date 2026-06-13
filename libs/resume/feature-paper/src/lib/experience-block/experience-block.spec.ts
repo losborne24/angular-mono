@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ExperienceBlock } from './experience-block';
 import type { ExperienceBlock as ExperienceBlockModel } from '@angular-monorepo/resume/util';
-import { ResumeStore } from '../resume-store';
+import { ResumeStore } from '../resume-store/resume-store';
 
 const BLOCK: ExperienceBlockModel = {
   id: 'x',

@@ -9,7 +9,7 @@ import {
   IconButton,
   IconPicker,
 } from '@angular-monorepo/shared/ui';
-import { ResumeStore } from '../resume-store';
+import { ResumeStore } from '../resume-store/resume-store';
 import { ExperienceBlock } from '../experience-block/experience-block';
 
 @Component({
