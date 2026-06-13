@@ -39,14 +39,14 @@
             <strong>{{ store.sectionLabels().experience }}</strong>
           </h3>
           @if (edit) {
-          <nav class="add-bar flex gap-2 font-sans">
+          <div class="add-bar flex gap-2 font-sans">
             <app-icon-button
               class="add-btn"
               [icon]="icon.faBriefcase"
               text="Add experience"
               (action)="store.addBlock('experience')"
             />
-          </nav>
+          </div>
           }
           <div class="flex flex-col gap-4">
             @for (block of store.blocks(); track block.id) {
@@ -60,11 +60,11 @@
             <strong>{{ store.sectionLabels().links }}</strong>
           </h3>
           @if (edit) {
-          <nav class="add-bar flex gap-2 font-sans">
+          <div class="add-bar flex gap-2 font-sans">
             <app-icon-button class="add-btn" [icon]="icon.faLink" text="Add link" (action)="store.addLink()" />
-          </nav>
+          </div>
           }
-          <nav class="flex flex-col text-base-content">
+          <div class="flex flex-col text-base-content">
             @for (link of store.links(); track $index; let i = $index) {
             <div class="link-row group/link flex items-center gap-2 text-base-content text-opacity-90">
               @if (edit) {
@@ -90,7 +90,7 @@
               }
             </div>
             }
-          </nav>
+          </div>
         </section>
       </main>
       <aside class="flex flex-col flex-none basis-[28%] bg-neutral text-neutral-content text-opacity-90 p-8 gap-8">
@@ -122,14 +122,14 @@
             <strong>{{ store.sectionLabels().education }}</strong>
           </h3>
           @if (edit) {
-          <nav class="add-bar flex gap-2 font-sans">
+          <div class="add-bar flex gap-2 font-sans">
             <app-icon-button
               class="add-btn"
               [icon]="icon.faGraduationCap"
               text="Add education"
               (action)="store.addEducation()"
             />
-          </nav>
+          </div>
           }
           <div class="flex flex-col gap-4">
             @for (edu of store.education(); track $index; let i = $index) {
@@ -187,14 +187,15 @@
               <strong>{{ section.header }}</strong>
             </h3>
             @if (edit) {
-            <nav class="add-bar flex gap-2 font-sans">
+            @let addControl = store.panelAddControl(section.header);
+            <div class="add-bar flex gap-2 font-sans">
               <app-icon-button
                 class="add-btn"
-                [icon]="section.header === 'CERTIFICATIONS' ? icon.faCertificate : icon.faTrophy"
-                [text]="section.header === 'CERTIFICATIONS' ? 'Add certification' : 'Add achievement'"
+                [icon]="addControl.icon"
+                [text]="addControl.text"
                 (action)="store.addPanelItem(section.header)"
               />
-            </nav>
+            </div>
             }
             <ul>
               @for(item of section.items; track $index; let i = $index) {

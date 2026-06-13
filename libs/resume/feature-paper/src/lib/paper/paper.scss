@@ -93,6 +93,23 @@
   @include row.expanded('left');
 }
 
+// Side panel (CERTIFICATIONS / ACHIEVEMENTS) headers are accent-coloured; wire
+// its add/remove chrome to the same daisyUI v5 tokens so the font colour tracks
+// the active theme instead of the hardcoded oklch fallbacks above.
+.group\/panel .add-btn {
+  color: color-mix(in oklch, var(--color-accent) 50%, transparent);
+
+  &:hover {
+    color: var(--color-accent);
+    background: color-mix(in oklch, var(--color-accent) 10%, transparent);
+  }
+}
+
+.panel-row .row-remove-btn {
+  background: var(--color-error);
+  color: var(--color-error-content);
+}
+
 .printable .row-remove-btn {
   display: none !important;
 }

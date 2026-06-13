@@ -76,6 +76,19 @@ function stateFromModel(model: ResumeModel): ResumeState {
  * detection, where an in-place mutation would not notify the signal graph.
  * `toModel` / `toCsv` round-trip the current state back out for download/upload.
  */
+/** Add-control presentation per right-panel header. */
+interface PanelAddControl {
+  icon: IconDefinition;
+  text: string;
+}
+
+/** Header -> add-button icon + label. Extend here when a new panel header lands. */
+const PANEL_ADD_CONTROLS: Record<string, PanelAddControl> = {
+  CERTIFICATIONS: { icon: Icon.faCertificate, text: 'Add certification' },
+  ACHIEVEMENTS: { icon: Icon.faTrophy, text: 'Add achievement' },
+};
+const DEFAULT_PANEL_ADD_CONTROL: PanelAddControl = { icon: Icon.faPlus, text: 'Add item' };
+
 export const ResumeStore = signalStore(
   withState<ResumeState>(initialState),
   withMethods((store) => {
@@ -372,6 +385,11 @@ export const ResumeStore = signalStore(
       },
 
       // --- right-panel sections -----------------------------------------------
+
+      /** Add-button icon + label for a header. Extend PANEL_ADD_CONTROLS for new headers. */
+      panelAddControl(header: string): PanelAddControl {
+        return PANEL_ADD_CONTROLS[header] ?? DEFAULT_PANEL_ADD_CONTROL;
+      },
 
       addPanelItem(header: string): void {
         patchState(store, {
