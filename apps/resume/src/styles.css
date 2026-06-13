@@ -1,5 +1,9 @@
-@import '@angular/cdk/overlay-prebuilt.css';
+/* ==========================================================================
+   Imports & Tailwind pipeline
+   ========================================================================== */
+
 @import 'tailwindcss';
+@import '@angular/cdk/overlay-prebuilt.css';
 
 /* Scan workspace libs for class usage (replaces v3 createGlobPatternsForDependencies). */
 @source '../../../libs';
@@ -7,51 +11,59 @@
 /* Theme/font classes built dynamically in Angular templates — keep them generated. */
 @source inline('font-sans font-serif font-mono');
 
+/* daisyUI component library. Generate every built-in theme; `light --default`
+   is the fallback applied at startup. The curated subset the resume theme
+   picker actually offers lives in DAISYUI_THEMES (shared/util daisyui-constants) */
 @plugin 'daisyui' {
-  themes: light --default, dark, cupcake, bumblebee, emerald, corporate, synthwave,
-    retro, cyberpunk, valentine, halloween, garden, forest, aqua, pastel, fantasy,
-    wireframe, dracula, cmyk, business, acid, lemonade, night, winter, dim, nord, sunset;
+  themes: all --default light;
 }
 
+/* Scrollbar utilities (scrollbar-thin etc.) for styling overflow areas. */
 @plugin 'tailwind-scrollbar';
 
+/* ==========================================================================
+   Theme tokens (Tailwind @theme)
+   ========================================================================== */
+
+/* Override Tailwind's default font-family tokens so font-serif/mono/sans
+   utilities resolve to these faces (used by the resume font picker). */
 @theme {
   --font-serif: Cambria, serif;
   --font-mono: Menlo, monospace;
   --font-sans: Helvetica, sans-serif;
 }
 
-/* You can add global styles to this file, and also import other style files */
+/* ==========================================================================
+   Design tokens (plain CSS custom properties)
+   ========================================================================== */
 
 :root {
   /* Motion tokens: shared transition durations for UI affordances. */
   --motion-fast: 120ms;
 }
 
+/* ==========================================================================
+   Base layer
+   ========================================================================== */
 @layer base {
-  .font-serif p,
-  .font-serif ul,
-  .font-serif a,
-  .font-serif h3 {
+  .font-serif :is(p, ul, a, h3) {
     font-size: 0.775rem;
   }
-  .font-mono p,
-  .font-mono ul,
-  .font-mono a,
-  .font-mono h3 {
+  .font-mono :is(p, ul, a, h3) {
     font-size: 0.67rem;
     word-break: break-word;
   }
   .font-mono .text-xs {
     font-size: 0.625rem;
   }
-  .font-sans p,
-  .font-sans ul,
-  .font-sans a,
-  .font-sans h3 {
+  .font-sans :is(p, ul, a, h3) {
     font-size: 0.72rem;
   }
 }
+
+/* ==========================================================================
+   Component layer
+   ========================================================================== */
 
 @layer components {
   .circle-button {
@@ -59,12 +71,4 @@
            bg-base-100 border-base-100
            hover:bg-base-200 hover:border-base-200;
   }
-}
-
-address {
-  font-style: normal;
-}
-
-.tooltip::before {
-  font-size: 0.75rem; /* Tailwind's text-xs = 12px = 0.75rem */
 }

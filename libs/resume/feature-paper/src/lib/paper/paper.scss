@@ -123,3 +123,11 @@
 .printable .add-bar {
   display: none !important;
 }
+
+address {
+  font-style: normal;
+}
+
+.tooltip::before {
+  font-size: 0.75rem; // Tailwind's text-xs = 12px = 0.75rem
+}
