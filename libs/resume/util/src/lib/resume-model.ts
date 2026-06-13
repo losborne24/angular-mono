@@ -13,4 +13,6 @@ export interface ResumeModel {
   experience: Experience[];
   achievements: string[];
   certifications: string[];
+  /** Side-panel (aside) width as a % of paper width. Omitted = use default. */
+  asideWidth?: number;
 }

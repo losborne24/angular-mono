@@ -15,7 +15,7 @@
       class="paper-container flex-row card bg-base-100 text-neutral overflow-hidden"
       [class.editing]="edit"
     >
-      <main class="group/main flex flex-col flex-none basis-[72%] p-8 gap-8 text-base-content">
+      <main class="group/main flex flex-col flex-1 min-w-0 p-8 gap-8 text-base-content">
         <header>
           <h1 class="text-5xl mb-2">
             <strong
@@ -93,7 +93,20 @@
           </div>
         </section>
       </main>
-      <aside class="flex flex-col flex-none basis-[28%] bg-neutral text-neutral-content text-opacity-90 p-8 gap-8">
+      @if (edit) {
+      <div
+        class="aside-resizer flex-none"
+        role="separator"
+        aria-orientation="vertical"
+        aria-label="Resize side panel"
+        data-cy="aside-resizer"
+        (pointerdown)="onResizeStart($event)"
+      ></div>
+      }
+      <aside
+        class="flex flex-col flex-none bg-neutral text-neutral-content text-opacity-90 p-8 gap-8"
+        [style.flex-basis.%]="store.asideWidth()"
+      >
         <address>
           @for (detail of store.content().contactDetails; track $index; let i = $index) {
           <div class="flex gap-2 items-center">

@@ -37,6 +37,32 @@ export class Paper {
     if (this.store.editMode()) event.preventDefault();
   }
 
+  /** Drag the aside resizer: map the pointer x onto a width % of the paper. */
+  onResizeStart(event: PointerEvent): void {
+    event.preventDefault();
+    const handle = event.target as HTMLElement;
+    const paper = handle.closest('.paper-container') as HTMLElement | null;
+    if (!paper) return;
+
+    handle.setPointerCapture(event.pointerId);
+
+    const onMove = (e: PointerEvent): void => {
+      const rect = paper.getBoundingClientRect();
+      // Aside grows as the pointer moves left, so measure from the right edge.
+      const percent = ((rect.right - e.clientX) / rect.width) * 100;
+      this.store.setAsideWidth(percent);
+    };
+
+    const onUp = (): void => {
+      handle.releasePointerCapture(event.pointerId);
+      handle.removeEventListener('pointermove', onMove);
+      handle.removeEventListener('pointerup', onUp);
+    };
+
+    handle.addEventListener('pointermove', onMove);
+    handle.addEventListener('pointerup', onUp);
+  }
+
   /** Clear the resume to a blank slate after confirmation. */
   startOver(): void {
     const ok = confirm('Start over with a new, blank resume? This clears all current content.');

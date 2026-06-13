@@ -17,12 +17,18 @@ $fallback-erc: 1 0 0; // error-content
   width: $page-width;
 }
 
+// Reserve the scrollbar track in both modes, so it appearing/disappearing
+// (entering edit mode, or during a resize drag) never shifts the paper width.
+.paper-scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+}
+
 // In edit mode the wrapper owns the scroll so the scrollbar sits outside the
 // card; the article grows to fit its content.
 .paper-scroll.editing {
   height: $page-height;
-  overflow-y: auto;
-  overflow-x: hidden;
 }
 
 .paper-container.editing {
@@ -31,6 +37,29 @@ $fallback-erc: 1 0 0; // error-content
 }
 .icon-container {
   width: 1rem;
+}
+
+// Drag handle between main and aside. Zero-width visually (a thin hit strip),
+// with a hover/active accent so the resize affordance reads clearly on screen.
+// Hidden from the printed/exported render via `.printable` below.
+.aside-resizer {
+  width: 0.375rem;
+  margin: 0 -0.1875rem; // overlap neighbours so it doesn't shift the columns
+  position: relative;
+  z-index: 1;
+  cursor: col-resize;
+  touch-action: none;
+  background: transparent;
+  transition: background-color motion.$fast;
+
+  &:hover,
+  &:active {
+    background: oklch(var(--p, #{$fallback-p}) / 0.4);
+  }
+}
+
+.printable .aside-resizer {
+  display: none;
 }
 
 // Education detail keeps embedded newlines (one entry per line).

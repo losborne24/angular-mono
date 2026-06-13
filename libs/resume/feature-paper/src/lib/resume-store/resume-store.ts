@@ -36,7 +36,15 @@ interface ResumeState {
   content: ResumeContent;
   /** When true, inline-edit and add/remove controls are active. */
   editMode: boolean;
+  /** Side-panel (aside) width as a percentage of the paper width. */
+  asideWidth: number;
 }
+
+/** Clamp the aside width to a sensible range (% of paper width). */
+const ASIDE_MIN = 10;
+const ASIDE_MAX = 50;
+/** Snap the aside width to a 1/50 grid (each step = 2 %). */
+const ASIDE_STEP = 2;
 
 const initialState: ResumeState = {
   content: {
@@ -49,6 +57,7 @@ const initialState: ResumeState = {
     blocks: [],
   },
   editMode: false,
+  asideWidth: 28,
 };
 
 /** Map a parsed model into editable content (experience -> id'd blocks). */
@@ -96,11 +105,7 @@ export const ResumeStore = signalStore(
     }
 
     /** Run a recipe against one position within a block. */
-    function updatePosition(
-      id: string,
-      posIndex: number,
-      recipe: (p: Experience['positions'][number]) => void,
-    ): void {
+    function updatePosition(id: string, posIndex: number, recipe: (p: Experience['positions'][number]) => void): void {
       updateExperience(id, (data) => {
         const position = data.positions[posIndex];
         if (position) recipe(position);
@@ -136,7 +141,11 @@ export const ResumeStore = signalStore(
 
       /** Replace all content from a parsed model. */
       hydrate(model: ResumeModel): void {
-        patchState(store, { content: contentFromModel(model), editMode: false });
+        const asideWidth =
+          model.asideWidth === undefined
+            ? initialState.asideWidth
+            : Math.min(ASIDE_MAX, Math.max(ASIDE_MIN, model.asideWidth));
+        patchState(store, { content: contentFromModel(model), editMode: false, asideWidth });
       },
 
       /** Clear all content to a blank resume and switch on edit mode. */
@@ -167,7 +176,7 @@ export const ResumeStore = signalStore(
       /** Snapshot the current content as a flat model (experience from blocks). */
       toModel(): ResumeModel {
         const { blocks, ...rest } = store.content();
-        return { ...rest, experience: blocks.map((b) => b.data) };
+        return { ...rest, experience: blocks.map((b) => b.data), asideWidth: store.asideWidth() };
       },
 
       /** Serialize the current state to CSV text. */
@@ -183,6 +192,15 @@ export const ResumeStore = signalStore(
 
       setEditMode(on: boolean): void {
         patchState(store, { editMode: on });
+      },
+
+      // --- layout -------------------------------------------------------------
+
+      /** Set the aside width (% of paper): snap to the 12-col grid, then clamp. */
+      setAsideWidth(percent: number): void {
+        const snapped = Math.round(percent / ASIDE_STEP) * ASIDE_STEP;
+        const clamped = Math.min(ASIDE_MAX, Math.max(ASIDE_MIN, snapped));
+        patchState(store, { asideWidth: clamped });
       },
 
       // --- header -------------------------------------------------------------
