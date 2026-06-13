@@ -104,15 +104,15 @@ $fallback-erc: 1 0 0; // error-content
   @include row.expanded('left');
 }
 
-// Side panel (CERTIFICATIONS / ACHIEVEMENTS) headers are accent-coloured; wire
-// its add/remove chrome to the same daisyUI v5 tokens so the font colour tracks
-// the active theme instead of the hardcoded oklch fallbacks above.
+// Side panel (CERTIFICATIONS / ACHIEVEMENTS) sits on the neutral aside; wire its
+// add chrome to the neutral-content token so the font colour tracks the active
+// theme instead of the hardcoded oklch fallbacks above.
 .group\/panel .add-btn {
-  color: color-mix(in oklch, var(--color-accent) 50%, transparent);
+  color: color-mix(in oklch, var(--color-neutral-content) 50%, transparent);
 
   &:hover {
-    color: var(--color-accent);
-    background: color-mix(in oklch, var(--color-accent) 10%, transparent);
+    color: var(--color-neutral-content);
+    background: color-mix(in oklch, var(--color-neutral-content) 10%, transparent);
   }
 }
 
