@@ -1,14 +1,7 @@
 import type { Contribution, Experience, Position } from './paper-model';
 
-export type BlockKind = 'experience';
-
-interface BlockBase {
+export interface ExperienceBlock {
   id: string;
-  kind: BlockKind;
-}
-
-export interface ExperienceBlock extends BlockBase {
-  kind: 'experience';
   data: Experience; // one company
 }
 

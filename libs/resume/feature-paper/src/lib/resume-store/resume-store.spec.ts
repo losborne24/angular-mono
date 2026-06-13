@@ -26,47 +26,46 @@ describe('ResumeStore', () => {
   });
 
   it('hydrates blocks and header from CSV', () => {
-    expect(store.blocks().length).toBeGreaterThan(0);
-    expect(store.header().name).toBe('Leith Osborne');
+    expect(store.content().blocks.length).toBeGreaterThan(0);
+    expect(store.content().header.name).toBe('Leith Osborne');
   });
 
   it('hydrates aside sections from CSV', () => {
-    expect(store.links().length).toBe(1);
-    expect(store.education()[0].school).toBe('Durham');
-    expect(store.rightPanel()[0].items).toEqual(['An award']);
+    expect(store.content().links.length).toBe(1);
+    expect(store.content().education[0].school).toBe('Durham');
+    expect(store.content().achievements).toEqual(['An award']);
   });
 
   describe('addBlock', () => {
     it('prepends an experience block with a unique id', () => {
-      const before = store.blocks().length;
-      store.addBlock('experience');
-      const blocks = store.blocks();
+      const before = store.content().blocks.length;
+      store.addBlock();
+      const blocks = store.content().blocks;
 
       expect(blocks.length).toBe(before + 1);
       const added = blocks[0];
-      expect(added.kind).toBe('experience');
       expect(added.id).toBeTruthy();
       expect(blocks.filter((b) => b.id === added.id).length).toBe(1);
     });
 
     it('does not touch the header', () => {
-      const header = store.header();
-      store.addBlock('experience');
-      expect(store.header()).toBe(header);
+      const header = store.content().header;
+      store.addBlock();
+      expect(store.content().header).toBe(header);
     });
   });
 
   describe('removeBlock', () => {
     it('drops the block with the given id', () => {
-      const id = store.blocks()[0].id;
+      const id = store.content().blocks[0].id;
       store.removeBlock(id);
-      expect(store.blocks().some((b) => b.id === id)).toBe(false);
+      expect(store.content().blocks.some((b) => b.id === id)).toBe(false);
     });
 
     it('ignores an unknown id', () => {
-      const before = store.blocks().length;
+      const before = store.content().blocks.length;
       store.removeBlock('does-not-exist');
-      expect(store.blocks().length).toBe(before);
+      expect(store.content().blocks.length).toBe(before);
     });
   });
 
@@ -80,13 +79,13 @@ describe('ResumeStore', () => {
 
   describe('contributions', () => {
     it('adds a contribution to a position immutably', () => {
-      const id = store.blocks()[0].id;
-      const before = store.blocks()[0];
+      const id = store.content().blocks[0].id;
+      const before = store.content().blocks[0];
       const count = before.data.positions[0].contributions.length;
 
       store.addContribution(id, 0);
 
-      const after = store.blocks()[0];
+      const after = store.content().blocks[0];
       expect(after.data.positions[0].contributions.length).toBe(count + 1);
       // Previous snapshot untouched (new object references throughout the path).
       expect(after).not.toBe(before);
@@ -94,24 +93,24 @@ describe('ResumeStore', () => {
     });
 
     it('removes a contribution by index', () => {
-      const id = store.blocks()[0].id;
+      const id = store.content().blocks[0].id;
       store.addContribution(id, 0);
-      const count = store.blocks()[0].data.positions[0].contributions.length;
+      const count = store.content().blocks[0].data.positions[0].contributions.length;
 
       store.removeContribution(id, 0, 0);
 
-      expect(store.blocks()[0].data.positions[0].contributions.length).toBe(count - 1);
+      expect(store.content().blocks[0].data.positions[0].contributions.length).toBe(count - 1);
     });
 
     it('reorders contributions without mutating the prior snapshot', () => {
-      const id = store.blocks()[0].id;
+      const id = store.content().blocks[0].id;
       store.addContribution(id, 0); // ensure at least two rows
-      const before = store.blocks()[0].data.positions[0].contributions;
+      const before = store.content().blocks[0].data.positions[0].contributions;
       const firstCategory = before[0].category;
 
       store.moveContribution(id, 0, 0, 1);
 
-      const after = store.blocks()[0].data.positions[0].contributions;
+      const after = store.content().blocks[0].data.positions[0].contributions;
       expect(after).not.toBe(before);
       expect(after[1].category).toBe(firstCategory);
       // Original array order is preserved (immutability).
@@ -119,20 +118,20 @@ describe('ResumeStore', () => {
     });
 
     it('edits contribution text and round-trips it to CSV', () => {
-      const id = store.blocks()[0].id;
+      const id = store.content().blocks[0].id;
 
       store.updateContributionText(id, 0, 0, 'Rebuilt the platform');
 
-      expect(store.blocks()[0].data.positions[0].contributions[0].contribution).toBe('Rebuilt the platform');
+      expect(store.content().blocks[0].data.positions[0].contributions[0].contribution).toBe('Rebuilt the platform');
       expect(store.toCsv()).toContain('Rebuilt the platform');
     });
   });
 
   describe('setTechStack', () => {
     it('splits an edited line back into the tech stack array', () => {
-      const id = store.blocks()[0].id;
+      const id = store.content().blocks[0].id;
       store.setTechStack(id, 0, 'Angular | TypeScript | RxJS');
-      expect(store.blocks()[0].data.positions[0].techStack).toEqual(['Angular', 'TypeScript', 'RxJS']);
+      expect(store.content().blocks[0].data.positions[0].techStack).toEqual(['Angular', 'TypeScript', 'RxJS']);
     });
   });
 

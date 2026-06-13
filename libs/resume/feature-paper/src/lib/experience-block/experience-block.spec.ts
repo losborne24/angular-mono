@@ -6,7 +6,6 @@ import { ResumeStore } from '../resume-store/resume-store';
 
 const BLOCK: ExperienceBlockModel = {
   id: 'x',
-  kind: 'experience',
   data: {
     companyName: 'Acme Corp',
     positions: [

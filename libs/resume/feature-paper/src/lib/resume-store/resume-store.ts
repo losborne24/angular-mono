@@ -8,92 +8,88 @@ import {
   emptyPosition,
   parseResumeCsv,
   serializeResumeCsv,
-  type BlockKind,
-  type ContactDetail,
-  type Education,
   type Experience,
   type Links,
   type ResumeBlock,
-  type ResumeHeader,
   type ResumeModel,
-  type RightPanelSection,
 } from '@angular-monorepo/resume/util';
+
+/** The two fixed side-panel lists. */
+export type PanelKey = 'achievements' | 'certifications';
 
 /** URL of the seed CSV shipped as a static asset. */
 const RESUME_CSV_URL = '/resume.csv';
 
-/** Shape of the in-memory draft held by the store. */
-interface ResumeState {
-  header: ResumeHeader;
-  contactDetails: ContactDetail[];
-  links: Links[];
-  education: Education[];
-  rightPanel: RightPanelSection[];
+/**
+ * Editable resume content: a {@link ResumeModel} whose flat `experience` array
+ * is swapped for id'd {@link ResumeBlock}s, so the template can `track` blocks
+ * and mutate them by id. `contentFromModel` / `toModel` convert between the two.
+ */
+interface ResumeContent extends Omit<ResumeModel, 'experience'> {
   /** Experience companies as left-column blocks. */
   blocks: ResumeBlock[];
+}
+
+/** Store state: the resume content plus UI-only flags. */
+interface ResumeState {
+  content: ResumeContent;
   /** When true, inline-edit and add/remove controls are active. */
   editMode: boolean;
 }
 
 const initialState: ResumeState = {
-  header: { name: '', title: '' },
-  contactDetails: [],
-  links: [],
-  education: [],
-  rightPanel: [],
-  blocks: [],
+  content: {
+    header: { name: '', title: '' },
+    contactDetails: [],
+    links: [],
+    education: [],
+    achievements: [],
+    certifications: [],
+    blocks: [],
+  },
   editMode: false,
 };
 
-/** Map a parsed model into store state (experience -> id'd blocks). */
-function stateFromModel(model: ResumeModel): ResumeState {
+/** Map a parsed model into editable content (experience -> id'd blocks). */
+function contentFromModel(model: ResumeModel): ResumeContent {
   return {
     header: model.header,
     contactDetails: model.contactDetails,
     links: model.links,
     education: model.education,
-    rightPanel: model.rightPanel,
+    achievements: model.achievements,
+    certifications: model.certifications,
     blocks: model.experience.map((data, i) => ({
       id: `seed-experience-${i}`,
-      kind: 'experience' as const,
       data,
     })),
-    editMode: false,
   };
 }
 
 /**
  * In-memory draft of the resume, hydrated from a CSV asset on init.
  *
- * Built on `@ngrx/signals`: {@link withState} exposes every state slice as a
- * read-only signal (`store.header()`, `store.blocks()`, …) and every mutation
- * goes through `patchState`, which replaces the affected slice immutably.
- * Nothing outside the store writes state — important under zoneless change
- * detection, where an in-place mutation would not notify the signal graph.
- * `toModel` / `toCsv` round-trip the current state back out for download/upload.
+ * Built on `@ngrx/signals`: {@link withState} exposes `content` and `editMode`
+ * as read-only signals, and every mutation goes through `patchState`, which
+ * replaces the affected slice immutably. Nothing outside the store writes state
+ * — important under zoneless change detection, where an in-place mutation would
+ * not notify the signal graph. `toModel` / `toCsv` round-trip the current
+ * content back out for download/upload.
  */
-/** Add-control presentation per right-panel header. */
-interface PanelAddControl {
-  icon: IconDefinition;
-  text: string;
-}
-
-/** Header -> add-button icon + label. Extend here when a new panel header lands. */
-const PANEL_ADD_CONTROLS: Record<string, PanelAddControl> = {
-  CERTIFICATIONS: { icon: Icon.faCertificate, text: 'Add certification' },
-  ACHIEVEMENTS: { icon: Icon.faTrophy, text: 'Add achievement' },
-};
-const DEFAULT_PANEL_ADD_CONTROL: PanelAddControl = { icon: Icon.faPlus, text: 'Add item' };
-
 export const ResumeStore = signalStore(
   withState<ResumeState>(initialState),
   withMethods((store) => {
     // --- private immutable-rebuild helpers ------------------------------------
 
+    /** Immutably patch one or more fields of the resume content. */
+    function patchContent(partial: Partial<ResumeContent>): void {
+      patchState(store, { content: { ...store.content(), ...partial } });
+    }
+
     /** Immutably replace one block's Experience data, found by id. */
     function updateExperience(id: string, recipe: (data: Experience) => Experience): void {
-      patchState(store, {
-        blocks: store.blocks().map((b) => (b.id === id ? { ...b, data: recipe(b.data) } : b)),
+      patchContent({
+        blocks: store.content().blocks.map((b) => (b.id === id ? { ...b, data: recipe(b.data) } : b)),
       });
     }
 
@@ -135,18 +131,18 @@ export const ResumeStore = signalStore(
       async load(url = RESUME_CSV_URL): Promise<void> {
         const res = await fetch(url);
         const text = await res.text();
-        patchState(store, stateFromModel(parseResumeCsv(text)));
+        patchState(store, { content: contentFromModel(parseResumeCsv(text)), editMode: false });
       },
 
-      /** Replace all state from a parsed model. */
+      /** Replace all content from a parsed model. */
       hydrate(model: ResumeModel): void {
-        patchState(store, stateFromModel(model));
+        patchState(store, { content: contentFromModel(model), editMode: false });
       },
 
       /** Clear all content to a blank resume and switch on edit mode. */
       reset(): void {
         patchState(store, {
-          ...stateFromModel({
+          content: contentFromModel({
             header: { name: 'Your Name', title: 'Your Title' },
             // Contacts have no add-control, so seed the standard rows to edit.
             contactDetails: [
@@ -161,26 +157,17 @@ export const ResumeStore = signalStore(
             links: [],
             education: [],
             experience: [],
-            // Keep empty sections so their add-item controls still render.
-            rightPanel: [
-              { header: 'ACHIEVEMENTS', items: [] },
-              { header: 'CERTIFICATIONS', items: [] },
-            ],
+            achievements: [],
+            certifications: [],
           }),
           editMode: true,
         });
       },
 
-      /** Snapshot the current state as a flat model (experience from blocks). */
+      /** Snapshot the current content as a flat model (experience from blocks). */
       toModel(): ResumeModel {
-        return {
-          header: store.header(),
-          contactDetails: store.contactDetails(),
-          links: store.links(),
-          education: store.education(),
-          experience: store.blocks().map((b) => b.data),
-          rightPanel: store.rightPanel(),
-        };
+        const { blocks, ...rest } = store.content();
+        return { ...rest, experience: blocks.map((b) => b.data) };
       },
 
       /** Serialize the current state to CSV text. */
@@ -201,29 +188,22 @@ export const ResumeStore = signalStore(
       // --- header -------------------------------------------------------------
 
       updateHeaderName(name: string): void {
-        patchState(store, { header: { ...store.header(), name } });
+        patchContent({ header: { ...store.content().header, name } });
       },
 
       updateHeaderTitle(title: string): void {
-        patchState(store, { header: { ...store.header(), title } });
+        patchContent({ header: { ...store.content().header, title } });
       },
 
       // --- experience blocks --------------------------------------------------
 
-      addBlock(kind: BlockKind): void {
-        if (kind !== 'experience') return;
-        const block: ResumeBlock = {
-          id: newId(),
-          kind: 'experience',
-          data: emptyExperience(),
-        };
-        patchState(store, { blocks: [block, ...store.blocks()] });
+      addBlock(): void {
+        const block: ResumeBlock = { id: newId(), data: emptyExperience() };
+        patchContent({ blocks: [block, ...store.content().blocks] });
       },
 
       removeBlock(id: string): void {
-        patchState(store, {
-          blocks: store.blocks().filter((b) => b.id !== id),
-        });
+        patchContent({ blocks: store.content().blocks.filter((b) => b.id !== id) });
       },
 
       updateCompanyName(id: string, companyName: string): void {
@@ -302,103 +282,71 @@ export const ResumeStore = signalStore(
       // --- links --------------------------------------------------------------
 
       addLink(): void {
-        patchState(store, {
-          links: [{ icon: Icon.faLink, href: 'https://' }, ...store.links()],
-        });
+        patchContent({ links: [{ icon: Icon.faLink, href: 'https://' }, ...store.content().links] });
       },
 
       removeLink(index: number): void {
-        patchState(store, {
-          links: store.links().filter((_, i) => i !== index),
-        });
+        patchContent({ links: store.content().links.filter((_, i) => i !== index) });
       },
 
       setLinkIcon(link: Links, icon: IconDefinition): void {
-        patchState(store, {
-          links: store.links().map((l) => (l === link ? { ...l, icon } : l)),
-        });
+        patchContent({ links: store.content().links.map((l) => (l === link ? { ...l, icon } : l)) });
       },
 
       updateLinkHref(index: number, href: string): void {
-        patchState(store, {
-          links: store.links().map((l, i) => (i === index ? { ...l, href } : l)),
-        });
+        patchContent({ links: store.content().links.map((l, i) => (i === index ? { ...l, href } : l)) });
       },
 
       // --- contact details ----------------------------------------------------
 
       updateContactText(index: number, text: string): void {
-        patchState(store, {
-          contactDetails: store.contactDetails().map((d, i) => (i === index ? { ...d, text } : d)),
+        patchContent({
+          contactDetails: store.content().contactDetails.map((d, i) => (i === index ? { ...d, text } : d)),
         });
       },
 
       // --- education ----------------------------------------------------------
 
       addEducation(): void {
-        patchState(store, {
-          education: [{ school: 'School', period: 'YEAR - YEAR', detail: 'Details' }, ...store.education()],
+        patchContent({
+          education: [{ school: 'School', period: 'YEAR - YEAR', detail: 'Details' }, ...store.content().education],
         });
       },
 
       removeEducation(index: number): void {
-        patchState(store, {
-          education: store.education().filter((_, i) => i !== index),
-        });
+        patchContent({ education: store.content().education.filter((_, i) => i !== index) });
       },
 
       updateEducationSchool(index: number, school: string): void {
-        patchState(store, {
-          education: store.education().map((e, i) => (i === index ? { ...e, school } : e)),
+        patchContent({
+          education: store.content().education.map((e, i) => (i === index ? { ...e, school } : e)),
         });
       },
 
       updateEducationPeriod(index: number, period: string): void {
-        patchState(store, {
-          education: store.education().map((e, i) => (i === index ? { ...e, period } : e)),
+        patchContent({
+          education: store.content().education.map((e, i) => (i === index ? { ...e, period } : e)),
         });
       },
 
       updateEducationDetail(index: number, detail: string): void {
-        patchState(store, {
-          education: store.education().map((e, i) => (i === index ? { ...e, detail } : e)),
+        patchContent({
+          education: store.content().education.map((e, i) => (i === index ? { ...e, detail } : e)),
         });
       },
 
-      // --- right-panel sections -----------------------------------------------
+      // --- side-panel lists (achievements / certifications) -------------------
 
-      /** Add-button icon + label for a header. Extend PANEL_ADD_CONTROLS for new headers. */
-      panelAddControl(header: string): PanelAddControl {
-        return PANEL_ADD_CONTROLS[header] ?? DEFAULT_PANEL_ADD_CONTROL;
+      addPanelItem(key: PanelKey): void {
+        patchContent({ [key]: ['New item', ...store.content()[key]] });
       },
 
-      addPanelItem(header: string): void {
-        patchState(store, {
-          rightPanel: store
-            .rightPanel()
-            .map((s) => (s.header === header ? { ...s, items: ['New item', ...s.items] } : s)),
-        });
+      removePanelItem(key: PanelKey, index: number): void {
+        patchContent({ [key]: store.content()[key].filter((_, i) => i !== index) });
       },
 
-      removePanelItem(header: string, index: number): void {
-        patchState(store, {
-          rightPanel: store
-            .rightPanel()
-            .map((s) => (s.header === header ? { ...s, items: s.items.filter((_, i) => i !== index) } : s)),
-        });
-      },
-
-      updatePanelItem(header: string, index: number, value: string): void {
-        patchState(store, {
-          rightPanel: store.rightPanel().map((s) =>
-            s.header === header
-              ? {
-                  ...s,
-                  items: s.items.map((item, i) => (i === index ? value : item)),
-                }
-              : s,
-          ),
-        });
+      updatePanelItem(key: PanelKey, index: number, value: string): void {
+        patchContent({ [key]: store.content()[key].map((item, i) => (i === index ? value : item)) });
       },
     };
   }),

@@ -29,10 +29,8 @@ const MODEL: ResumeModel = {
       ],
     },
   ],
-  rightPanel: [
-    { header: 'ACHIEVEMENTS', items: ['Award A', 'Award B'] },
-    { header: 'CERTIFICATIONS', items: ['AWS'] },
-  ],
+  achievements: ['Award A', 'Award B'],
+  certifications: ['AWS'],
 };
 
 describe('resume-csv', () => {

@@ -1,11 +1,4 @@
-import type {
-  ContactDetail,
-  Education,
-  Experience,
-  Links,
-  ResumeHeader,
-  RightPanelSection,
-} from './paper-model';
+import type { ContactDetail, Education, Experience, Links, ResumeHeader } from './paper-model';
 
 /**
  * Aggregate of every piece of resume content. Single source of truth that the
@@ -18,5 +11,6 @@ export interface ResumeModel {
   links: Links[];
   education: Education[];
   experience: Experience[];
-  rightPanel: RightPanelSection[];
+  achievements: string[];
+  certifications: string[];
 }

@@ -29,11 +29,6 @@ export interface Experience {
   positions: Position[];
 }
 
-export interface RightPanelSection {
-  header: string;
-  items: string[];
-}
-
 export interface ResumeHeader {
   name: string;
   title: string;

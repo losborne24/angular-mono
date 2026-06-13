@@ -20,7 +20,7 @@
           <h1 class="text-5xl mb-2">
             <strong
               data-cy="resume-name"
-              [appInlineEdit]="store.header().name"
+              [appInlineEdit]="store.content().header.name"
               [disabled]="!edit"
               (editCommit)="store.updateHeaderName($event)"
             ></strong>
@@ -28,7 +28,7 @@
           <!-- eslint-disable-next-line @angular-eslint/template/elements-content -->
           <h3
             data-cy="resume-title"
-            [appInlineEdit]="store.header().title"
+            [appInlineEdit]="store.content().header.title"
             [disabled]="!edit"
             (editCommit)="store.updateHeaderTitle($event)"
           ></h3>
@@ -44,12 +44,12 @@
               class="add-btn"
               [icon]="icon.faBriefcase"
               text="Add experience"
-              (action)="store.addBlock('experience')"
+              (action)="store.addBlock()"
             />
           </div>
           }
           <div class="flex flex-col gap-4">
-            @for (block of store.blocks(); track block.id) {
+            @for (block of store.content().blocks; track block.id) {
             <app-experience-block [block]="block" [removable]="edit" (remove)="store.removeBlock(block.id)" />
             }
           </div>
@@ -65,7 +65,7 @@
           </div>
           }
           <div class="flex flex-col text-base-content">
-            @for (link of store.links(); track $index; let i = $index) {
+            @for (link of store.content().links; track $index; let i = $index) {
             <div class="link-row group/link flex items-center gap-2 text-base-content text-opacity-90">
               @if (edit) {
               <app-icon-picker [icon]="link.icon" (iconChanged)="store.setLinkIcon(link, $event)" />
@@ -95,7 +95,7 @@
       </main>
       <aside class="flex flex-col flex-none basis-[28%] bg-neutral text-neutral-content text-opacity-90 p-8 gap-8">
         <address>
-          @for (detail of store.contactDetails(); track $index; let i = $index) {
+          @for (detail of store.content().contactDetails; track $index; let i = $index) {
           <div class="flex gap-2 items-center">
             <div class="icon-container">
               <fa-icon [icon]="detail.icon"></fa-icon>
@@ -132,7 +132,7 @@
           </div>
           }
           <div class="flex flex-col gap-4">
-            @for (edu of store.education(); track $index; let i = $index) {
+            @for (edu of store.content().education; track $index; let i = $index) {
             <article class="edu-row group/edu flex flex-col gap-2">
               <header>
                 <h2>
@@ -169,43 +169,74 @@
           </div>
         </section>
         <section class="flex flex-col gap-8">
-          @for(section of store.rightPanel(); track $index ){
           <section class="group/panel flex flex-col gap-2">
             <h3 class="text-accent">
-              <strong>{{ section.header }}</strong>
+              <strong>ACHIEVEMENTS</strong>
             </h3>
             @if (edit) {
-            @let addControl = store.panelAddControl(section.header);
             <div class="add-bar flex gap-2 font-sans">
               <app-icon-button
                 class="add-btn"
-                [icon]="addControl.icon"
-                [text]="addControl.text"
-                (action)="store.addPanelItem(section.header)"
+                [icon]="icon.faTrophy"
+                text="Add achievement"
+                (action)="store.addPanelItem('achievements')"
               />
             </div>
             }
             <ul>
-              @for(item of section.items; track $index; let i = $index) {
+              @for(item of store.content().achievements; track $index; let i = $index) {
               <li class="panel-row group/panel-item">
                 <span
-                  [appInlineEdit]="section.items[i]"
+                  [appInlineEdit]="item"
                   [disabled]="!edit"
-                  (editCommit)="store.updatePanelItem(section.header, i, $event)"
+                  (editCommit)="store.updatePanelItem('achievements', i, $event)"
                 ></span>
                 @if (edit) {
                 <app-icon-button
                   class="row-remove-btn font-sans"
                   [icon]="icon.faXmark"
                   label="Remove item"
-                  (action)="store.removePanelItem(section.header, i)"
+                  (action)="store.removePanelItem('achievements', i)"
                 />
                 }
               </li>
               }
             </ul>
           </section>
-          }
+          <section class="group/panel flex flex-col gap-2">
+            <h3 class="text-accent">
+              <strong>CERTIFICATIONS</strong>
+            </h3>
+            @if (edit) {
+            <div class="add-bar flex gap-2 font-sans">
+              <app-icon-button
+                class="add-btn"
+                [icon]="icon.faCertificate"
+                text="Add certification"
+                (action)="store.addPanelItem('certifications')"
+              />
+            </div>
+            }
+            <ul>
+              @for(item of store.content().certifications; track $index; let i = $index) {
+              <li class="panel-row group/panel-item">
+                <span
+                  [appInlineEdit]="item"
+                  [disabled]="!edit"
+                  (editCommit)="store.updatePanelItem('certifications', i, $event)"
+                ></span>
+                @if (edit) {
+                <app-icon-button
+                  class="row-remove-btn font-sans"
+                  [icon]="icon.faXmark"
+                  label="Remove item"
+                  (action)="store.removePanelItem('certifications', i)"
+                />
+                }
+              </li>
+              }
+            </ul>
+          </section>
         </section>
       </aside>
     </article>

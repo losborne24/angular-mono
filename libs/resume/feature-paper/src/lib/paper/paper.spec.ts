@@ -124,19 +124,19 @@ describe('Paper', () => {
       vi.spyOn(globalThis, 'confirm').mockReturnValue(true);
       component.startOver();
 
-      expect(component.store.blocks().length).toBe(0);
-      expect(component.store.links().length).toBe(0);
+      expect(component.store.content().blocks.length).toBe(0);
+      expect(component.store.content().links.length).toBe(0);
       // Contact rows are seeded (no add-control for them).
-      expect(component.store.contactDetails().length).toBe(3);
+      expect(component.store.content().contactDetails.length).toBe(3);
       expect(component.store.editMode()).toBe(true);
     });
 
     it('keeps state when start-over is cancelled', () => {
       vi.spyOn(globalThis, 'confirm').mockReturnValue(false);
-      const before = component.store.blocks().length;
+      const before = component.store.content().blocks.length;
       component.startOver();
 
-      expect(component.store.blocks().length).toBe(before);
+      expect(component.store.content().blocks.length).toBe(before);
     });
 
     it('hydrates store from an uploaded file', async () => {
@@ -144,7 +144,7 @@ describe('Paper', () => {
       const input = { files: [{ text: async () => csv }], value: 'x' };
       await component.onFileSelected({ target: input } as unknown as Event);
 
-      expect(component.store.header().name).toBe('Uploaded Person');
+      expect(component.store.content().header.name).toBe('Uploaded Person');
       expect(input.value).toBe('');
     });
   });
