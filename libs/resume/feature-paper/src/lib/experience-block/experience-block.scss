@@ -165,9 +165,7 @@ $fallback-b1: 1 0 0; // base-100 (surface)
   }
 }
 
-// Flatten the block's always-on padding/negative-margin in the exported PDF
-// clone, where the offset margin can shift or clip the block at page edges.
-// (The dashed border is already gone via paper.scss's `.printable * border:none`.)
+// Drop the negative margin in the PDF clone; it shifts/clips the block at page edges.
 :host-context(.printable) {
   .block-container {
     padding: 0 !important;
