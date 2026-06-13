@@ -17,7 +17,7 @@ export const emptyContribution = (): Contribution => ({
 export const emptyPosition = (): Position => ({
   position: 'Role',
   period: 'YEAR - YEAR',
-  techStack: [],
+  techStack: ['Tech'],
   contributions: [emptyContribution()],
 });
 
