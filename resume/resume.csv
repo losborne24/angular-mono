@@ -1,9 +1,6 @@
 type,icon,a,b,c,d,e,f
 header,,name,Leith Osborne,,,,
 header,,title,Front-End Focused Product Engineer,,,,
-label,,experience,EXPERIENCE,,,,
-label,,links,LINKS,,,,
-label,,education,EDUCATION,,,,
 contact,faLocationDot,"London, UK",,,,,
 contact,faPhone,+44 7494 391933,,,,,
 contact,faEnvelope,osborneleith@gmail.com,mailto:osborneleith@gmail.com,,,,
