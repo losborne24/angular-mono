@@ -1,5 +1,5 @@
 @let company = block().data; @let id = block().id; @let edit = store.editMode();
-<div class="block-container relative flex items-start" [class.group]="removable()">
+<div class="block-container group relative flex items-start" [class.removable]="removable()">
   <article class="flex-1" [class.editing]="edit">
     <h2>
       <strong
