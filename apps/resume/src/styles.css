@@ -15,7 +15,7 @@
    is the fallback applied at startup. The curated subset the resume theme
    picker actually offers lives in DAISYUI_THEMES (shared/util daisyui-constants) */
 @plugin 'daisyui' {
-  themes: all --default light;
+  themes: all;
 }
 
 /* Scrollbar utilities (scrollbar-thin etc.) for styling overflow areas. */
