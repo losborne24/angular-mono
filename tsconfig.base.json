@@ -17,6 +17,7 @@
     "paths": {
       "@angular-monorepo/resume/feature-paper": ["libs/resume/feature-paper/src/index.ts"],
       "@angular-monorepo/resume/util": ["libs/resume/util/src/index.ts"],
+      "@angular-monorepo/shared/e2e": ["libs/shared/e2e/src/index.ts"],
       "@angular-monorepo/shared/ui": ["libs/shared/ui/src/index.ts"],
       "@angular-monorepo/shared/util": ["libs/shared/util/src/index.ts"]
     }
