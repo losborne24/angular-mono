@@ -10,7 +10,7 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
  * {@link label} for its `aria-label` (the row/block remove controls).
  *
  * The component deliberately ships almost no styling: the contextual class on
- * the host (`add-button`, `row-remove`, `block-remove`, …) is what drives the
+ * the host (`add-btn`, `row-remove-btn`, `block-remove-btn`, …) is what drives the
  * size, colour and the parent-hover reveal/collapse transitions in the
  * consumer's stylesheet. Emulated encapsulation lets those parent rules target
  * this host element, so the button stays a dumb shell.

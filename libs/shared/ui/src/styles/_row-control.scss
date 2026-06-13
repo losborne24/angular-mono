@@ -1,0 +1,45 @@
+// Shared inline row edit controls (remove / reorder grip).
+//
+// The hover-revealed controls that sit inline within a list row — the remove
+// button and the drag grip. Collapse to zero footprint until the row is
+// hovered, then expand to a fixed square and fade in. The list-specific look
+// (border-radius, background, colour, the grip's cursor) stays in the consumer;
+// this partial owns only the collapse/expand behaviour that is identical
+// everywhere.
+//
+// Usage:
+//   @use 'shared/ui/src/styles/row-control' as row;
+//   .row-remove-btn { @include row.collapsed; /* + colours */ }
+//   .some-row:hover .row-remove-btn { @include row.expanded('left'); }
+
+$size: 0.875rem; // square edge of an expanded control
+$gap: 0.25rem; // margin that opens beside it on reveal
+
+// Collapsed base: zero width, hidden overflow, faded out.
+@mixin collapsed {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  width: 0;
+  height: $size;
+  overflow: hidden;
+  font-size: 0.5rem;
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity var(--motion-fast, 120ms) ease,
+    width var(--motion-fast, 120ms) ease,
+    margin var(--motion-fast, 120ms) ease;
+}
+
+// Revealed state for the row-hover rule. Pass 'left' or 'right' to also open
+// the gap on that side (e.g. remove button trails the text, grip leads it);
+// omit for no margin shift.
+@mixin expanded($margin-side: null) {
+  width: $size;
+  opacity: 1;
+  @if $margin-side {
+    margin-#{$margin-side}: $gap;
+  }
+}

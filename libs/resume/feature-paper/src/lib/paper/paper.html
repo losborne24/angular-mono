@@ -41,7 +41,7 @@
           @if (edit) {
           <nav class="add-bar flex gap-2 font-sans">
             <app-icon-button
-              class="add-button"
+              class="add-btn"
               [icon]="icon.faBriefcase"
               text="Add experience"
               (action)="store.addBlock('experience')"
@@ -61,7 +61,7 @@
           </h3>
           @if (edit) {
           <nav class="add-bar flex gap-2 font-sans">
-            <app-icon-button class="add-button" [icon]="icon.faLink" text="Add link" (action)="store.addLink()" />
+            <app-icon-button class="add-btn" [icon]="icon.faLink" text="Add link" (action)="store.addLink()" />
           </nav>
           }
           <nav class="flex flex-col text-base-content">
@@ -82,7 +82,7 @@
               </a>
               @if (edit) {
               <app-icon-button
-                class="row-remove font-sans"
+                class="row-remove-btn font-sans"
                 [icon]="icon.faXmark"
                 label="Remove link"
                 (action)="store.removeLink(i)"
@@ -124,7 +124,7 @@
           @if (edit) {
           <nav class="add-bar flex gap-2 font-sans">
             <app-icon-button
-              class="add-button"
+              class="add-btn"
               [icon]="icon.faGraduationCap"
               text="Add education"
               (action)="store.addEducation()"
@@ -151,7 +151,7 @@
                 ></time>
                 @if (edit) {
                 <app-icon-button
-                  class="row-remove font-sans"
+                  class="row-remove-btn font-sans"
                   [icon]="icon.faXmark"
                   label="Remove education"
                   (action)="store.removeEducation(i)"
@@ -189,7 +189,7 @@
             @if (edit) {
             <nav class="add-bar flex gap-2 font-sans">
               <app-icon-button
-                class="add-button"
+                class="add-btn"
                 [icon]="section.header === 'CERTIFICATIONS' ? icon.faCertificate : icon.faTrophy"
                 [text]="section.header === 'CERTIFICATIONS' ? 'Add certification' : 'Add achievement'"
                 (action)="store.addPanelItem(section.header)"
@@ -206,7 +206,7 @@
                 ></span>
                 @if (edit) {
                 <app-icon-button
-                  class="row-remove font-sans"
+                  class="row-remove-btn font-sans"
                   [icon]="icon.faXmark"
                   label="Remove item"
                   (action)="store.removePanelItem(section.header, i)"

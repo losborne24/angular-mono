@@ -47,9 +47,14 @@
         "
         >
           @for (contribution of position.contributions; track contribution; let c = $index) {
-          <li class="contribution group/con relative" cdkDrag [cdkDragDisabled]="!edit">
+          <li
+            class="contribution group/con relative"
+            cdkDrag
+            cdkDragPreviewContainer="parent"
+            [cdkDragDisabled]="!edit"
+          >
             @if (edit) {
-            <button type="button" class="row-drag font-sans" aria-label="Reorder contribution" cdkDragHandle>
+            <button type="button" class="contribution-row-drag font-sans" aria-label="Reorder contribution" cdkDragHandle>
               <fa-icon [icon]="icon.faGripVertical"></fa-icon>
             </button>
             }
@@ -66,7 +71,7 @@
             ></span>
             @if (edit) {
             <app-icon-button
-              class="row-remove font-sans"
+              class="row-remove-btn font-sans"
               [icon]="icon.faXmark"
               label="Remove contribution"
               (action)="store.removeContribution(id, posIndex, c)"
@@ -78,20 +83,20 @@
         @if (edit) {
         <div class="position-actions flex gap-2 font-sans">
           <app-icon-button
-            class="add-button add-button--sm"
+            class="add-btn add-btn--sm"
             [icon]="icon.faPlus"
             text="Add contribution"
             (action)="store.addContribution(id, posIndex)"
           />
           <app-icon-button
-            class="add-button add-button--sm"
+            class="add-btn add-btn--sm"
             [icon]="icon.faPlus"
             text="Add role"
             (action)="store.addPosition(id)"
           />
           @if (company.positions.length > 1) {
           <app-icon-button
-            class="add-button add-button--sm add-button--danger"
+            class="add-btn add-btn--sm add-btn--danger"
             [icon]="icon.faXmark"
             text="Remove role"
             (action)="store.removePosition(id, posIndex)"
@@ -105,7 +110,7 @@
   </article>
   @if (removable()) {
   <app-icon-button
-    class="block-remove flex flex-none items-center justify-center font-sans"
+    class="block-remove-btn flex flex-none items-center justify-center font-sans"
     [icon]="icon.faXmark"
     label="Remove block"
     (action)="remove.emit()"

@@ -1,5 +1,5 @@
 // The styled, animated box is the contextual class the consumer puts on this
-// host (`add-button`, `row-remove`, `block-remove`): it owns display, sizing,
+// host (`add-btn`, `row-remove-btn`, `block-remove-btn`): it owns display, sizing,
 // colour and the parent-hover reveal/collapse transitions. Leave the host
 // undeclared so those rules win without a specificity fight, and let the inner
 // <button> dissolve into the host box so the icon and label are its children.

@@ -1,21 +1,24 @@
 @use 'shared/ui/src/styles/cdk-drag' as cdk;
+@use 'shared/ui/src/styles/row-control' as row;
+
+@include cdk.reorder('.contribution');
 
 // Reveal/collapse dimensions for the hover-revealed edit affordances. Each
 // control collapses to 0 then expands to its $*-size when its row/block is
-// hovered; $*-gap is the margin that opens up beside it.
+// hovered; $*-gap is the margin that opens up beside it. (The inline row
+// remove/drag sizing lives in the shared `row-control` partial.)
 $block-control-size: 1.75rem; // block-level remove button (square)
 $block-control-gap: 0.5rem;
-$row-control-size: 0.875rem; // inline row remove/drag controls (square)
-$row-control-gap: 0.25rem;
-$position-actions-height: 1.5rem; // add-position action bar
-$position-actions-gap: 0.25rem;
+
+// Shared timing for every reveal/collapse transition.
+$ease-fast: var(--motion-fast, 120ms) ease;
 
 .block-container {
   border: 1px dashed transparent;
   border-radius: 0.375rem;
   padding: 0.5rem;
   margin: -0.5rem;
-  transition: border-color var(--motion-fast, 120ms) ease;
+  transition: border-color $ease-fast;
 
   // Border affordance only in edit mode (.removable set when removable).
   &.removable:hover {
@@ -23,7 +26,7 @@ $position-actions-gap: 0.25rem;
   }
 }
 
-.block-remove {
+.block-remove-btn {
   // Layout (flex flex-none items-center justify-center) lives in Tailwind on
   // the template. Reveal/collapse + colours stay here.
   // Zero footprint until the block is hovered.
@@ -37,10 +40,10 @@ $position-actions-gap: 0.25rem;
   color: oklch(var(--bc, 0.4 0 0) / 0.6);
   cursor: pointer;
   transition:
-    width var(--motion-fast, 120ms) ease,
-    margin var(--motion-fast, 120ms) ease,
-    background-color var(--motion-fast, 120ms) ease,
-    color var(--motion-fast, 120ms) ease;
+    width $ease-fast,
+    margin $ease-fast,
+    background-color $ease-fast,
+    color $ease-fast;
 
   // .removable marks the edit-mode block; reveal on its hover.
   .block-container.removable:hover & {
@@ -54,42 +57,21 @@ $position-actions-gap: 0.25rem;
   }
 }
 
-// Inline affordance shared by the row remove/drag controls: collapses to zero
-// footprint until the row is hovered.
-%row-affordance {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  vertical-align: middle;
-  width: 0;
-  height: $row-control-size;
-  overflow: hidden;
-  font-size: 0.5rem;
-  cursor: pointer;
-  opacity: 0;
-  transition:
-    opacity var(--motion-fast, 120ms) ease,
-    width var(--motion-fast, 120ms) ease,
-    margin var(--motion-fast, 120ms) ease;
-}
-
-.row-remove {
-  @extend %row-affordance;
+.row-remove-btn {
+  @include row.collapsed;
   // Sits at the end of the contribution text.
   margin-left: 0;
-  border-radius: 9999px;
+  border-radius: 50%;
   background: oklch(var(--er, 0.58 0.22 27) / 0.15);
   color: oklch(var(--er, 0.58 0.22 27));
 }
 
-.contribution:hover .row-remove {
-  width: $row-control-size;
-  margin-left: $row-control-gap;
-  opacity: 1;
+.contribution:hover .row-remove-btn {
+  @include row.expanded('left');
 }
 
-.row-drag {
-  @extend %row-affordance;
+.contribution-row-drag {
+  @include row.collapsed;
   // Grip at the start of the row.
   margin-right: 0;
   color: oklch(var(--bc, 0.4 0 0) / 0.5);
@@ -105,18 +87,12 @@ $position-actions-gap: 0.25rem;
   }
 }
 
-.contribution:hover .row-drag {
-  width: $row-control-size;
-  margin-right: $row-control-gap;
-  opacity: 1;
+.contribution:hover .contribution-row-drag {
+  @include row.expanded('right');
 }
 
-// CDK drag-drop visuals.
 .cdk-drag-preview {
   box-sizing: border-box;
-  // Preview is cloned to <body>, so it loses the paper's inherited font size.
-  // Restore it to match the contribution row text.
-  font-size: 0.75rem;
   line-height: 1.4;
   border-radius: 0.25rem;
   background: oklch(var(--b1, 1 0 0));
@@ -125,8 +101,6 @@ $position-actions-gap: 0.25rem;
   list-style: none;
 }
 
-@include cdk.reorder('.contribution');
-
 .position-actions {
   // Collapse to zero footprint until the position is hovered.
   margin-top: 0;
@@ -134,22 +108,25 @@ $position-actions-gap: 0.25rem;
   overflow: hidden;
   opacity: 0;
   transition:
-    opacity var(--motion-fast, 120ms) ease,
-    height var(--motion-fast, 120ms) ease,
-    margin var(--motion-fast, 120ms) ease;
+    opacity $ease-fast,
+    height $ease-fast,
+    margin $ease-fast;
 }
 
 .position:hover .position-actions {
+  $position-actions-height: 1.5rem;
+  $position-actions-gap: 0.25rem;
+
   margin-top: $position-actions-gap;
   height: $position-actions-height;
   opacity: 1;
 
-  .add-button {
+  .add-btn {
     opacity: 1;
   }
 }
 
-.add-button {
+.add-btn {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
@@ -164,9 +141,9 @@ $position-actions-gap: 0.25rem;
   cursor: pointer;
   opacity: 0;
   transition:
-    opacity var(--motion-fast, 120ms) ease,
-    color var(--motion-fast, 120ms) ease,
-    background-color var(--motion-fast, 120ms) ease;
+    opacity $ease-fast,
+    color $ease-fast,
+    background-color $ease-fast;
 
   &:hover {
     color: oklch(var(--p, 0.55 0.2 264));
@@ -183,18 +160,18 @@ $position-actions-gap: 0.25rem;
   }
 }
 
-// Hide all editing chrome inside the exported PDF clone.
+// Hide editor-only controls (remove/drag/add buttons, position actions) inside the exported PDF clone.
 :host-context(.printable) {
   .block-container {
     border-color: transparent !important;
     padding: 0 !important;
     margin: 0 !important;
   }
-  .block-remove,
-  .row-remove,
-  .row-drag,
+  .block-remove-btn,
+  .row-remove-btn,
+  .contribution-row-drag,
   .position-actions,
-  .add-button {
+  .add-btn {
     display: none !important;
   }
 }
