@@ -12,7 +12,7 @@ const MODEL: ResumeModel = {
   links: [{ icon: Icon.faGithub, href: 'https://github.com/x' }],
   education: [
     { school: 'Durham', period: '2017 - 2020', detail: 'BSc, First Class' },
-    { school: 'Ashcombe', period: '2010 - 2017', items: ['Maths A*', 'CS A'] },
+    { school: 'Ashcombe', period: '2010 - 2017', detail: 'Maths A*\nCS A' },
   ],
   experience: [
     {
@@ -54,11 +54,9 @@ describe('resume-csv', () => {
     expect(parsed.contactDetails[0].icon).toBe(Icon.faLocationDot);
   });
 
-  it('distinguishes education detail from items', () => {
+  it('preserves newlines in education detail', () => {
     const parsed = parseResumeCsv(serializeResumeCsv(MODEL));
     expect(parsed.education[0].detail).toBe('BSc, First Class');
-    expect(parsed.education[0].items).toBeUndefined();
-    expect(parsed.education[1].items).toEqual(['Maths A*', 'CS A']);
-    expect(parsed.education[1].detail).toBeUndefined();
+    expect(parsed.education[1].detail).toBe('Maths A*\nCS A');
   });
 });

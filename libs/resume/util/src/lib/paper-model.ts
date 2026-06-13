@@ -42,10 +42,8 @@ export interface ResumeHeader {
 export interface Education {
   school: string;
   period: string;
-  /** Single line of detail (e.g. degree). Mutually exclusive with `items`. */
-  detail?: string;
-  /** List of detail lines (e.g. A-levels). Mutually exclusive with `detail`. */
-  items?: string[];
+  /** Free-text detail (e.g. degree or A-levels). Newlines render as separate lines. */
+  detail: string;
 }
 
 /** Editable labels for the static section headings. */

@@ -158,24 +158,12 @@
                 />
                 }
               </header>
-              @if (edu.detail !== undefined) {
               <p
                 class="edu-detail"
                 [appInlineEdit]="edu.detail"
                 [disabled]="!edit"
                 (editCommit)="store.updateEducationDetail(i, $event)"
               ></p>
-              } @if (edu.items) {
-              <ul>
-                @for (item of edu.items; track $index; let itemIndex = $index) {
-                <li
-                  [appInlineEdit]="edu.items![itemIndex]"
-                  [disabled]="!edit"
-                  (editCommit)="store.updateEducationItem(i, itemIndex, $event)"
-                ></li>
-                }
-              </ul>
-              }
             </article>
             }
           </div>

@@ -11,7 +11,9 @@ link,faLinkedin,https://www.linkedin.com/in/leith-osborne-5946161b3,,,,,
 link,faGithub,https://github.com/losborne24,,,,,
 link,faGlobe,https://losborne24.github.io,,,,,
 education,,Durham University,OCT 2017 - JUL 2020,"BSc Computer Science, First Class Honours",,,
-education,,"The Ashcombe School, Surrey",SEP 2010 - AUG 2017,,Further Mathematics A*|Mathematics A*|Computer Science A,,
+education,,"The Ashcombe School, Surrey",SEP 2010 - AUG 2017,"Further Mathematics A*
+Mathematics A*
+Computer Science A",,,
 experience,,OpenGamma Limited,Software Developer,JAN 2025 - PRESENT,Angular|TypeScript|RxJS|Java|PostgreSQL|Node|AWS,Full UI Ownership,"Core member of a lean 1.5–3 developer team, owning the complete UI of the company’s flagship multi-million ARR margin optimisation analytics SaaS platform."
 experience,,OpenGamma Limited,Software Developer,JAN 2025 - PRESENT,Angular|TypeScript|RxJS|Java|PostgreSQL|Node|AWS,BI Integration,Implemented custom date pickers and calculation logic to drive dynamic API parameterisation in embedded AWS QuickSight dashboards.
 experience,,OpenGamma Limited,Software Developer,JAN 2025 - PRESENT,Angular|TypeScript|RxJS|Java|PostgreSQL|Node|AWS,Tenant-Specific UI Configuration,"Owned and delivered the full-stack implementation (database layer, data modeling, API services, and frontend UI orchestration) to power dynamic tenant-specific profiles, modules, navigation menus, and dashboards within a scalable multi-tenant ecosystem."

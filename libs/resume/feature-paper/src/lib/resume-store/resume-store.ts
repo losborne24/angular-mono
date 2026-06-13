@@ -371,19 +371,6 @@ export const ResumeStore = signalStore(
         });
       },
 
-      updateEducationItem(eduIndex: number, itemIndex: number, value: string): void {
-        patchState(store, {
-          education: store.education().map((e, i) =>
-            i !== eduIndex
-              ? e
-              : {
-                  ...e,
-                  items: (e.items ?? []).map((item, j) => (j === itemIndex ? value : item)),
-                },
-          ),
-        });
-      },
-
       // --- right-panel sections -----------------------------------------------
 
       /** Add-button icon + label for a header. Extend PANEL_ADD_CONTROLS for new headers. */
