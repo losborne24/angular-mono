@@ -1,5 +1,6 @@
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
+import { produce } from 'immer';
 import { Icon } from '@angular-monorepo/shared/util';
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import {
@@ -79,45 +80,44 @@ function contentFromModel(model: ResumeModel): ResumeContent {
 export const ResumeStore = signalStore(
   withState<ResumeState>(initialState),
   withMethods((store) => {
-    // --- private immutable-rebuild helpers ------------------------------------
+    // --- private draft helpers (immer) ----------------------------------------
 
-    /** Immutably patch one or more fields of the resume content. */
-    function patchContent(partial: Partial<ResumeContent>): void {
-      patchState(store, { content: { ...store.content(), ...partial } });
+    /** Apply an immer recipe to the resume content, producing a new immutable slice. */
+    function mutate(recipe: (content: ResumeContent) => void): void {
+      patchState(store, (state) => ({ content: produce(state.content, recipe) }));
     }
 
-    /** Immutably replace one block's Experience data, found by id. */
-    function updateExperience(id: string, recipe: (data: Experience) => Experience): void {
-      patchContent({
-        blocks: store.content().blocks.map((b) => (b.id === id ? { ...b, data: recipe(b.data) } : b)),
+    /** Run a recipe against one block's Experience data, found by id. */
+    function updateExperience(id: string, recipe: (data: Experience) => void): void {
+      mutate((content) => {
+        const block = content.blocks.find((b) => b.id === id);
+        if (block) recipe(block.data);
       });
     }
 
-    /** Immutably replace one position within a block. */
+    /** Run a recipe against one position within a block. */
     function updatePosition(
       id: string,
       posIndex: number,
-      recipe: (p: Experience['positions'][number]) => Experience['positions'][number],
+      recipe: (p: Experience['positions'][number]) => void,
     ): void {
-      updateExperience(id, (data) => ({
-        ...data,
-        positions: data.positions.map((p, i) => (i === posIndex ? recipe(p) : p)),
-      }));
+      updateExperience(id, (data) => {
+        const position = data.positions[posIndex];
+        if (position) recipe(position);
+      });
     }
 
-    /** Immutably replace one contribution within a position. */
+    /** Run a recipe against one contribution within a position. */
     function updateContribution(
       id: string,
       posIndex: number,
       conIndex: number,
-      recipe: (
-        c: Experience['positions'][number]['contributions'][number],
-      ) => Experience['positions'][number]['contributions'][number],
+      recipe: (c: Experience['positions'][number]['contributions'][number]) => void,
     ): void {
-      updatePosition(id, posIndex, (p) => ({
-        ...p,
-        contributions: p.contributions.map((c, i) => (i === conIndex ? recipe(c) : c)),
-      }));
+      updatePosition(id, posIndex, (p) => {
+        const contribution = p.contributions[conIndex];
+        if (contribution) recipe(contribution);
+      });
     }
 
     function newId(): string {
@@ -188,50 +188,62 @@ export const ResumeStore = signalStore(
       // --- header -------------------------------------------------------------
 
       updateHeaderName(name: string): void {
-        patchContent({ header: { ...store.content().header, name } });
+        mutate((content) => {
+          content.header.name = name;
+        });
       },
 
       updateHeaderTitle(title: string): void {
-        patchContent({ header: { ...store.content().header, title } });
+        mutate((content) => {
+          content.header.title = title;
+        });
       },
 
       // --- experience blocks --------------------------------------------------
 
       addBlock(): void {
         const block: ResumeBlock = { id: newId(), data: emptyExperience() };
-        patchContent({ blocks: [block, ...store.content().blocks] });
+        mutate((content) => {
+          content.blocks.unshift(block);
+        });
       },
 
       removeBlock(id: string): void {
-        patchContent({ blocks: store.content().blocks.filter((b) => b.id !== id) });
+        mutate((content) => {
+          content.blocks = content.blocks.filter((b) => b.id !== id);
+        });
       },
 
       updateCompanyName(id: string, companyName: string): void {
-        updateExperience(id, (data) => ({ ...data, companyName }));
+        updateExperience(id, (data) => {
+          data.companyName = companyName;
+        });
       },
 
       // --- positions (by block id + position index) ---------------------------
 
       addPosition(id: string): void {
-        updateExperience(id, (data) => ({
-          ...data,
-          positions: [...data.positions, emptyPosition()],
-        }));
+        updateExperience(id, (data) => {
+          data.positions.push(emptyPosition());
+        });
       },
 
       removePosition(id: string, posIndex: number): void {
-        updateExperience(id, (data) => ({
-          ...data,
-          positions: data.positions.filter((_, i) => i !== posIndex),
-        }));
+        updateExperience(id, (data) => {
+          data.positions.splice(posIndex, 1);
+        });
       },
 
       updatePositionTitle(id: string, posIndex: number, position: string): void {
-        updatePosition(id, posIndex, (p) => ({ ...p, position }));
+        updatePosition(id, posIndex, (p) => {
+          p.position = position;
+        });
       },
 
       updatePositionPeriod(id: string, posIndex: number, period: string): void {
-        updatePosition(id, posIndex, (p) => ({ ...p, period }));
+        updatePosition(id, posIndex, (p) => {
+          p.period = period;
+        });
       },
 
       /** Split an edited "Angular | TypeScript" line back into the techStack array. */
@@ -240,113 +252,129 @@ export const ResumeStore = signalStore(
           .split('|')
           .map((tech) => tech.trim())
           .filter((tech) => tech.length > 0);
-        updatePosition(id, posIndex, (p) => ({ ...p, techStack }));
+        updatePosition(id, posIndex, (p) => {
+          p.techStack = techStack;
+        });
       },
 
       // --- contributions (by block id + position index + contribution index) --
 
       addContribution(id: string, posIndex: number): void {
-        updatePosition(id, posIndex, (p) => ({
-          ...p,
-          contributions: [...p.contributions, emptyContribution()],
-        }));
+        updatePosition(id, posIndex, (p) => {
+          p.contributions.push(emptyContribution());
+        });
       },
 
       removeContribution(id: string, posIndex: number, conIndex: number): void {
-        updatePosition(id, posIndex, (p) => ({
-          ...p,
-          contributions: p.contributions.filter((_, i) => i !== conIndex),
-        }));
+        updatePosition(id, posIndex, (p) => {
+          p.contributions.splice(conIndex, 1);
+        });
       },
 
       moveContribution(id: string, posIndex: number, from: number, to: number): void {
         updatePosition(id, posIndex, (p) => {
-          // moveItemInArray mutates in place — apply it to a copy.
-          const contributions = [...p.contributions];
-          moveItemInArray(contributions, from, to);
-          return { ...p, contributions };
+          moveItemInArray(p.contributions, from, to);
         });
       },
 
       updateContributionCategory(id: string, posIndex: number, conIndex: number, category: string): void {
-        updateContribution(id, posIndex, conIndex, (c) => ({ ...c, category }));
+        updateContribution(id, posIndex, conIndex, (c) => {
+          c.category = category;
+        });
       },
 
       updateContributionText(id: string, posIndex: number, conIndex: number, contribution: string): void {
-        updateContribution(id, posIndex, conIndex, (c) => ({
-          ...c,
-          contribution,
-        }));
+        updateContribution(id, posIndex, conIndex, (c) => {
+          c.contribution = contribution;
+        });
       },
 
       // --- links --------------------------------------------------------------
 
       addLink(): void {
-        patchContent({ links: [{ icon: Icon.faLink, href: 'https://' }, ...store.content().links] });
+        mutate((content) => {
+          content.links.unshift({ icon: Icon.faLink, href: 'https://' });
+        });
       },
 
       removeLink(index: number): void {
-        patchContent({ links: store.content().links.filter((_, i) => i !== index) });
+        mutate((content) => {
+          content.links.splice(index, 1);
+        });
       },
 
       setLinkIcon(link: Links, icon: IconDefinition): void {
-        patchContent({ links: store.content().links.map((l) => (l === link ? { ...l, icon } : l)) });
+        const index = store.content().links.indexOf(link);
+        if (index < 0) return;
+        mutate((content) => {
+          content.links[index].icon = icon;
+        });
       },
 
       updateLinkHref(index: number, href: string): void {
-        patchContent({ links: store.content().links.map((l, i) => (i === index ? { ...l, href } : l)) });
+        mutate((content) => {
+          content.links[index].href = href;
+        });
       },
 
       // --- contact details ----------------------------------------------------
 
       updateContactText(index: number, text: string): void {
-        patchContent({
-          contactDetails: store.content().contactDetails.map((d, i) => (i === index ? { ...d, text } : d)),
+        mutate((content) => {
+          content.contactDetails[index].text = text;
         });
       },
 
       // --- education ----------------------------------------------------------
 
       addEducation(): void {
-        patchContent({
-          education: [{ school: 'School', period: 'YEAR - YEAR', detail: 'Details' }, ...store.content().education],
+        mutate((content) => {
+          content.education.unshift({ school: 'School', period: 'YEAR - YEAR', detail: 'Details' });
         });
       },
 
       removeEducation(index: number): void {
-        patchContent({ education: store.content().education.filter((_, i) => i !== index) });
+        mutate((content) => {
+          content.education.splice(index, 1);
+        });
       },
 
       updateEducationSchool(index: number, school: string): void {
-        patchContent({
-          education: store.content().education.map((e, i) => (i === index ? { ...e, school } : e)),
+        mutate((content) => {
+          content.education[index].school = school;
         });
       },
 
       updateEducationPeriod(index: number, period: string): void {
-        patchContent({
-          education: store.content().education.map((e, i) => (i === index ? { ...e, period } : e)),
+        mutate((content) => {
+          content.education[index].period = period;
         });
       },
 
       updateEducationDetail(index: number, detail: string): void {
-        patchContent({
-          education: store.content().education.map((e, i) => (i === index ? { ...e, detail } : e)),
+        mutate((content) => {
+          content.education[index].detail = detail;
         });
       },
 
       // --- side-panel lists (achievements / certifications) -------------------
 
       addPanelItem(key: PanelKey): void {
-        patchContent({ [key]: ['New item', ...store.content()[key]] });
+        mutate((content) => {
+          content[key].unshift('New item');
+        });
       },
 
       removePanelItem(key: PanelKey, index: number): void {
-        patchContent({ [key]: store.content()[key].filter((_, i) => i !== index) });
+        mutate((content) => {
+          content[key].splice(index, 1);
+        });
       },
 
       updatePanelItem(key: PanelKey, index: number, value: string): void {
-        patchContent({ [key]: store.content()[key].map((item, i) => (i === index ? value : item)) });
+        mutate((content) => {
+          content[key][index] = value;
+        });
       },
     };
   }),
