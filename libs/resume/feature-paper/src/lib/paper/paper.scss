@@ -133,10 +133,11 @@ $fallback-erc: 1 0 0; // error-content
   @include row.expanded('left');
 }
 
-// Side panel (CERTIFICATIONS / ACHIEVEMENTS) sits on the neutral aside; wire its
-// add chrome to the neutral-content token so the font colour tracks the active
-// theme instead of the hardcoded oklch fallbacks above.
-.group\/panel .add-btn {
+// Side panel (CERTIFICATIONS / ACHIEVEMENTS) and EDUCATION both sit on the
+// neutral aside; wire their add chrome to the neutral-content token so the font
+// colour tracks the active theme instead of the hardcoded oklch fallbacks above.
+.group\/panel .add-btn,
+.group\/education .add-btn {
   color: color-mix(in oklch, var(--color-neutral-content) 50%, transparent);
 
   &:hover {
