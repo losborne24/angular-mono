@@ -17,8 +17,8 @@ $position-actions-gap: 0.25rem;
   margin: -0.5rem;
   transition: border-color var(--motion-fast, 120ms) ease;
 
-  // Border affordance only in edit mode (.group set when removable).
-  &.group:hover {
+  // Border affordance only in edit mode (.removable set when removable).
+  &.removable:hover {
     border-color: oklch(var(--bc, 0.4 0 0) / 0.35);
   }
 }
@@ -42,8 +42,8 @@ $position-actions-gap: 0.25rem;
     background-color var(--motion-fast, 120ms) ease,
     color var(--motion-fast, 120ms) ease;
 
-  // .group marks the removable (edit-mode) block; reveal on its hover.
-  .block-container.group:hover & {
+  // .removable marks the edit-mode block; reveal on its hover.
+  .block-container.removable:hover & {
     width: $block-control-size;
     margin-left: $block-control-gap;
   }
