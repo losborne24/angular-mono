@@ -1,5 +1,6 @@
 @use 'shared/ui/src/styles/cdk-drag' as cdk;
 @use 'shared/ui/src/styles/row-control' as row;
+@use 'shared/ui/src/styles/motion' as motion;
 
 @include cdk.reorder('.contribution');
 
@@ -10,19 +11,23 @@
 $block-control-size: 1.75rem; // block-level remove button (square)
 $block-control-gap: 0.5rem;
 
-// Shared timing for every reveal/collapse transition.
-$ease-fast: var(--motion-fast, 120ms) ease;
+// Fallback oklch components for the daisyUI theme tokens, used when the CSS
+// custom property is unset (e.g. in the export clone, outside the theme scope).
+$fallback-bc: 0.4 0 0; // base-content (neutral text)
+$fallback-er: 0.58 0.22 27; // error (red)
+$fallback-p: 0.55 0.2 264; // primary (blue)
+$fallback-b1: 1 0 0; // base-100 (surface)
 
 .block-container {
   border: 1px dashed transparent;
   border-radius: 0.375rem;
   padding: 0.5rem;
   margin: -0.5rem;
-  transition: border-color $ease-fast;
+  transition: border-color motion.$fast;
 
   // Border affordance only in edit mode (.removable set when removable).
   &.removable:hover {
-    border-color: oklch(var(--bc, 0.4 0 0) / 0.35);
+    border-color: oklch(var(--bc, #{$fallback-bc}) / 0.35);
   }
 }
 
@@ -37,13 +42,13 @@ $ease-fast: var(--motion-fast, 120ms) ease;
   font-size: 0.875rem;
   border-radius: 0.375rem;
   background: transparent;
-  color: oklch(var(--bc, 0.4 0 0) / 0.6);
+  color: oklch(var(--bc, #{$fallback-bc}) / 0.6);
   cursor: pointer;
   transition:
-    width $ease-fast,
-    margin $ease-fast,
-    background-color $ease-fast,
-    color $ease-fast;
+    width motion.$fast,
+    margin motion.$fast,
+    background-color motion.$fast,
+    color motion.$fast;
 
   // .removable marks the edit-mode block; reveal on its hover.
   .block-container.removable:hover & {
@@ -52,8 +57,8 @@ $ease-fast: var(--motion-fast, 120ms) ease;
   }
 
   &:hover {
-    background: oklch(var(--er, 0.58 0.22 27) / 0.12);
-    color: oklch(var(--er, 0.58 0.22 27));
+    background: oklch(var(--er, #{$fallback-er}) / 0.12);
+    color: oklch(var(--er, #{$fallback-er}));
   }
 }
 
@@ -62,8 +67,8 @@ $ease-fast: var(--motion-fast, 120ms) ease;
   // Sits at the end of the contribution text.
   margin-left: 0;
   border-radius: 50%;
-  background: oklch(var(--er, 0.58 0.22 27) / 0.15);
-  color: oklch(var(--er, 0.58 0.22 27));
+  background: oklch(var(--er, #{$fallback-er}) / 0.15);
+  color: oklch(var(--er, #{$fallback-er}));
 }
 
 .contribution:hover .row-remove-btn {
@@ -74,7 +79,7 @@ $ease-fast: var(--motion-fast, 120ms) ease;
   @include row.collapsed;
   // Grip at the start of the row.
   margin-right: 0;
-  color: oklch(var(--bc, 0.4 0 0) / 0.5);
+  color: oklch(var(--bc, #{$fallback-bc}) / 0.5);
   cursor: grab;
 
   fa-icon {
@@ -95,7 +100,7 @@ $ease-fast: var(--motion-fast, 120ms) ease;
   box-sizing: border-box;
   line-height: 1.4;
   border-radius: 0.25rem;
-  background: oklch(var(--b1, 1 0 0));
+  background: oklch(var(--b1, #{$fallback-b1}));
   box-shadow: 0 2px 8px hsl(0 0% 0% / 0.18);
   padding: 0 0.25rem;
   list-style: none;
@@ -108,9 +113,9 @@ $ease-fast: var(--motion-fast, 120ms) ease;
   overflow: hidden;
   opacity: 0;
   transition:
-    opacity $ease-fast,
-    height $ease-fast,
-    margin $ease-fast;
+    opacity motion.$fast,
+    height motion.$fast,
+    margin motion.$fast;
 }
 
 .position:hover .position-actions {
@@ -137,17 +142,17 @@ $ease-fast: var(--motion-fast, 120ms) ease;
   border: none;
   border-radius: 0.375rem;
   background: transparent;
-  color: oklch(var(--bc, 0.4 0 0) / 0.5);
+  color: oklch(var(--bc, #{$fallback-bc}) / 0.5);
   cursor: pointer;
   opacity: 0;
   transition:
-    opacity $ease-fast,
-    color $ease-fast,
-    background-color $ease-fast;
+    opacity motion.$fast,
+    color motion.$fast,
+    background-color motion.$fast;
 
   &:hover {
-    color: oklch(var(--p, 0.55 0.2 264));
-    background: oklch(var(--p, 0.55 0.2 264) / 0.1);
+    color: oklch(var(--p, #{$fallback-p}));
+    background: oklch(var(--p, #{$fallback-p}) / 0.1);
   }
 
   &--sm {
@@ -155,23 +160,17 @@ $ease-fast: var(--motion-fast, 120ms) ease;
   }
 
   &--danger:hover {
-    color: oklch(var(--er, 0.58 0.22 27));
-    background: oklch(var(--er, 0.58 0.22 27) / 0.1);
+    color: oklch(var(--er, #{$fallback-er}));
+    background: oklch(var(--er, #{$fallback-er}) / 0.1);
   }
 }
 
-// Hide editor-only controls (remove/drag/add buttons, position actions) inside the exported PDF clone.
+// Flatten the block's always-on padding/negative-margin in the exported PDF
+// clone, where the offset margin can shift or clip the block at page edges.
+// (The dashed border is already gone via paper.scss's `.printable * border:none`.)
 :host-context(.printable) {
   .block-container {
-    border-color: transparent !important;
     padding: 0 !important;
     margin: 0 !important;
-  }
-  .block-remove-btn,
-  .row-remove-btn,
-  .contribution-row-drag,
-  .position-actions,
-  .add-btn {
-    display: none !important;
   }
 }

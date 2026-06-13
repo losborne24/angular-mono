@@ -1,25 +1,36 @@
 @use 'shared/ui/src/styles/row-control' as row;
+@use 'shared/ui/src/styles/motion' as motion;
+
+// Page dimensions: same as a google-doc.
+$page-height: 1066px;
+$page-width: 754px;
+
+// Fallback oklch values for daisyUI tokens, used when the theme var is unset.
+// Named to mirror the short CSS token 1:1 ($fallback-bc <-> --bc).
+$fallback-bc: 0.4 0 0; // base-content
+$fallback-p: 0.55 0.2 264; // primary
+$fallback-er: 0.58 0.22 27; // error
+$fallback-erc: 1 0 0; // error-content
 
 .paper-container {
-  // same as google-doc
-  height: 1066px;
-  width: 754px;
+  height: $page-height;
+  width: $page-width;
 }
 
 // In edit mode the wrapper owns the scroll so the scrollbar sits outside the
 // card; the article grows to fit its content.
 .paper-scroll.editing {
-  height: 1066px;
+  height: $page-height;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
 .paper-container.editing {
   height: auto;
-  min-height: 1066px;
+  min-height: $page-height;
 }
 .icon-container {
-  width: 16px;
+  width: 1rem;
 }
 
 // Education detail keeps embedded newlines (one entry per line).
@@ -38,15 +49,15 @@
   border: none;
   border-radius: 0.375rem;
   background: transparent;
-  color: oklch(var(--bc, 0.4 0 0) / 0.5);
+  color: oklch(var(--bc, #{$fallback-bc}) / 0.5);
   cursor: pointer;
   transition:
-    color 120ms ease,
-    background-color 120ms ease;
+    color motion.$fast,
+    background-color motion.$fast;
 
   &:hover {
-    color: oklch(var(--p, 0.55 0.2 264));
-    background: oklch(var(--p, 0.55 0.2 264) / 0.1);
+    color: oklch(var(--p, #{$fallback-p}));
+    background: oklch(var(--p, #{$fallback-p}) / 0.1);
   }
 }
 
@@ -58,9 +69,9 @@
   overflow: hidden;
   opacity: 0;
   transition:
-    opacity 120ms ease,
-    height 120ms ease,
-    margin 120ms ease;
+    opacity motion.$fast,
+    height motion.$fast,
+    margin motion.$fast;
 }
 
 .group\/main:hover .add-bar,
@@ -79,9 +90,9 @@
 .panel-row .row-remove-btn {
   @include row.collapsed;
   margin-left: 0;
-  border-radius: 9999px;
-  background: oklch(var(--er, 0.58 0.22 27));
-  color: oklch(var(--erc, 1 0 0));
+  border-radius: 50%;
+  background: oklch(var(--er, #{$fallback-er}));
+  color: oklch(var(--erc, #{$fallback-erc}));
 }
 
 .link-row:hover .row-remove-btn {
@@ -110,10 +121,8 @@
   color: var(--color-error-content);
 }
 
-.printable .row-remove-btn {
-  display: none !important;
-}
-
+// `.printable` marks the export/print render. Strip every border and the card
+// radius so the PDF reads as a flat document.
 .printable,
 .printable * {
   border: none !important;
@@ -121,16 +130,7 @@
 .printable .card {
   border-radius: 0 !important;
 }
-// Editing chrome must never appear in the exported PDF.
-// (block-container / block-remove-btn handled in experience-block.scss)
-.printable .add-bar {
-  display: none !important;
-}
 
 address {
   font-style: normal;
-}
-
-.tooltip::before {
-  font-size: 0.75rem; // Tailwind's text-xs = 12px = 0.75rem
 }

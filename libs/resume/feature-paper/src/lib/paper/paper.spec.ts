@@ -76,8 +76,26 @@ describe('Paper', () => {
     it('should render utility buttons', () => {
       const compiled = fixture.nativeElement;
       // Upload is a <label for> wrapping the hidden file input; the rest are buttons.
-      const controls = compiled.querySelectorAll('nav.utility-container button, nav.utility-container label');
+      const controls = compiled.querySelectorAll('.utility-container button, .utility-container label');
       expect(controls.length).toBe(6);
+    });
+
+    it('disables export/download in edit mode so editor chrome cannot leak into the output', () => {
+      const btn = (cy: string) =>
+        fixture.nativeElement.querySelector(`[data-cy="${cy}"]`) as HTMLButtonElement;
+
+      expect(btn('export-pdf').disabled).toBe(false);
+      expect(btn('download-csv').disabled).toBe(false);
+
+      component.store.setEditMode(true);
+      fixture.detectChanges();
+      expect(btn('export-pdf').disabled).toBe(true);
+      expect(btn('download-csv').disabled).toBe(true);
+
+      component.store.setEditMode(false);
+      fixture.detectChanges();
+      expect(btn('export-pdf').disabled).toBe(false);
+      expect(btn('download-csv').disabled).toBe(false);
     });
   });
 

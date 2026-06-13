@@ -222,10 +222,15 @@
       </aside>
     </article>
   </div>
-  <nav class="utility-container flex flex-col gap-2">
+  <div
+    role="toolbar"
+    aria-orientation="vertical"
+    aria-label="Resume actions"
+    class="utility-container flex flex-col gap-2"
+  >
     <button
       data-cy="edit-toggle"
-      class="circle-button tooltip tooltip-right font-sans"
+      class="circle-button tooltip tooltip-right font-sans before:text-xs"
       [class.ring-2]="edit"
       [class.ring-neutral]="edit"
       [attr.data-tip]="edit ? 'Done editing' : 'Edit resume'"
@@ -236,7 +241,7 @@
     </button>
     <button
       data-cy="start-over"
-      class="circle-button tooltip tooltip-right font-sans"
+      class="circle-button tooltip tooltip-right font-sans before:text-xs"
       data-tip="Start over"
       (click)="startOver()"
     >
@@ -245,15 +250,16 @@
     <label
       for="fileInput"
       data-cy="upload-csv"
-      class="circle-button tooltip tooltip-right font-sans"
+      class="circle-button tooltip tooltip-right font-sans before:text-xs"
       data-tip="Upload CSV"
     >
       <fa-icon [icon]="icon.faFileArrowUp"></fa-icon>
     </label>
     <button
       data-cy="download-csv"
-      class="circle-button tooltip tooltip-right font-sans"
-      data-tip="Download CSV"
+      class="circle-button tooltip tooltip-right font-sans before:text-xs"
+      [attr.data-tip]="edit ? 'Finish editing to download' : 'Download CSV'"
+      [disabled]="edit"
       (click)="downloadCsv()"
     >
       <fa-icon [icon]="icon.faFileCsv"></fa-icon>
@@ -268,8 +274,9 @@
     />
     <button
       data-cy="export-pdf"
-      class="circle-button tooltip tooltip-right font-sans"
-      data-tip="Export to pdf"
+      class="circle-button tooltip tooltip-right font-sans before:text-xs"
+      [attr.data-tip]="edit ? 'Finish editing to export' : 'Export to pdf'"
+      [disabled]="edit"
       (click)="pdfExporter.export()"
     >
       <fa-icon [icon]="icon.faFilePdf"></fa-icon>
@@ -278,12 +285,12 @@
       #urlCopier="appCopyUrl"
       appCopyUrl
       data-cy="copy-url"
-      class="circle-button tooltip tooltip-right font-sans"
+      class="circle-button tooltip tooltip-right font-sans before:text-xs"
       [attr.data-tip]="urlCopier.copied() ? 'Copied!': 'Copy to clipboard'"
       [attr.data-copied]="urlCopier.copied()"
       (click)="urlCopier.copy()"
     >
       <fa-icon [icon]="icon.faLink"></fa-icon>
     </button>
-  </nav>
+  </div>
 </div>

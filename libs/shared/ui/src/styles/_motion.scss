@@ -1,0 +1,12 @@
+// Shared motion timing for hover/collapse edit-chrome transitions.
+//
+// One source of truth for the reveal/collapse easing used across the resume
+// paper and its child blocks. Driven by the `--motion-fast` CSS custom property
+// so a theme can retune it, with a 120ms fallback when the var is unset (e.g. in
+// the export clone, outside the theme scope).
+//
+// Usage:
+//   @use 'shared/ui/src/styles/motion' as motion;
+//   transition: opacity motion.$fast, height motion.$fast;
+
+$fast: var(--motion-fast, 120ms) ease;
