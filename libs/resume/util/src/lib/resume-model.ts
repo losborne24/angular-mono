@@ -5,7 +5,6 @@ import type {
   Links,
   ResumeHeader,
   RightPanelSection,
-  SectionLabels,
 } from './paper-model';
 
 /**
@@ -15,7 +14,6 @@ import type {
  */
 export interface ResumeModel {
   header: ResumeHeader;
-  sectionLabels: SectionLabels;
   contactDetails: ContactDetail[];
   links: Links[];
   education: Education[];

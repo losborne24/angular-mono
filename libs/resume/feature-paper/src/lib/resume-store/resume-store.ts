@@ -17,7 +17,6 @@ import {
   type ResumeHeader,
   type ResumeModel,
   type RightPanelSection,
-  type SectionLabels,
 } from '@angular-monorepo/resume/util';
 
 /** URL of the seed CSV shipped as a static asset. */
@@ -26,7 +25,6 @@ const RESUME_CSV_URL = '/resume.csv';
 /** Shape of the in-memory draft held by the store. */
 interface ResumeState {
   header: ResumeHeader;
-  sectionLabels: SectionLabels;
   contactDetails: ContactDetail[];
   links: Links[];
   education: Education[];
@@ -39,7 +37,6 @@ interface ResumeState {
 
 const initialState: ResumeState = {
   header: { name: '', title: '' },
-  sectionLabels: { experience: '', links: '', education: '' },
   contactDetails: [],
   links: [],
   education: [],
@@ -52,7 +49,6 @@ const initialState: ResumeState = {
 function stateFromModel(model: ResumeModel): ResumeState {
   return {
     header: model.header,
-    sectionLabels: model.sectionLabels,
     contactDetails: model.contactDetails,
     links: model.links,
     education: model.education,
@@ -152,7 +148,6 @@ export const ResumeStore = signalStore(
         patchState(store, {
           ...stateFromModel({
             header: { name: 'Your Name', title: 'Your Title' },
-            sectionLabels: store.sectionLabels(),
             // Contacts have no add-control, so seed the standard rows to edit.
             contactDetails: [
               { icon: Icon.faLocationDot, text: 'City, Country' },
@@ -180,7 +175,6 @@ export const ResumeStore = signalStore(
       toModel(): ResumeModel {
         return {
           header: store.header(),
-          sectionLabels: store.sectionLabels(),
           contactDetails: store.contactDetails(),
           links: store.links(),
           education: store.education(),

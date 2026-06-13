@@ -4,7 +4,6 @@ import type { ResumeModel } from './resume-model';
 
 const MODEL: ResumeModel = {
   header: { name: 'Leith Osborne', title: 'Front-End Focused Product Engineer' },
-  sectionLabels: { experience: 'EXPERIENCE', links: 'LINKS', education: 'EDUCATION' },
   contactDetails: [
     { icon: Icon.faLocationDot, text: 'London, UK' },
     { icon: Icon.faEnvelope, text: 'a@b.com', href: 'mailto:a@b.com' },

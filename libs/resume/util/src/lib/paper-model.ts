@@ -45,10 +45,3 @@ export interface Education {
   /** Free-text detail (e.g. degree or A-levels). Newlines render as separate lines. */
   detail: string;
 }
-
-/** Editable labels for the static section headings. */
-export interface SectionLabels {
-  experience: string;
-  links: string;
-  education: string;
-}

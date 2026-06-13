@@ -1,6 +1,3 @@
 type,icon,a,b,c,d,e,f
 header,,name,Jane Doe,,,,
 header,,title,Principal Engineer,,,,
-label,,experience,Experience,,,,
-label,,links,Links,,,,
-label,,education,Education,,,,
