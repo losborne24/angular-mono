@@ -40,4 +40,4 @@ jobs:
       - uses: nrwl/nx-set-shas@v4
 
       # Run Nx affected targets
-      - run: yarn nx affected -t lint test build e2e
+      - run: yarn nx affected -t lint test build e2e-ci
