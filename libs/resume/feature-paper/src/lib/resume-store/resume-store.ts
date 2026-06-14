@@ -21,8 +21,7 @@ export type PanelKey = 'achievements' | 'certifications';
 /**
  * URL of the seed CSV shipped as a static asset. Relative (no leading slash) so
  * it resolves against the document `<base href>` — under GitHub Pages the app is
- * served from a sub-path (`/angular-mono/resume/`), and a root-absolute
- * `/resume.csv` would 404.
+ * served from a sub-path (`/angular-mono/resume/`)
  */
 const RESUME_CSV_URL = 'resume.csv';
 
@@ -83,13 +82,6 @@ function contentFromModel(model: ResumeModel): ResumeContent {
 
 /**
  * In-memory draft of the resume, hydrated from a CSV asset on init.
- *
- * Built on `@ngrx/signals`: {@link withState} exposes `content` and `editMode`
- * as read-only signals, and every mutation goes through `patchState`, which
- * replaces the affected slice immutably. Nothing outside the store writes state
- * — important under zoneless change detection, where an in-place mutation would
- * not notify the signal graph. `toModel` / `toCsv` round-trip the current
- * content back out for download/upload.
  */
 export const ResumeStore = signalStore(
   withState<ResumeState>(initialState),
