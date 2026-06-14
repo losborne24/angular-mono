@@ -12,6 +12,9 @@ import {
 import { ResumeStore } from '../resume-store/resume-store';
 import { ExperienceBlock } from '../experience-block/experience-block';
 
+/** Upper bound on an uploaded CSV; a resume is far smaller than this. */
+const MAX_CSV_BYTES = 2 * 1024 * 1024;
+
 @Component({
   selector: 'app-paper',
   imports: [
@@ -87,9 +90,19 @@ export class Paper {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (!file) return;
-    const text = await file.text();
-    this.store.hydrate(parseResumeCsv(text));
-    // Reset so selecting the same file again re-triggers change.
-    input.value = '';
+    try {
+      // A resume CSV is tiny; cap the read so a huge file can't freeze the tab.
+      if (file.size > MAX_CSV_BYTES) {
+        alert('That file is too large to be a resume CSV.');
+        return;
+      }
+      const text = await file.text();
+      this.store.hydrate(parseResumeCsv(text));
+    } catch {
+      alert('Could not read that file.');
+    } finally {
+      // Reset so selecting the same file again re-triggers change.
+      input.value = '';
+    }
   }
 }
