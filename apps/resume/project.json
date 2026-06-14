@@ -52,6 +52,9 @@
           "optimization": false,
           "extractLicenses": false,
           "sourceMap": true
+        },
+        "ci": {
+          "baseHref": "/"
         }
       },
       "defaultConfiguration": "production"
@@ -92,7 +95,7 @@
       "continuous": true,
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "resume:build",
+        "buildTarget": "resume:build:ci",
         "port": 4201,
         "staticFilePath": "dist/apps/resume",
         "spa": true

@@ -49,6 +49,9 @@
           "optimization": false,
           "extractLicenses": false,
           "sourceMap": true
+        },
+        "ci": {
+          "baseHref": "/"
         }
       },
       "defaultConfiguration": "production"
@@ -89,7 +92,7 @@
       "continuous": true,
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "home:build",
+        "buildTarget": "home:build:ci",
         "port": 4200,
         "staticFilePath": "dist/apps/home",
         "spa": true

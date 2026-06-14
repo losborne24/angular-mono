@@ -12,7 +12,7 @@ function rename(hook: string, value: string): void {
 }
 
 describe('resume-e2e', () => {
-  beforeEach(() => cy.visit('/angular-mono/resume/'));
+  beforeEach(() => cy.visit('/'));
 
   // Fast sanity check that the app boots and renders its seed content.
   it('loads the resume with its default content', () => {
@@ -120,7 +120,7 @@ describe('resume-e2e', () => {
         cy.stub(win.navigator.clipboard, 'writeText').as('writeText').resolves();
       });
       cy.dataCy('copy-url').click();
-      cy.get('@writeText').should('have.been.calledWith', `${Cypress.config('baseUrl')}/angular-mono/resume/`);
+      cy.get('@writeText').should('have.been.calledWith', `${Cypress.config('baseUrl')}/`);
       cy.dataCy('copy-url').should('have.attr', 'data-copied', 'true');
     });
   });
