@@ -1,6 +1,4 @@
 type,icon,a,b,c,d,e,f
 header,,name,Jane Doe,,,,
 header,,title,Distinguished Engineer,,,,
-label,,experience,Experience,,,,
-label,,links,Links,,,,
-label,,education,Education,,,,
+layout,,asideWidth,28,,,,

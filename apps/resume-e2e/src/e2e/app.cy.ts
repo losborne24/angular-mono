@@ -31,6 +31,10 @@ describe('resume-e2e', () => {
       rename('resume-name', 'Ada Lovelace');
       rename('resume-title', 'Founding Engineer');
 
+      // Leave edit mode so the download control unlocks.
+      cy.dataCy('edit-toggle').click();
+      cy.dataCy('edit-toggle').should('have.attr', 'aria-pressed', 'false');
+
       // Export and verify both edits round-tripped into the file.
       cy.dataCy('download-csv').click();
       cy.readFile('cypress/downloads/resume.csv', { timeout: 10000 })
@@ -50,6 +54,10 @@ describe('resume-e2e', () => {
       // Tweak the imported resume, then export the merged result.
       cy.dataCy('edit-toggle').click();
       rename('resume-title', 'Distinguished Engineer');
+
+      // Leave edit mode so the download control unlocks.
+      cy.dataCy('edit-toggle').click();
+      cy.dataCy('edit-toggle').should('have.attr', 'aria-pressed', 'false');
 
       cy.dataCy('download-csv').click();
       cy.readFile('cypress/downloads/resume.csv', { timeout: 10000 })

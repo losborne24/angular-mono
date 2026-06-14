@@ -6,7 +6,7 @@ export default defineConfig({
     ...nxE2EPreset(__filename, {
       cypressDir: 'src',
       webServerCommands: {
-        default: 'yarn nx run home:serve',
+        default: 'yarn nx run home:serve-static',
         production: 'yarn nx run home:serve-static',
       },
       ciWebServerCommand: 'yarn nx run home:serve-static',
