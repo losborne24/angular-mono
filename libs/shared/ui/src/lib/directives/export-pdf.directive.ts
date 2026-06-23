@@ -2,6 +2,20 @@ import { Directive, ElementRef, inject, input } from '@angular/core';
 import jsPDF from 'jspdf';
 import domtoimage from 'dom-to-image-more';
 
+/**
+ * Exports the host element to a downloadable PDF.
+ *
+ * Renders the host element to a PNG via an offscreen, upscaled clone and writes
+ * the result into a single-page jsPDF document. Apply it to the element you want
+ * captured and call {@link ExportPdfDirective.export} (e.g. via a template
+ * reference using `exportAs: 'appExportPdf'`).
+ *
+ * @example
+ * ```html
+ * <div appExportPdf #pdf="appExportPdf" filename="resume.pdf" [scale]="2">…</div>
+ * <button (click)="pdf.export()">Download</button>
+ * ```
+ */
 @Directive({
   selector: '[appExportPdf]',
   standalone: true,
@@ -10,9 +24,17 @@ import domtoimage from 'dom-to-image-more';
 export class ExportPdfDirective {
   private elementRef = inject(ElementRef<HTMLElement>);
 
+  /** Filename used when saving the generated PDF. Defaults to `document.pdf`. */
   filename = input<string>('document.pdf');
+  /** Upscale factor applied to the clone before capture; higher = sharper output. Defaults to `3`. */
   scale = input<number>(3);
 
+  /**
+   * Captures the host element and triggers a PDF download.
+   *
+   * Clones the host offscreen, then generates and saves the PDF during the next
+   * idle callback. No-op if the host element is unavailable.
+   */
   export(): void {
     if (!this.elementRef) return;
 
