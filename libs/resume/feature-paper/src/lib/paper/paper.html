@@ -260,7 +260,7 @@
     aria-orientation="vertical"
     aria-label="Resume actions"
     class="utility-container flex flex-col gap-2"
-    [style.margin-left.px]="-toolbarOffset()"
+    [style.transform]="'translateX(' + -toolbarOffset() + 'px)'"
   >
     <button
       data-cy="edit-toggle"

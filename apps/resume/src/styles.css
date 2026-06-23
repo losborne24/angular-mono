@@ -46,6 +46,13 @@
    Base layer
    ========================================================================== */
 @layer base {
+  /* Reserve the window scrollbar track so it appearing/disappearing never
+     narrows the viewport. The layout is centered (justify-center), so a
+     viewport width change would otherwise drift the paper sideways. */
+  html {
+    scrollbar-gutter: stable;
+  }
+
   .font-serif :is(p, ul, a, h3) {
     font-size: 0.775rem;
   }

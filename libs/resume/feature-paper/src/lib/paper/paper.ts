@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  ElementRef,
+  afterNextRender,
+  inject,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Icon } from '@angular-monorepo/shared/util';
 import { parseResumeCsv } from '@angular-monorepo/resume/util';
@@ -34,6 +43,37 @@ const MAX_CSV_BYTES = 2 * 1024 * 1024;
 export class Paper {
   readonly icon = Icon;
   readonly store = inject(ResumeStore);
+
+  private readonly paperScroll = viewChild.required<ElementRef<HTMLElement>>('paperScroll');
+
+  /**
+   * Width (px) of the reserved scrollbar gutter when no scrollbar is showing.
+   * The toolbar is pulled left by this much (via translateX, so its layout box
+   * doesn't change and the centered group never reflows) to hug the paper; when
+   * the scrollbar appears it drops back to 0 and the toolbar sits clear of it.
+   * The paper stays put because the gutter is always reserved
+   * (scrollbar-gutter: stable).
+   */
+  readonly toolbarOffset = signal(0);
+
+  constructor() {
+    const destroyRef = inject(DestroyRef);
+    afterNextRender(() => {
+      const el = this.paperScroll().nativeElement;
+      const sync = (): void => {
+        // No scrollbar => offsetWidth - clientWidth is the reserved gutter; pull
+        // the toolbar over it. Scrollbar present => gutter is filled, offset 0.
+        const gutter = el.offsetWidth - el.clientWidth;
+        const hasScrollbar = el.scrollHeight > el.clientHeight;
+        this.toolbarOffset.set(hasScrollbar ? 0 : gutter);
+      };
+      sync();
+      const observer = new ResizeObserver(sync);
+      observer.observe(el);
+      observer.observe(el.firstElementChild as Element);
+      destroyRef.onDestroy(() => observer.disconnect());
+    });
+  }
 
   /** In edit mode, suppress navigation so the click edits the href text. */
   onLinkClick(event: MouseEvent): void {
