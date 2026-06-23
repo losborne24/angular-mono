@@ -2,6 +2,7 @@
 <div class="flex gap-2">
   <div
     #pdfExporter="appExportPdf"
+    #paperScroll
     appExportPdf
     [filename]="'Leith Osborne Resume.pdf'"
     [scale]="4"
@@ -259,6 +260,7 @@
     aria-orientation="vertical"
     aria-label="Resume actions"
     class="utility-container flex flex-col gap-2"
+    [style.margin-left.px]="-toolbarOffset()"
   >
     <button
       data-cy="edit-toggle"

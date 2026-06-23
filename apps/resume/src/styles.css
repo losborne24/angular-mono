@@ -62,6 +62,23 @@
 }
 
 /* ==========================================================================
+   Print/export render
+   ========================================================================== */
+
+/* The PDF export clones the paper with `.printable`. Tailwind v4 defaults the
+   border color to `currentColor` (v3 used gray-200), so any bordered element
+   renders a dark edge in the capture. This reset is global (not scoped to a
+   component) so it pierces Angular's emulated encapsulation and strips borders
+   across every child component in the clone, not just the paper host. */
+.printable,
+.printable * {
+  border: none !important;
+}
+.printable .card {
+  border-radius: 0 !important;
+}
+
+/* ==========================================================================
    Component layer
    ========================================================================== */
 

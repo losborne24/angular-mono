@@ -15,8 +15,10 @@ $fallback-p: 0.55 0.2 264; // primary
   width: $page-width;
 }
 
-// Reserve the scrollbar track in both modes, so it appearing/disappearing
-// (entering edit mode, or during a resize drag) never shifts the paper width.
+// Reserve the scrollbar track in both modes so the paper width never changes
+// when the scrollbar appears/disappears (which, under the centered layout, would
+// drift the paper sideways). The action toolbar is pulled left over this empty
+// gutter when there's no scrollbar — see `toolbarOffset` in paper.ts.
 .paper-scroll {
   overflow-y: auto;
   overflow-x: hidden;
@@ -144,15 +146,9 @@ $fallback-p: 0.55 0.2 264; // primary
   }
 }
 
-// `.printable` marks the export/print render. Strip every border and the card
-// radius so the PDF reads as a flat document.
-.printable,
-.printable * {
-  border: none !important;
-}
-.printable .card {
-  border-radius: 0 !important;
-}
+// `.printable` border/radius reset lives in the global stylesheet
+// (apps/resume/src/styles.css) — it must be unscoped to pierce Angular's
+// emulated encapsulation and reach child components in the export clone.
 
 address {
   font-style: normal;

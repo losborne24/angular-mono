@@ -94,6 +94,7 @@ export class ExportPdfDirective {
     return domtoimage.toPng(clone, {
       width: width * scale,
       height: height * scale,
+      bgcolor: '#ffffff',
       style: {
         width: `${width * scale}px`,
         height: `${height * scale}px`,
