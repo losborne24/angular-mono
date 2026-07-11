@@ -1,6 +1,6 @@
 import { Icon } from '@angular-monorepo/shared/util';
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { fromPairs, groupBy } from 'lodash';
+import { fromPairs, groupBy } from 'lodash-es';
 import Papa from 'papaparse';
 
 import type { ResumeModel } from './resume-model';
