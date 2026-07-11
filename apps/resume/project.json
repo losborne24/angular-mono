@@ -55,7 +55,11 @@
           "baseHref": "/"
         },
         "ci": {
-          "baseHref": "/"
+          "baseHref": "/",
+          "outputPath": {
+            "base": "dist/apps/resume-ci",
+            "browser": ""
+          }
         }
       },
       "defaultConfiguration": "production"
@@ -98,7 +102,7 @@
       "options": {
         "buildTarget": "resume:build:ci",
         "port": 4201,
-        "staticFilePath": "dist/apps/resume",
+        "staticFilePath": "dist/apps/resume-ci",
         "spa": true
       }
     }

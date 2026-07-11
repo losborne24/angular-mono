@@ -52,7 +52,11 @@
           "baseHref": "/"
         },
         "ci": {
-          "baseHref": "/"
+          "baseHref": "/",
+          "outputPath": {
+            "base": "dist/apps/home-ci",
+            "browser": ""
+          }
         }
       },
       "defaultConfiguration": "production"
@@ -95,7 +99,7 @@
       "options": {
         "buildTarget": "home:build:ci",
         "port": 4200,
-        "staticFilePath": "dist/apps/home",
+        "staticFilePath": "dist/apps/home-ci",
         "spa": true
       }
     }
