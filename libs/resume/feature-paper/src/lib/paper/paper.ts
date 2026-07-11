@@ -60,18 +60,27 @@ export class Paper {
     const destroyRef = inject(DestroyRef);
     afterNextRender(() => {
       const el = this.paperScroll().nativeElement;
-      const sync = (): void => {
-        // No scrollbar => offsetWidth - clientWidth is the reserved gutter; pull
-        // the toolbar over it. Scrollbar present => gutter is filled, offset 0.
-        const gutter = el.offsetWidth - el.clientWidth;
-        const hasScrollbar = el.scrollHeight > el.clientHeight;
-        this.toolbarOffset.set(hasScrollbar ? 0 : gutter);
-      };
+      const sync = () => this.syncToolbarOffset(el);
       sync();
       const observer = new ResizeObserver(sync);
       observer.observe(el);
       observer.observe(el.firstElementChild as Element);
       destroyRef.onDestroy(() => observer.disconnect());
+    });
+  }
+
+  /**
+   * Match {@link toolbarOffset} to the scroll element's reserved gutter: pull
+   * the toolbar over the gutter when no scrollbar shows, drop to 0 when it does.
+   * Deferred to the next frame so the layout the write triggers lands outside
+   * the ResizeObserver delivery cycle — otherwise the browser raises
+   * "ResizeObserver loop completed with undelivered notifications".
+   */
+  private syncToolbarOffset(el: HTMLElement): void {
+    requestAnimationFrame(() => {
+      const gutter = el.offsetWidth - el.clientWidth;
+      const hasScrollbar = el.scrollHeight > el.clientHeight;
+      this.toolbarOffset.set(hasScrollbar ? 0 : gutter);
     });
   }
 

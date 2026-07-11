@@ -15,3 +15,13 @@
 
 // Import commands.ts using ES2015 syntax:
 import './commands';
+
+// "ResizeObserver loop completed with undelivered notifications" is a benign
+// browser notification (not a real error): the paper toolbar's ResizeObserver
+// reads layout and writes a signal, which nudges layout within the same
+// delivery cycle. It surfaces only under slower headless CI, where Cypress
+// would otherwise fail every test. Swallow it; rethrow everything else.
+Cypress.on('uncaught:exception', (err) => {
+  if (/ResizeObserver loop/.test(err.message)) return false;
+  return true;
+});
